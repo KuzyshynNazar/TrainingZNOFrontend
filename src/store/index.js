@@ -6,6 +6,7 @@ import treeCategories from './modules/admin/tree-categories'
 import tests from './modules/admin/tests'
 import testQuestions from './modules/admin/test-questions'
 import testQuestionAnswers from './modules/admin/test-question-answers'
+import testStudents from './modules/admin/test-students'
 
 
 export default createStore({
@@ -15,6 +16,7 @@ export default createStore({
     treeCategories,
     tests,
     testQuestions,
-    testQuestionAnswers
+    testQuestionAnswers,
+    testStudents
   }
 })

@@ -4,6 +4,7 @@ const origin = 'http://training-zno/api';
 const routes = {
     get: {
         treeCategories: `${origin}/treeCategories`,
+        categoryTests: `${origin}/get-category-and-tests`,
         treeCategory: `${origin}/treeCategories/{id}`,
     },
     post: {
@@ -22,6 +23,10 @@ exports.getRoutes = () => {
 };
 exports.index = (headers) => {
     const url = routes.get.treeCategories;
+    return axios.get(url, headers);
+};
+exports.categoryTests = (headers) => {
+    const url = routes.get.categoryTests;
     return axios.get(url, headers);
 };
 exports.show = (id, headers) => {

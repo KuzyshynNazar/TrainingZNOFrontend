@@ -127,7 +127,7 @@ export default {
     }),
   },
   created() {
-    console.log(this.user.isCustomer)
+    console.log(this.user)
   },
   methods: {
     ...mapActions({

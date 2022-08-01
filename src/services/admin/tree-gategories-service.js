@@ -18,6 +18,22 @@ export default {
             context.commit(types.TREE_CATEGORY_ERRORS, err.response.data.errors);
         });
     },
+
+    /**
+     *
+     * @param context
+     */
+    async  getAllCategoryAndTests(context) {
+        await  apiTreeCategories.categoryTests({
+            headers: {
+                'Authorization': `Bearer ${context.rootGetters["auth/token"]}`
+            }
+        }).then((response) => {
+            context.commit(types.SET_CATEGORY_AND_TESTS, response.data.data);
+        }).catch(err => {
+            context.commit(types.TREE_CATEGORY_ERRORS, err.response.data.errors);
+        });
+    },
     /**
      *
      * @param context

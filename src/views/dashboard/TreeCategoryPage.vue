@@ -4,9 +4,15 @@
              color="white">
     <w-tooltip right>
       <template #activator="{ on }">
-        <w-icon v-on="on" md @click="openCreateDialog">mdi mdi-account-multiple-plus</w-icon>
+        <w-icon class="mb2" v-on="on" md @click="openCreateDialog">mdi mdi-account-multiple-plus</w-icon>
       </template>
-      Створити категорію
+      Створити батьківську категорію
+    </w-tooltip>
+    <w-tooltip right>
+      <template #activator="{ on }">
+        <w-icon v-on="on" md @click="openCategoryAndFilesDialog">mdi mdi-text-box-outline</w-icon>
+      </template>
+      Категорії і тести
     </w-tooltip>
   </w-toolbar>
 
@@ -62,9 +68,9 @@
       </div>
     </w-card>
   </w-flex>
-  <w-dialog width="600px"
-            v-model="showCreateDialog"
-            title="Створити Батьківську Категорію">
+  <w-dialog title="Створити Батьківську Категорію"
+            width="600px"
+            v-model="showCreateDialog">
     <w-button absolute top right bg-color="grey-dark5"
               color="white" icon="wi-cross" tile @click="showCreateDialog=false"></w-button>
     <div class="mb4">
@@ -88,9 +94,9 @@
       <w-button @click="storeCategory" class="mt3 grow">Створити студента</w-button>
     </w-flex>
   </w-dialog>
-  <w-dialog width="600px"
-            v-model="showCreateChildDialog"
-            title="Створити студента">
+  <w-dialog title="Створити категорію"
+            width="600px"
+            v-model="showCreateChildDialog">
     <w-button absolute top right bg-color="grey-dark5"
               color="white" icon="wi-cross" tile @click="showCreateChildDialog=false"></w-button>
     <div class="mb4">
@@ -111,9 +117,9 @@
       <w-button @click="storeChildCategory" class="mt3 grow">Створити студента</w-button>
     </w-flex>
   </w-dialog>
-  <w-dialog width="1000px"
-            v-model="showEditDialog"
-            title="Створити студента">
+  <w-dialog title="Редагувати категорію"
+            width="1000px"
+            v-model="showEditDialog">
     <w-button absolute top right bg-color="grey-dark5"
               color="white" icon="wi-cross" tile @click="showEditDialog=false"></w-button>
     <w-flex fill-height>
@@ -186,9 +192,9 @@
       </w-card>
     </w-flex>
   </w-dialog>
-  <w-dialog width="400px"
-            v-model="showDeleteDialog"
-            title="Видалити студента">
+  <w-dialog title="Видалити категорію"
+            width="400px"
+            v-model="showDeleteDialog">
     <w-button absolute top right bg-color="grey-dark5"
               color="white" icon="wi-cross" tile @click="showDeleteDialog=false">
     </w-button>
@@ -199,6 +205,53 @@
       <w-button @click="showDeleteDialog=false" class="mt3 grow">Ні</w-button>
     </w-flex>
   </w-dialog>
+  <w-dialog title="Показати категорії і тести"
+            width="90vw"
+            v-model="showCategoryAndFilesDialog">
+    <w-button absolute top right bg-color="grey-dark5"
+              color="white" icon="wi-cross" tile @click="showCategoryAndFilesDialog=false"></w-button>
+    <w-flex fill-height>
+      <w-card class="grow mr3" style="height: 80vh">
+        <div style="width:100%; height: 75vh; overflow: auto;">
+          <Tree :value="categoryAndTests">
+            <template v-slot="{node,  path, tree}">
+              <w-flex justify-space-between align-center>
+                <w-flex align-center>
+                  <div class="mr2">
+                      <w-icon xl v-if="node.children && node.children.length!==0" @click="tree.toggleFold(node, path)" class="mr2">
+                        {{ node.$folded ? 'mdi mdi-folder-plus' : 'mdi mdi-folder-minus' }}
+                      </w-icon>
+                      <w-icon xl v-else-if="node.children && node.children.length===0"  class="mr2">
+                            mdi mdi-folder-outline
+                      </w-icon>
+                    <w-icon xl v-else class="mr2">
+                      mdi mdi-file
+                    </w-icon>
+                  </div>
+                  <div class="mr2">
+                    {{ node.text }}
+                  </div>
+                </w-flex>
+              </w-flex>
+            </template>
+          </Tree>
+        </div>
+      </w-card>
+    </w-flex>
+  </w-dialog>
+  <w-overlay
+      v-model="showProgress"
+      persistent
+      opacity="0.8"
+  >
+    <w-progress
+        size="150px"
+        class="ma1"
+        circle
+        color="yellow-light2"
+        bg-color="light-blue-light2">
+    </w-progress>
+  </w-overlay>
 </template>
 <script>
 import 'he-tree-vue/dist/he-tree-vue.css'
@@ -209,7 +262,9 @@ export default {
   components: {Tree: Tree.mixPlugins([Fold]),},
   data: function () {
     return {
+      showProgress: false,
       showCreateDialog: false,
+      showCategoryAndFilesDialog: false,
       showCreateChildDialog: false,
       showEditDialog: false,
       showDeleteDialog: false,
@@ -224,17 +279,20 @@ export default {
     };
   },
   created() {
-    this.getAll()
+    this.showProgress=true
+    this.getAll().then(()=>{this.showProgress=false})
   },
   computed: {
     ...mapGetters({
       treeCategories: 'treeCategories/treeCategories',
+      categoryAndTests: 'treeCategories/categoryAndTests',
       errors: 'treeCategories/errors',
     }),
   },
   methods: {
     ...mapActions({
       getAll: 'treeCategories/getAll',
+      getAllCategoryAndTests: 'treeCategories/getAllCategoryAndTests',
       store: 'treeCategories/store',
       update: 'treeCategories/update',
       delete: 'treeCategories/delete',
@@ -296,6 +354,11 @@ export default {
     },
     parentCategory(node) {
       this.isParentCategory = node.id
+    },
+    openCategoryAndFilesDialog() {
+      this.showProgress=true
+      this.getAllCategoryAndTests().then(()=>{this.showProgress=false})
+      this.showCategoryAndFilesDialog = true
     }
   },
 };

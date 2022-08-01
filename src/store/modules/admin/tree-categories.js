@@ -3,6 +3,7 @@ import treeCategoriesService from '../../../services/admin/tree-gategories-servi
 
 const state = () => ({
     treeCategories: [],
+    categoryAndTests: [],
     errors: [],
 })
 
@@ -12,6 +13,7 @@ const getters = {
      * @param state
      */
     treeCategories: state => state.treeCategories,
+    categoryAndTests: state => state.categoryAndTests,
     errors: state => state.errors,
 
 };
@@ -25,6 +27,14 @@ const actions = {
      */
     async getAll(context) {
         await treeCategoriesService.getAll(context)
+    },
+    /**
+     *
+     * @param context
+     * @returns {Promise<void>}
+     */
+    async getAllCategoryAndTests(context) {
+        await treeCategoriesService.getAllCategoryAndTests(context)
     },
 
     /**
@@ -65,6 +75,14 @@ const mutations = {
      */
     [types.SET_TREE_CATEGORIES]: (state, treeCategories) => {
         state.treeCategories = treeCategories
+    },
+    /**
+     *
+     * @param state
+     * @param treeCategories
+     */
+    [types.SET_CATEGORY_AND_TESTS]: (state, categoryAndTests) => {
+        state.categoryAndTests = categoryAndTests
     },
 
 
