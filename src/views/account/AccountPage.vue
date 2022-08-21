@@ -18,10 +18,12 @@
     </w-flex>
 
   </w-drawer>
-  <div style="margin-left: 250px" class="pa3">
+  <main class="grow">
+<!--  <div style="margin-left: 250px; width: 100%"  >-->
 
     <router-view></router-view>
-  </div>
+<!--  </div>-->
+  </main>
 </template>
 
 <script>
@@ -33,8 +35,9 @@ export default {
     return {
       openDrawer1: true,
       items: [
-        {label: 'Item 1', id: 'item1', color: 'amber',icon: 'mdi mdi-star', route: '/account/test1'},
-        {label: 'Item 2', id: 'item2', color: 'warning',icon: 'mdi mdi-star', route: '/account/test2'},
+        {label: 'Ваші тести', id: 'item1', color: 'white',icon: 'mdi mdi-ab-testing', route: '/account/tests'},
+        {label: 'Мої книги', id: 'item2', color: 'white',icon: 'mdi mdi-book-open-page-variant', route: '/account/my-books'},
+        {label: 'Мої оцінки', id: 'item3', color: 'white',icon: 'mdi mdi-star', route: '/account/my-grades'},
       ]
     }
   },
@@ -53,21 +56,4 @@ export default {
 
 <style>
 
-h3 {
-  margin: 40px 0 0;
-}
-
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-
-a {
-  color: #42b983;
-}
 </style>

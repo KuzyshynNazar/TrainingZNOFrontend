@@ -91,6 +91,7 @@ export default {
         {label: 'Студенти', id: 'students', color: 'white', icon: 'mdi mdi-account-school', route: '/dashboard/students'},
         {label: 'Дерево категорій', id: 'treeCategories', color: 'white', icon: 'mdi mdi-file-tree-outline', route: '/dashboard/tree-categories'},
         {label: 'Тест', id: 'tests', color: 'white', icon: 'mdi mdi-ab-testing', route: '/dashboard/tests'},
+        {label: 'Новина', id: 'tests', color: 'white', icon: 'mdi mdi-newspaper-variant', route: '/dashboard/news'},
       ]
     }
   },

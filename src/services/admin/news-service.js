@@ -1,6 +1,6 @@
 import * as types from '../../store/mutayion-types';
 
-const apiTests = require('../../api/admin/tests');
+const apiNews = require('../../api/admin/news');
 
 export default {
     /**
@@ -8,32 +8,31 @@ export default {
      * @param context
      */
     async  getAll(context) {
-        await  apiTests.index({
+        await  apiNews.index({
             headers: {
                 'Authorization': `Bearer ${context.rootGetters["auth/token"]}`
             }
         }).then((response) => {
-            context.commit(types.SET_TESTS, response.data.data);
+            context.commit(types.SET_NEWS, response.data.data);
         }).catch(err => {
-            console.log(err)
-            // context.commit(types.TEST_ERRORS, err.response.data.errors);
+            context.commit(types.NEWS_ERRORS, err.response.data.errors);
         });
     },
     /**
      *
      * @param context
-     * @param test
+     * @param news
      */
-    async store(context, test) {
-        await apiTests.create(test, {
+    async store(context, news) {
+        await apiNews.create(news, {
             headers: {
                 'Authorization': `Bearer ${context.rootGetters["auth/token"]}`
             }
         }).then((response) => {
-            context.commit(types.TEST_ERRORS, []);
-            context.commit(types.SAVE_NEW_TEST, response.data.data);
+            context.commit(types.NEWS_ERRORS, []);
+            context.commit(types.SAVE_NEW_NEWS, response.data.data);
         }).catch(err => {
-            context.commit(types.TEST_ERRORS, err.response.data.errors);
+            context.commit(types.NEWS_ERRORS, err.response.data.errors);
         });
     },
     /**
@@ -42,32 +41,32 @@ export default {
      * @param id
      */
     async show(context, id) {
-        await apiTests.show(id, {
+        await apiNews.show(id, {
             headers: {
                 'Authorization': `Bearer ${context.rootGetters["auth/token"]}`
             }
         }).then((response) => {
-            context.commit(types.SET_TEST, response.data.data);
+            context.commit(types.SET_ONE_NEWS, response.data.data);
         }).catch(err => {
-            context.commit(types.TEST_ERRORS, err.response.data.errors);
+            context.commit(types.NEWS_ERRORS, err.response.data.errors);
         });
     },
 
     /**
      *
      * @param context
-     * @param test
+     * @param news
      */
-    async update(context, test) {
-        await apiTests.update(test.id, test, {
+    async update(context, news) {
+        await apiNews.update(news.id, news, {
             headers: {
                 'Authorization': `Bearer ${context.rootGetters["auth/token"]}`
             }
         }).then((response) => {
-            context.commit(types.TEST_ERRORS, []);
-            context.commit(types.SAVE_UPDATED_TEST, response.data.data);
+            context.commit(types.NEWS_ERRORS, []);
+            context.commit(types.SAVE_UPDATED_NEWS, response.data.data);
         }).catch(err => {
-            context.commit(types.TEST_ERRORS, err.response.data.errors);
+            context.commit(types.NEWS_ERRORS, err.response.data.errors);
         });
     },
     /**
@@ -76,14 +75,14 @@ export default {
      * @param id
      */
     async delete(context, id) {
-        await apiTests.delete(id, {
+        await apiNews.delete(id, {
             headers: {
                 'Authorization': `Bearer ${context.rootGetters["auth/token"]}`
             }
         }).then(() => {
-            context.commit(types.SET_DELETE_TEST, id);
+            context.commit(types.SET_DELETE_NEWS, id);
         }).catch(err => {
-            context.commit(types.TEST_ERRORS, err.response.data.errors);
+            context.commit(types.NEWS_ERRORS, err.response.data.errors);
         })
     }
 }

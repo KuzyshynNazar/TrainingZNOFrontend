@@ -16,8 +16,8 @@
           <div class="spacer"></div>
           <w-tooltip left>
             <template #activator="{ on }">
-              <w-button v-on="on" icon="mdi mdi-backburger" color="white" @click="openDrawer = true" text md
-                        class="ml3 mr3">
+              <w-button v-on="on" icon="mdi mdi-backburger" color="white" @click="openDrawer = true" tile text md
+                        class="mr2">
               </w-button>
             </template>
             Розгорнути бічну панель
@@ -38,65 +38,77 @@
                   @click="openDrawer = false"
                   sm
                   absolute
+                  left
                   text
+                  tile
+                  style="left: -20px"
                   color="white"
+                  bg-color="grey-dark5"
                   icon="mdi mdi-forwardburger">
               </w-button>
             </template>
             Згорнути бічну панель
           </w-tooltip>
+          <w-flex column class="mt2">
+            <w-list style="display: inline-grid" :items="items" nav hover>
+              <template #item="{ item }">
+                <div>{{ item.label }}</div>
+                <div class="spacer"></div>
+                <w-icon md>{{ item.icon }}</w-icon>
+              </template>
+            </w-list>
+          </w-flex>
         </w-drawer>
         <router-view></router-view>
       </main>
       <footer>
         <w-toolbar shadow class="pa0" bg-color="grey-dark5" color="white" height="40px">
-          <w-tooltip right>
+          <w-tooltip top>
             <template #activator="{ on }">
-              <w-button v-on="on" :icon="!isFullscreen?iconFullscreen1:iconFullscreen2" color="white"
+              <w-button v-on="on" :icon="!isFullscreen?iconFullscreen1:iconFullscreen2" tile color="white"
                         @click="fullScreen" text md
                         class="ml3 mr3">
               </w-button>
             </template>
             {{ !isFullscreen ? 'Повноноекраний режим' : 'Звичайний режим' }}
           </w-tooltip>
-          <div class="spacer"></div>
-          <w-tooltip v-if="user.isCustomer" top color="white" bg-color="grey-dark5">
+          <w-tooltip top>
             <template #activator="{ on }">
-              <w-button v-on="on" icon="mdi mdi-account" color="white" @click="goToAccount" text md
+              <w-button v-on="on" icon="mdi mdi-location-exit" color="white" v-if="user.isAdmin" @click="logOutAdmin" tile text md
+                        class="mr2"></w-button>
+              <w-button v-else v-on="on" icon="mdi mdi-logout-variant" color="white" @click="logOutStudent" tile text md
+                        class="mr2"></w-button>
+            </template>
+            Вихід
+          </w-tooltip>
+          <div class="spacer"></div>
+          <w-tooltip  v-if="!user.isAdmin" top color="white" bg-color="grey-dark5">
+            <template #activator="{ on }">
+              <w-button v-on="on" icon="mdi mdi-account" color="white" @click="goToAccount" tile text md
                         class="ml3 mr3"></w-button>
             </template>
             Особистий кабінет
           </w-tooltip>
           <w-tooltip v-if="user.isAdmin" top color="white" bg-color="grey-dark5">
             <template #activator="{ on }">
-              <w-button v-on="on" icon="mdi mdi-monitor-dashboard" color="white" @click="goToAdminPanel" text md
+              <w-button v-on="on" icon="mdi mdi-monitor-dashboard" color="white" @click="goToAdminPanel" tile text md
                         class="ml3 mr3"></w-button>
             </template>
             Адмін панель
           </w-tooltip>
           <w-tooltip top color="white" bg-color="grey-dark5">
             <template #activator="{ on }">
-              <w-button v-on="on" icon="mdi mdi-cog-outline" color="white" @click="goToSettings" text md
+              <w-button v-on="on" icon="mdi mdi-cog-outline" color="white" @click="goToSettings" tile text md
                         class="ml3 mr3"></w-button>
             </template>
             Налаштування сайту
           </w-tooltip>
-          <w-tooltip v-if="user.isCustomer" top color="white" bg-color="grey-dark5">
+          <w-tooltip  top color="white" bg-color="grey-dark5">
             <template #activator="{ on }">
-              <w-button v-on="on" icon="mdi mdi-account-cog" color="white" @click="goToSettingsAccount" text md
+              <w-button v-on="on" icon="mdi mdi-account-cog" color="white" @click="goToSettingsAccount" tile text md
                         class="ml3 mr3"></w-button>
             </template>
             Налаштування особистого кабінету
-          </w-tooltip>
-          <div class="spacer"></div>
-          <w-tooltip left>
-            <template #activator="{ on }">
-              <w-button v-on="on" icon="mdi mdi-location-exit" color="white" v-if="user.isAdmin" @click="logOutAdmin" text md
-                        class="ml3 mr3"></w-button>
-              <w-button v-else v-on="on" icon="mdi mdi-location-exit" color="white" @click="logOutStudent" text md
-                        class="ml3 mr3"></w-button>
-            </template>
-            Вихід
           </w-tooltip>
         </w-toolbar>
       </footer>
@@ -119,6 +131,11 @@ export default {
       iconFullscreen2: 'mdi mdi-fullscreen-exit',
       isFullscreen: false,
       openDrawer: false,
+      items: [
+        {label: 'Новина', id: 'tests', color: 'white', icon: 'mdi mdi-newspaper-variant-outline', route: '/home'},
+        {label: 'Книги', id: 'students', color: 'white', icon: 'mdi mdi-bookshelf', route: '/books'},
+        // {label: 'Додаткові матеріали', id: 'treeCategories', color: 'white', icon: 'mdi mdi-file-tree-outline', route: '/dashboard/tree-categories'},
+      ]
     }
   },
   computed: {
@@ -127,7 +144,7 @@ export default {
     }),
   },
   created() {
-    console.log(this.user)
+    // console.log(this.user)
   },
   methods: {
     ...mapActions({
@@ -151,12 +168,12 @@ export default {
     },
     logOutAdmin() {
       this.logoutAdmin().then(() => {
-        this.$router.push({path: '/'});
+        this.$router.push({path: '/login-admin'});
       })
     },
     logOutStudent() {
       this.logoutStudent().then(() => {
-        this.$router.push({path: '/'});
+        this.$router.push({path: '/login'});
       })
     },
     home() {

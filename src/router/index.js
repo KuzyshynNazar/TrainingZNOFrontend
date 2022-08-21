@@ -8,13 +8,17 @@ const routes = [
       if (store.getters['auth/isAuthorized']) {
         next();
       } else {
-        next({path: '/'});
+        next({path: '/login'});
       }
     }),
     children: [
       {
         path: '/home',
         component: () => import( '../views/HomePage'),
+      },
+      {
+        path: '/books',
+        component: () => import( '../views/BooksPage'),
       },
       {
         path: '/account-settings',
@@ -49,18 +53,26 @@ const routes = [
         component: () => import( '../views/account/AccountPage'),
         children: [
           {
-            path: '/account/test1',
-            component: () => import( '../views/account/AccountTest1Page'),
+            path: '/account/tests',
+            component: () => import( '../views/account/TestPage'),
           },
           {
-            path: '/account/test2',
-            component: () => import( '../views/account/AccountTest2Page'),
+            path: '/account/my-books',
+            component: () => import( '../views/account/MyBooksPage'),
+          },
+          {
+            path: '/account/my-grades',
+            component: () => import( '../views/account/MyGradesPage'),
           },
         ]
       },
       {
         path: '/:pathMatch(.*)*',
         component: () => import( '../components/NotFound'),
+      },
+      {
+        path: '/',
+        component: () => import( '../views/HomePage'),
       },
       {
         path: '*',
@@ -92,17 +104,21 @@ const routes = [
         component: () => import( '../views/dashboard/TestPage'),
       },
       {
+        path: '/dashboard/news',
+        component: () => import( '../views/dashboard/NewsPage'),
+      },
+      {
         path: '/:pathMatch(.*)*',
         component: () => import( '../components/NotFound'),
       },
       {
         path: '*',
-        component: () => import( '../views/HomePage'),
+        component: () => import( '../views/dashboard/StudentsPage'),
       },
     ]
   },
   {
-    path: '/',
+    path: '/login',
     component: () => import('../views/auth/AuthPage.vue'),
     beforeEnter: ((to, from, next) => {
       if (store.getters['auth/isAuthorized']) {
@@ -123,6 +139,31 @@ const routes = [
       {
         path: '*',
         component: () => import('../views/auth/AuthPage.vue')
+      },
+    ]
+  },
+  {
+    path: '/login-admin',
+    component: () => import('../views/auth/AuthDashboardPage.vue'),
+    beforeEnter: ((to, from, next) => {
+      if (store.getters['auth/isAuthorized']) {
+        next({path: '/dashboard/students'});
+      } else {
+        next();
+      }
+    }),
+    children: [
+      {
+        path: 'login-admin',
+        component: () => import('../views/auth/AuthDashboardPage.vue')
+      },
+      {
+        path: '/:pathMatch(.*)*',
+        component: () => import('../views/auth/AuthDashboardPage.vue')
+      },
+      {
+        path: '*',
+        component: () => import('../views/auth/AuthDashboardPage.vue')
       },
     ]
   },

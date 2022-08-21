@@ -13,7 +13,9 @@ export default {
       openDrawer1:true
     }
   },
-  created() { },
+  created() {
+
+  },
   computed: {
     ...mapGetters({
     }),

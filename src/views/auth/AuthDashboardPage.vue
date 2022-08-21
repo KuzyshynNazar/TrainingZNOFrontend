@@ -24,10 +24,10 @@
           style="flex-direction: column; width: 100%"
       >
         <w-input
-            v-model="inputs.nick_name"
+            v-model="inputs.email"
             style="width: 100%"
             class="mb2"
-            placeholder="username"
+            placeholder="email"
             outline
         >
         </w-input>
@@ -45,7 +45,7 @@
             style="width: 100%" height="28"
             bg-color="grey-dark5"
             color="white"
-            @click="logInStudent"
+            @click="logInAdmin"
         >
           Login
         </w-button>
@@ -59,7 +59,7 @@
 import {mapActions} from "vuex";
 
 export default {
-  name: 'myAuth',
+  name: 'dashboardAuth',
   data() {
     return {
       inputs: {
@@ -72,11 +72,11 @@ export default {
 
   methods: {
     ...mapActions({
-      loginStudent: "auth/loginStudent",
+      loginAdmin: "auth/loginAdmin",
     }),
-    logInStudent() {
-      this.loginStudent(this.inputs).then(() => {
-        this.$router.push({path: '/home'});
+    logInAdmin() {
+      this.loginAdmin(this.inputs).then(() => {
+        this.$router.push({path: '/dashboard/students'});
       })
     },
   },

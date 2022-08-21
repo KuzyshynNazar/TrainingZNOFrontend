@@ -237,12 +237,12 @@
     </w-dialog>
     <w-dialog title="Показати Тест"
               title-class="grey-dark5--bg white"
-              width="95vw"
+              fullscreen
               v-model="showShowTestDialog">
       <w-button absolute top right bg-color="grey-dark5"
                 color="white" icon="wi-cross" tile @click="showShowTestDialog=false"></w-button>
-      <w-flex style="height: 85vh">
-        <w-card class="grow mr3" title="Основна інформація" style="width: 40%" shadow>
+      <w-flex fill-height>
+        <w-card class="grow mr3" title="Основна інформація" style="width: 30%; height: auto" no-border shadow>
           <w-flex column>
             <w-flex justify-space-between align-start class="mb1 pa1">
               <div>
@@ -278,26 +278,98 @@
             </w-flex>
           </w-flex>
         </w-card>
-        <w-card :title="test.name" style="width: 60%" shadow>
+        <w-card :title="test.name" style="width: 70%; height: auto" no-border shadow>
           <w-flex column class="pl2">
             <div v-for="(value, index) in test.questions" :key="index" class="align-center mb2">
               <div class="w-flex align-center mb1">
                 <div class="mr2">{{ index + 1 }}.</div>
                 <div v-html="value.question"></div>
               </div>
-              <div class="w-flex column align-start pl6 mb1">
-                <div v-for="(value, index) in value.answers" :key="index" class="d-flex align-center pa1">
+              <div class="w-flex column justify-center align-start pl6 mb1">
+                <!--                <div v-for="(value, index) in value.answers" :key="index" class="d-flex align-center pa1">-->
+                <!--                  <div>-->
+                <!--                    <w-icon>mdi mdi-minus</w-icon>-->
+                <!--                  </div>-->
+                <div v-if="value.questionType===1" class="d-flex align-center justify-center">
+                  <w-radios
+                      v-model="selection.answers[`question${index}`]"
+                      :items="value.answers"
+                      color="grey-dark5"
+                      @update:model-value="input2($event, value.id, index)"
+                  >
+                    <template #item="{ item }">
+                      <span class="pr2 grey-dark5" v-html="item.label"></span>
+                    </template>
+                  </w-radios>
+                </div>
+                <div v-else-if="value.questionType===3">
+                  <div v-html="value.answers[0].answer"></div>
                   <div>
-                    <w-icon>mdi mdi-minus</w-icon>
+                    <div class="d-flex align-center justify-start" style="margin-left: 32px">
+                      <div class="pa2" style="width: 34px; height: 34px">А</div>
+                      <div class="pa2" style="width: 34px; height: 34px">Б</div>
+                      <div class="pa2" style="width: 34px; height: 34px">В</div>
+                      <div class="pa2" style="width: 34px; height: 34px">Г</div>
+                      <div class="pa2" style="width: 34px; height: 34px">Д</div>
+                    </div>
+                    <div class="d-flex align-center justify-start">
+                      <div class="pa2">1.</div>
+                      <div>
+                        <w-radio :name="`item${value.id}1`" @change="input1(value.id,1,'А', index)"
+                                 class="pa2"></w-radio>
+                        <w-radio :name="`item${value.id}1`" @change="input1(value.id,1,'Б', index)"
+                                 class="pa2"></w-radio>
+                        <w-radio :name="`item${value.id}1`" @change="input1(value.id,1,'В', index)"
+                                 class="pa2"></w-radio>
+                        <w-radio :name="`item${value.id}1`" @change="input1(value.id,1,'Г', index)"
+                                 class="pa2"></w-radio>
+                        <w-radio :name="`item${value.id}1`" @change="input1(value.id,1,'Д', index)"
+                                 class="pa2"></w-radio>
+                      </div>
+                    </div>
+                    <div class="d-flex align-center justify-start">
+                      <div class="pa2">2.</div>
+                      <div>
+                        <w-radio :name="`item${value.id}2`" @change="input1(value.id,2, 'А', index)"
+                                 class="pa2"></w-radio>
+                        <w-radio :name="`item${value.id}2`" @change="input1(value.id,2, 'Б', index)"
+                                 class="pa2"></w-radio>
+                        <w-radio :name="`item${value.id}2`" @change="input1(value.id,2, 'В', index)"
+                                 class="pa2"></w-radio>
+                        <w-radio :name="`item${value.id}2`" @change="input1(value.id,2, 'Г', index)"
+                                 class="pa2"></w-radio>
+                        <w-radio :name="`item${value.id}2`" @change="input1(value.id,2, 'Д', index)"
+                                 class="pa2"></w-radio>
+                      </div>
+                    </div>
+                    <div class="d-flex align-center justify-start">
+                      <div class="pa2">3.</div>
+                      <div>
+                        <w-radio :name="`item${value.id}3`" @change="input1(value.id,3, 'А', index)"
+                                 class="pa2"></w-radio>
+                        <w-radio :name="`item${value.id}3`" @change="input1(value.id,3, 'Б', index)"
+                                 class="pa2"></w-radio>
+                        <w-radio :name="`item${value.id}3`" @change="input1(value.id,3, 'В', index)"
+                                 class="pa2"></w-radio>
+                        <w-radio :name="`item${value.id}3`" @change="input1(value.id,3, 'Г', index)"
+                                 class="pa2"></w-radio>
+                        <w-radio :name="`item${value.id}3`" @change="input1(value.id,3, 'Д', index)"
+                                 class="pa2"></w-radio>
+                      </div>
+                    </div>
                   </div>
-                  <div class="ml2" v-html="value.answer"></div>
+                </div>
+                <div v-else-if="value.questionType===2" style="width: 100%">
+                  <w-input @update:model-value="input3($event,value.id,index)" color="grey-dark5" style="width: 100%"
+                           placeholder="Введіть свою відповідь"></w-input>
                 </div>
               </div>
+              <w-divider class="mt3 mb1"></w-divider>
             </div>
           </w-flex>
+          <w-button @click="createTestResult">Зберегти тест</w-button>
         </w-card>
       </w-flex>
-
     </w-dialog>
     <w-dialog title="Показати студентів даного тесту"
               title-class="grey-dark5--bg white"
@@ -306,10 +378,10 @@
       <w-button absolute top right bg-color="grey-dark5"
                 color="white" icon="wi-cross" tile @click="showShowTestStudentsDialog=false"></w-button>
       <w-flex style="height: 85vh">
-<!--        <w-card class="grow mr3"  style="width: 40%" shadow>-->
-<!--{{test.students}}-->
-<!--        </w-card>-->
-        <w-card  style="width: 100%" shadow>
+        <!--        <w-card class="grow mr3"  style="width: 40%" shadow>-->
+        <!--{{test.students}}-->
+        <!--        </w-card>-->
+        <w-card style="width: 100%" shadow>
           <w-table
               :headers="tableHeaderStudentT.filter(header => !header.hidden)"
               :items="test.students"
@@ -317,9 +389,9 @@
               @update:selected-rows="this.inputsUpdateTestStudents.student_ids=$event"
           >
           </w-table>
-          <w-flex  justify-center class="mt2 ">
+          <w-flex justify-center class="mt2 ">
             <w-button :disabled="inputsUpdateTestStudents.student_ids.length===0"
-                class="mr3"
+                      class="mr3"
                       lg
                       shadow
                       bg-color="grey-dark5"
@@ -327,11 +399,11 @@
                       @click="updateTestFotStudents(test.id)">Оновити список студентів
             </w-button>
             <w-button
-                      lg
-                      shadow
-                      bg-color="grey-dark5"
-                      color="white"
-                      @click="deleteTestFotStudents(test.id)">Видалити студентів із тесту
+                lg
+                shadow
+                bg-color="grey-dark5"
+                color="white"
+                @click="deleteTestFotStudents(test.id)">Видалити студентів із тесту
             </w-button>
           </w-flex>
         </w-card>
@@ -445,6 +517,20 @@
       <w-flex fill-height>
         <w-card style="width: 100%" shadow>
           <div class="mb4">
+            <w-select
+                v-model="inputsTestQuestions.question_type_id"
+                :items="questionTypes"
+                placeholder="Виберіть тип питання"
+                color="grey-dark5"
+            >
+            </w-select>
+          </div>
+          <div class="mb4">
+            <w-input type="number" label-color="grey-dark5" color="grey-dark5" v-model="inputsTestQuestions.points"
+                     min="0" max="10">Бал за питання
+            </w-input>
+          </div>
+          <div class="mb4">
             <ckeditor
                 :editor="testQuestionEditor.editor"
                 v-model="inputsTestQuestions.question"
@@ -454,9 +540,11 @@
             <!--                     label="Назва"></w-input>-->
             <!--            <span v-if="errors && errors.question" style="font-size: 10px; color: red">{{ errors.question[0] }}</span>-->
           </div>
+
           <div class="mb4">
-            <w-checkbox color="grey-dark5" label-color="grey-dark5" v-model="inputsTestQuestions.status" label="Статус">
-              {{ inputsTestQuestions.status ? 'Відображати' : 'Не відображати' }}
+            <w-checkbox color="grey-dark5" label-color="grey-dark5" v-model="inputsTestQuestions.status"
+                        :label="inputsTestQuestions.status ? 'Відображати' : 'Не відображати'">
+
             </w-checkbox>
           </div>
           <w-flex>
@@ -519,6 +607,20 @@
       <w-flex fill-height>
         <w-card style="width: 100%" shadow>
           <div class="mb4">
+            <w-select
+                v-model="inputsTestQuestions.question_type_id"
+                :items="questionTypes"
+                placeholder="Виберіть тип питання"
+                color="grey-dark5"
+            >
+            </w-select>
+          </div>
+          <div class="mb4">
+            <w-input type="number" label-color="grey-dark5" color="grey-dark5" v-model="inputsTestQuestions.points"
+                     min="0" max="10">Бал за питання
+            </w-input>
+          </div>
+          <div class="mb4">
             <ckeditor
                 :editor="testQuestionEditor.editor"
                 v-model="inputsTestQuestions.question"
@@ -562,6 +664,59 @@
               <w-icon class="pr2">mdi mdi-plus-circle-outline</w-icon>
               Створити відповідь
             </w-button>
+
+            <w-menu align-right shadow>
+              <template #activator="{ on }">
+                <w-button v-on="on" class="ml3" bg-color="grey-dark5"
+                          color="green">
+                  <w-icon class="pr2" color="green">mdi mdi-plus-circle-outline</w-icon>
+                  Створити правильну відповідь
+                </w-button>
+              </template>
+              <div style="width: 300px; height: 200px">
+                <div v-if="tableItemTestQuestion.questionType===1">
+                  <w-select multiple
+                            label-color="grey-dark5"
+                            label="Виберіть правильну відповідь"
+                            v-model="inputsTestQuestionTrueAnswer.true_answer"
+                            :items="testQuestionAnswers" @update:model-value="setTrueAnswer1($event)">
+                    <template #item="{ item }">
+                      <span class="ml1" v-html="item.label"></span>
+                    </template>
+                    <template #selection="{ item }">
+                      <w-tag
+                          color="grey-dark5"
+                          class="mr2"
+                          v-for="(el, i) in item"
+                          :key="i"
+                          v-html="el.label">
+                      </w-tag>
+                    </template>
+                  </w-select>
+                </div>
+                <div v-else-if="tableItemTestQuestion.questionType===2">
+                  <w-input color="grey-dark5" label-color="grey-dark5"
+                           v-model="inputsTestQuestionTrueAnswer.true_answer"
+                           label="Опис"></w-input>
+                </div>
+                <div v-else-if="tableItemTestQuestion.questionType===3">
+                  <div class="d-flex align-center mb2" v-for="n in 3"
+                       :key="n">
+                    <div class="mr3">{{ n }}.</div>
+                    <w-select :items="selectionTrueAnswer" label-color="grey-dark5" label="Виберіть правильну відповідь"
+                              @update:model-value="setTrueAnswer(n,$event)">
+
+                    </w-select>
+                  </div>
+                </div>
+                <w-flex class="mt4">
+                  <w-button class="grow" @click="createTestQuestionTrueAnswer" bg-color="grey-dark5"
+                            color="white">Створити
+                  </w-button>
+                </w-flex>
+
+              </div>
+            </w-menu>
           </div>
 
 
@@ -612,9 +767,6 @@
                       v-model="inputsTestQuestionAnswers.answer"
                       :config="testQuestionAnswerEditor.editorConfig"
             ></ckeditor>
-            <!--            <w-input color="grey-dark5" label-color="grey-dark5" v-model="inputsTestQuestionAnswers.answer"-->
-            <!--                     label="Назва"></w-input>-->
-            <!--            <span v-if="errors && errors.answer " style="font-size: 10px; color: red">{{ errors.answer [0] }}</span>-->
           </div>
           <w-flex>
             <w-button bg-color="grey-dark5"
@@ -750,17 +902,18 @@
 import {mapActions, mapGetters} from "vuex";
 import 'he-tree-vue/dist/he-tree-vue.css'
 import {Tree, Fold} from 'he-tree-vue'
-// import MathLive from "mathlive";
-// import MathLiveInput from "../../components/MathliveComponent";
 import ClassicEditor from "ckeditor5-mathtype/build/ckeditor"
-// import {MathJax} from "mathjax-vue3";
-// import VueMathjax from 'vue-mathjax-next';
 export default {
 
   name: 'HelloWorld',
   components: {Tree: Tree.mixPlugins([Fold])},
   data() {
     return {
+      selection: {
+        answers: {},
+        testId: null,
+        studentId: null
+      },
       editor: ClassicEditor,
       editorData: "",
       editorConfig: {},
@@ -815,6 +968,8 @@ export default {
         question: null,
         status: null,
         test_id: null,
+        question_type_id: null,
+        points: null,
       },
       testQuestionEditor: {
         editor: ClassicEditor,
@@ -843,6 +998,18 @@ export default {
         answer: null,
         test_question_id: null,
       },
+      inputsTestQuestionTrueAnswer: {
+        test_question_id: null,
+        true_answer: null,
+      },
+      selectionTrueAnswer: [
+        {label: 'А', value: 'А'},
+        {label: 'Б', value: 'Б'},
+        {label: 'В', value: 'В'},
+        {label: 'В', value: 'В'},
+        {label: 'Г', value: 'Г'},
+        {label: 'Д', value: 'Д'},
+      ],
       testQuestionAnswerEditor: {
         editor: ClassicEditor,
         editorData: "",
@@ -886,7 +1053,6 @@ export default {
     }
   },
   created() {
-
     this.showProgress = true
     this.getAllTests().then(() => {
       this.getAllTreeCategories().then(() => {
@@ -902,22 +1068,18 @@ export default {
       testQuestions: 'testQuestions/testQuestions',
       testQuestion: 'testQuestions/testQuestion',
       testQuestionAnswers: 'testQuestionAnswers/testQuestionAnswers',
+      testQuestionTrueAnswers: 'testQuestionTrueAnswers/testQuestionTrueAnswers',
       treeCategories: 'treeCategories/treeCategories',
       errors: 'tests/errors',
+      questionTypes: 'questionTypes/questionTypes',
     }),
-    studentsObj() {
-      let checkboxes = []
-      this.students.forEach(element => {
-        checkboxes.push({label: element.name, value: element.id})
-
-      });
-      console.log(checkboxes)
-      return checkboxes
-
-    }
   },
   methods: {
     ...mapActions({
+      /**
+       * TreeCategory
+       */
+      getAllQuestionTypes: 'questionTypes/getAll',
       /**
        * Student
        */
@@ -952,16 +1114,25 @@ export default {
       storeTestQuestionAnswer: 'testQuestionAnswers/store',
       updateTestQuestionAnswer: 'testQuestionAnswers/update',
       deleteTestQuestionAnswer: 'testQuestionAnswers/delete',
+      /**
+       * TestQuestionTrueAnswer
+       */
+      getAllTestQuestionTrueAnswers: 'testQuestionTrueAnswers/getAll',
+      storeTestQuestionTrueAnswer: 'testQuestionTrueAnswers/store',
+      updateTestQuestionTrueAnswer: 'testQuestionTrueAnswers/update',
+      deleteTestQuestionTrueAnswer: 'testQuestionTrueAnswers/delete',
+      /**
+       * Result Test
+       */
+      storeTestResult: 'testResults/store'
     }),
     /**
      * Test
      */
     openCreateTestDialog() {
-      // this.inputsTests = Object.assign({}, [])
       this.showCreateTestDialog = true
     },
     openShowTestDialog(item) {
-      // this.math();
       this.showProgress = true
       this.showTest(item.id).then(() => {
         this.showProgress = false
@@ -986,11 +1157,11 @@ export default {
       this.inputsStudent = Object.assign({}, item)
       this.showDeleteTestDialog = true
     },
-    openShowTestStudentsDialog(item){
+    openShowTestStudentsDialog(item) {
       this.showProgress = true
-      this.showTest(item.id).then(()=>{
+      this.showTest(item.id).then(() => {
         this.showProgress = false
-        this.showShowTestStudentsDialog=true
+        this.showShowTestStudentsDialog = true
       })
 
     },
@@ -1020,6 +1191,7 @@ export default {
      * TestQuestion
      */
     openCreateTestQuestionDialog() {
+      this.getAllQuestionTypes()
       this.inputsTestQuestions = Object.assign({}, [])
       this.showCreateTestQuestionDialog = true
     },
@@ -1032,6 +1204,15 @@ export default {
     },
     openEditTestQuestionDialog(item) {
       this.inputsTestQuestions = Object.assign({}, item)
+      this.inputsTestQuestions.question_type_id = this.inputsTestQuestions.questionType
+      // console.log(this.inputsTestQuestions)
+      //     this.questionTypes.forEach(el=>{
+      //       console.log(el.id===this.inputsTestQuestions.questionType)
+      //       if(el.id===this.inputsTestQuestions.questionType){
+      //
+      //         this.inputsTestQuestions.questionType={}
+      //       }
+      //     })
       this.showEditTestQuestionDialog = true
     },
     openDeleteTestQuestionDialog(item) {
@@ -1040,6 +1221,7 @@ export default {
     },
     openCreateTestQuestionAnswersDialog(item) {
       this.tableItemTestQuestion = item
+      this.inputsTestQuestionTrueAnswer.true_answer = null
       this.showProgress = true
       this.getAllTestQuestionAnswers(item.id).then(() => {
         this.showProgress = false
@@ -1049,7 +1231,6 @@ export default {
     createTestQuestion() {
       this.inputsTestQuestions.status ? this.inputsTestQuestions.status = 1 : this.inputsTestQuestions.status = 0
       this.inputsTestQuestions.test_id = this.tableItemTest.id
-      console.log(this.inputsTestQuestions)
       this.storeTestQuestion(this.inputsTestQuestions).then(() => {
         this.notify('Питання створено.')
         this.showCreateTestQuestionDialog = false
@@ -1104,6 +1285,40 @@ export default {
       })
     },
     /**
+     * TestQuestionTrueAnswer
+     */
+    createTestQuestionTrueAnswer() {
+      console.log(typeof  this.inputsTestQuestionTrueAnswer.true_answer )
+      if(typeof  this.inputsTestQuestionTrueAnswer.true_answer !=='string' ){
+      this.inputsTestQuestionTrueAnswer.true_answer = JSON.stringify(this.inputsTestQuestionTrueAnswer.true_answer)
+      }
+      this.inputsTestQuestionTrueAnswer.test_question_id = this.tableItemTestQuestion.id
+      // if(this.inputsTestQuestionTrueAnswer.test_question_answer_id!==null){
+      //   this.inputsTestQuestionTrueAnswer.test_question_answer_id=this.inputsTestQuestionTrueAnswer.test_question_answer_id[0]
+      // }
+      console.log(this.inputsTestQuestionTrueAnswer)
+      this.storeTestQuestionTrueAnswer(this.inputsTestQuestionTrueAnswer).then(() => {
+        this.notify('Правильна відповідь створено.')
+      })
+    },
+    setTrueAnswer(index, event) {
+      if (this.inputsTestQuestionTrueAnswer.true_answer === null) {
+        this.inputsTestQuestionTrueAnswer.true_answer = []
+        this.inputsTestQuestionTrueAnswer.true_answer.push(`${index}-${event}`)
+      } else {
+        let el = `${index}-${event}`
+        let index1 = this.inputsTestQuestionTrueAnswer.true_answer.findIndex((c) => c[0] === el[0]);
+        if (index1 > -1) {
+          this.inputsTestQuestionTrueAnswer.true_answer.splice(index1, 1, el);
+        } else {
+          this.inputsTestQuestionTrueAnswer.true_answer.push(`${index}-${event}`)
+        }
+      }
+    },
+    setTrueAnswer1(event) {
+      this.inputsTestQuestionTrueAnswer.true_answer = event[0]
+    },
+    /**
      * Test Student
      */
     openTestStudentsDialog() {
@@ -1118,20 +1333,20 @@ export default {
         this.showCreateTestStudentsDialog = false
       })
     },
-    updateTestFotStudents(testId){
-      this.inputsUpdateTestStudents.test_id=testId
-      this.updateTestStudents(this.inputsUpdateTestStudents).then(()=>{
+    updateTestFotStudents(testId) {
+      this.inputsUpdateTestStudents.test_id = testId
+      this.updateTestStudents(this.inputsUpdateTestStudents).then(() => {
         this.showProgress = true
-        this.showTest(testId).then(()=>{
+        this.showTest(testId).then(() => {
           this.showProgress = false
         })
       })
     },
-    deleteTestFotStudents(testId){
-      this.inputsDeleteTestStudents.test_id=testId
-      this.deleteTestStudents(this.inputsDeleteTestStudents).then(()=>{
+    deleteTestFotStudents(testId) {
+      this.inputsDeleteTestStudents.test_id = testId
+      this.deleteTestStudents(this.inputsDeleteTestStudents).then(() => {
         this.showProgress = true
-        this.showTest(testId).then(()=>{
+        this.showTest(testId).then(() => {
           this.showProgress = false
         })
       })
@@ -1150,29 +1365,48 @@ export default {
     parentCategory(node) {
       this.isParentCategory = node.id
     },
-    input(data) {
-      this.formula = '$$' + data + '$$'
+    input1(question, answer, event, index) {
+      if (this.selection.answers[`question${index}`] === undefined) {
+        this.selection.answers[`question${index}`] = []
+        this.selection.answers[`question${index}`].push({questionId: question, answer: `${answer}-${event}`})
+      } else {
+        let el = {questionId: question, answer: `${answer}-${event}`}
+        let index1 = this.selection.answers[`question${index}`].findIndex((c) => c.answer[0] === el.answer[0]);
+        if (index1 > -1) {
+          this.selection.answers[`question${index}`].splice(index1, 1, el);
+        } else {
+          this.selection.answers[`question${index}`].push({questionId: question, answer: `${answer}-${event}`})
+        }
+      }
+      this.selection.answers[`question${index}`].sort((a, b) => {
+        return a.answer[0]-b.answer[0]
+      })
+
+    },
+    input2(event, questionId, index) {
+      this.selection.answers[`question${index}`] = {questionId: questionId, answerId: event}
+    },
+    input3(event,questionId, index) {
+      this.selection.answers[`question${index}`] = {questionId: questionId, answerId:event}
     },
     testRadio(event) {
       this.inputsTestStudents.test_id = event.item.id
       console.log(event.item.id)
     },
-    studentRadio(event) {
-      console.log(
-          event
-      )
-      // this.inputsTestStudents.student_ids=[]
-      // event.selectedRows.forEach(element => {
-      //   this.inputsTestStudents.student_ids.push(element.id)
-      // })
-      // console.log(this.inputsTestStudents.student_ids)
+    createTestResult() {
+      this.selection.testId = this.test.id
+      this.selection.studentId = 6
+      this.storeTestResult( JSON.stringify(this.selection))
     },
-
   }
 }
 </script>
 
 <style>
+td {
+  padding: 5px;
+}
+
 .ML__keystroke-caption {
   padding: 0 !important;
 }

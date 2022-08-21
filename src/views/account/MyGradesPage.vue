@@ -1,6 +1,6 @@
 <template>
 
-<div>Особистий кабінет студента сторінка тест1</div>
+<div>Мої оцінки</div>
 </template>
 
 <script>
@@ -13,7 +13,9 @@ export default {
       openDrawer1:true
     }
   },
-  created() { },
+  created() {
+
+  },
   computed: {
     ...mapGetters({
     }),
