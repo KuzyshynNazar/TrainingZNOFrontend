@@ -18,6 +18,24 @@ export default {
             context.commit(types.STUDENT_ERRORS, err.response.data.errors);
         });
     },
+
+    /**
+     *
+     * @param context
+     * @param data
+     * @returns {Promise<void>}
+     */
+    async  getStudentTestResult(context, data) {
+        await  apiStudents.getStudentTestResult({
+            headers: {'Authorization': `Bearer ${context.rootGetters["auth/token"]}`},
+            params:{studentId:data.studentId, testId:data.testId}
+        }).then((response) => {
+            context.commit(types.SET_STUDENT_TEST_RESULT, response.data.data);
+        }).catch(err => {
+            console.log(err)
+        });
+    },
+
     /**
      *
      * @param context

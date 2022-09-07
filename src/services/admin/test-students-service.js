@@ -19,6 +19,55 @@ export default {
             console.log(err)
         });
     },
+
+    /**
+     *
+     * @param context
+     * @param data
+     */
+    async getTestStudentByTestIdByStudentId(context,data) {
+        await apiTestStudents.getTestStudentByTestIdByStudentId( {
+            headers: { 'Authorization': `Bearer ${context.rootGetters["auth/token"]}`},
+            params:{testId:data.testId, studentId:data.studentId}
+        }).then((response) => {
+            context.commit(types.SET_TEST_STUDENT, response.data.data);
+        }).catch(err => {
+            console.log(err)
+        });
+    },
+
+    /**
+     *
+     * @param context
+     * @param data
+     */
+    async getTestStudentByStudentId(context,data) {
+        await apiTestStudents.getTestStudentByStudentId( {
+            headers: { 'Authorization': `Bearer ${context.rootGetters["auth/token"]}`},
+            params:{studentId:data.studentId}
+        }).then((response) => {
+            context.commit(types.SET_TESTS_STUDENT, response.data.data);
+        }).catch(err => {
+            console.log(err)
+        });
+    },
+
+    /**
+     *
+     * @param context
+     * @param data
+     */
+    async getTestStudentCheckedByStudentId(context,data) {
+        await apiTestStudents.getTestStudentCheckedByStudentId( {
+            headers: { 'Authorization': `Bearer ${context.rootGetters["auth/token"]}`},
+            params:{studentId:data.studentId}
+        }).then((response) => {
+            context.commit(types.SET_TESTS_CHECKED_STUDENT, response.data.data);
+        }).catch(err => {
+            console.log(err)
+        });
+    },
+
     /**
      *
      * @param context
@@ -31,6 +80,23 @@ export default {
             }
         }).then((response) => {
             context.commit(types.SAVE_NEW_TEST_STUDENTS, response.data.data);
+        }).catch(err => {
+            console.log(err)
+        });
+    },
+    /**
+     *
+     * @param context
+     * @param data
+     */
+    async checked(context,  data) {
+        await apiTestStudents.checked(data.id,data, {
+            headers: {
+                'Authorization': `Bearer ${context.rootGetters["auth/token"]}`
+            }
+        }).then((response) => {
+            console.log(response.data.data)
+            // context.commit(types.SAVE_NEW_TEST_STUDENTS, response.data.data);
         }).catch(err => {
             console.log(err)
         });

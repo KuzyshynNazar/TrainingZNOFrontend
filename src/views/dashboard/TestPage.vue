@@ -18,7 +18,7 @@
 
     </w-toolbar>
     <w-flex column fill-height style="margin-left: 36px;" class="pa1">
-      <w-card shadow style="height: calc(100vh - 50px)">
+      <w-card no-border  style="height: calc(100vh - 50px)">
         <w-input
             color="grey-dark5"
             v-model="keywordTest"
@@ -41,6 +41,7 @@
               <td>{{ item.categoryName }}</td>
               <td>{{ item.name }}</td>
               <td>{{ item.description }}</td>
+              <td>{{ item.time }}</td>
               <td>
                 <w-icon>{{ item.status ? 'mdi mdi-plus' : 'mdi mdi-minus' }}</w-icon>
               </td>
@@ -89,14 +90,14 @@
     </w-flex>
     <!--    Test Modal Start     -->
     <w-dialog title="Створити тест"
-              width="1200px"
+              fullscreen width="1200px"
               title-class="grey-dark5--bg white"
               v-model="showCreateTestDialog">
       <w-button absolute top right bg-color="grey-dark5"
                 color="white" icon="wi-cross" tile @click="showCreateTestDialog=false"></w-button>
       <w-flex fill-height>
-        <w-card class="grow mr3" title="Відображення дерева категорії" shadow style="width: 40%">
-          <div style="width:100%; height: calc(100vh - 300px); overflow: auto;">
+        <w-card class="grow mr3" title="Відображення дерева категорії" style="width: 40%; height: calc(100vh - 65px); overflow-y: auto">
+          <div style="width:100%;">
             <Tree :value="treeCategories">
               <template v-slot="{node,  path, tree}">
                 <w-flex justify-space-between align-center>
@@ -134,7 +135,7 @@
             </Tree>
           </div>
         </w-card>
-        <w-card class="mr3" title="Форма створення тесту" style="width: 60%">
+        <w-card title="Форма створення тесту" style="width: 60%">
           <div class="mb4">
             <w-input color="grey-dark5" label-color="grey-dark5" v-model="inputsTests.name" label="Назва"></w-input>
             <span v-if="errors && errors.name" style="font-size: 10px; color: red">{{ errors.name[0] }}</span>
@@ -144,6 +145,13 @@
                      label="Опис"></w-input>
             <span v-if="errors && errors.description" style="font-size: 10px; color: red">{{
                 errors.description[0]
+              }}</span>
+          </div>
+          <div class="mb4">
+            <w-input color="grey-dark5" label-color="grey-dark5" v-model="inputsTests.time"
+                     label="Час, хв."></w-input>
+            <span v-if="errors && errors.time" style="font-size: 10px; color: red">{{
+                errors.time[0]
               }}</span>
           </div>
           <div class="mb4">
@@ -161,27 +169,28 @@
     </w-dialog>
     <w-dialog v-model="showCreateTestQuestionsDialog"
               title-class="grey-dark5--bg white"
-              width="90vw"
+              fullscreen width="90vw"
     >
       <template #title>
         <div>
-          {{ `Показати Питання Тесту студента ${tableItemTest.name}` }}
+          {{ `Показати питання тесту ${tableItemTest.name}` }}
         </div>
       </template>
       <w-button absolute top right bg-color="grey-dark5"
                 color="white" icon="wi-cross" tile @click="showCreateTestQuestionsDialog=false"></w-button>
-      <w-card shadow>
-        <w-flex column justify-start style="height: 80vh">
+      <w-card no-border content-class="pa0">
+        <w-flex column justify-start style="height: 80vh; overflow-y: auto">
           <div class="d-flex justify-space-between align-center mb3">
-            <div style="width: 85%">
-              <w-input outline style="width: 100%"
+            <div>
+              <w-input outline
+                       style="width: 300px"
                        v-model="keywordTestQuestion"
                        placeholder="Пошук"
                        inner-icon-left="wi-search"
               >
               </w-input>
             </div>
-            <div class="text-right" style="width: 15%">
+            <div class="text-right">
               <w-button bg-color="grey-dark5"
                         color="white"
                         class="grow"
@@ -235,14 +244,14 @@
       </w-card>
 
     </w-dialog>
-    <w-dialog title="Показати Тест"
+    <w-dialog title="Показати тест"
               title-class="grey-dark5--bg white"
               fullscreen
               v-model="showShowTestDialog">
       <w-button absolute top right bg-color="grey-dark5"
                 color="white" icon="wi-cross" tile @click="showShowTestDialog=false"></w-button>
       <w-flex fill-height>
-        <w-card class="grow mr3" title="Основна інформація" style="width: 30%; height: auto" no-border shadow>
+        <w-card class="grow mr3" title="Основна інформація" style="width: 30%; height: calc(100vh - 65px)" >
           <w-flex column>
             <w-flex justify-space-between align-start class="mb1 pa1">
               <div>
@@ -278,7 +287,7 @@
             </w-flex>
           </w-flex>
         </w-card>
-        <w-card :title="test.name" style="width: 70%; height: auto" no-border shadow>
+        <w-card :title="test.name" style="width: 70%; height: calc(100vh - 65px); overflow-y: auto">
           <w-flex column class="pl2">
             <div v-for="(value, index) in test.questions" :key="index" class="align-center mb2">
               <div class="w-flex align-center mb1">
@@ -303,7 +312,7 @@
                   </w-radios>
                 </div>
                 <div v-else-if="value.questionType===3">
-                  <div v-html="value.answers[0].answer"></div>
+                  <!--                  <div v-html="value.answers[0].answer"></div>-->
                   <div>
                     <div class="d-flex align-center justify-start" style="margin-left: 32px">
                       <div class="pa2" style="width: 34px; height: 34px">А</div>
@@ -373,15 +382,15 @@
     </w-dialog>
     <w-dialog title="Показати студентів даного тесту"
               title-class="grey-dark5--bg white"
-              width="95vw"
+              fullscreen width="95vw"
               v-model="showShowTestStudentsDialog">
       <w-button absolute top right bg-color="grey-dark5"
                 color="white" icon="wi-cross" tile @click="showShowTestStudentsDialog=false"></w-button>
-      <w-flex style="height: 85vh">
+      <w-flex fill-height>
         <!--        <w-card class="grow mr3"  style="width: 40%" shadow>-->
         <!--{{test.students}}-->
         <!--        </w-card>-->
-        <w-card style="width: 100%" shadow>
+        <w-card style="width: 100%" no-border content-class="pa0">
           <w-table
               :headers="tableHeaderStudentT.filter(header => !header.hidden)"
               :items="test.students"
@@ -389,7 +398,7 @@
               @update:selected-rows="this.inputsUpdateTestStudents.student_ids=$event"
           >
           </w-table>
-          <w-flex justify-center class="mt2 ">
+          <w-flex justify-center class="mt3">
             <w-button :disabled="inputsUpdateTestStudents.student_ids.length===0"
                       class="mr3"
                       lg
@@ -432,14 +441,14 @@
       </w-flex>
     </w-dialog>
     <w-dialog title="Редагувати тест"
-              width="80vw"
+               fullscreen width="80vw"
               title-class="grey-dark5--bg white"
               v-model="showEditTestDialog">
       <w-button absolute top right bg-color="grey-dark5"
                 color="white" icon="wi-cross" tile @click="showEditTestDialog=false"></w-button>
       <w-flex fill-height>
-        <w-card class="grow mr3" title="Відображення дерева категорії" shadow style="width: 40%">
-          <div style="width:100%; height: calc(100vh - 300px); overflow: auto;">
+        <w-card class="grow mr3" title="Відображення дерева категорії" style="width: 40%; height: calc(100vh - 65px); overflow: auto;">
+          <div style="width:100%;">
             <Tree :value="treeCategories">
               <template v-slot="{node,  path, tree}">
                 <w-flex justify-space-between align-center>
@@ -480,7 +489,7 @@
             </Tree>
           </div>
         </w-card>
-        <w-card title="Форма створення тесту" shadow style="width: 60%">
+        <w-card title="Форма створення тесту" style="width: 60%">
           <div class="mb4">
             <w-input color="grey-dark5" label-color="grey-dark5" v-model="inputsTests.name" label="Назва"></w-input>
             <span v-if="errors && errors.name" style="font-size: 10px; color: red">{{ errors.name[0] }}</span>
@@ -490,6 +499,13 @@
                      label="Опис"></w-input>
             <span v-if="errors && errors.description" style="font-size: 10px; color: red">{{
                 errors.description[0]
+              }}</span>
+          </div>
+          <div class="mb4">
+            <w-input color="grey-dark5" label-color="grey-dark5" v-model="inputsTests.time"
+                     label="Час, хв."></w-input>
+            <span v-if="errors && errors.time" style="font-size: 10px; color: red">{{
+                errors.time[0]
               }}</span>
           </div>
           <div class="mb4">
@@ -509,73 +525,143 @@
 
     <!--    Test Question Modal Start     -->
     <w-dialog title="Створити питання"
-              width="75vw"
+              width="80vw"
               title-class="grey-dark5--bg white"
               v-model="showCreateTestQuestionDialog">
       <w-button absolute top right bg-color="grey-dark5"
                 color="white" icon="wi-cross" tile @click="showCreateTestQuestionDialog=false"></w-button>
-      <w-flex fill-height>
-        <w-card style="width: 100%" shadow>
-          <div class="mb4">
-            <w-select
-                v-model="inputsTestQuestions.question_type_id"
-                :items="questionTypes"
-                placeholder="Виберіть тип питання"
-                color="grey-dark5"
-            >
-            </w-select>
-          </div>
-          <div class="mb4">
-            <w-input type="number" label-color="grey-dark5" color="grey-dark5" v-model="inputsTestQuestions.points"
-                     min="0" max="10">Бал за питання
-            </w-input>
-          </div>
-          <div class="mb4">
-            <ckeditor
-                :editor="testQuestionEditor.editor"
-                v-model="inputsTestQuestions.question"
-                :config="testQuestionEditor.editorConfig"
-            ></ckeditor>
-            <!--            <w-input color="grey-dark5" label-color="grey-dark5" v-model="inputsTestQuestions.question"-->
-            <!--                     label="Назва"></w-input>-->
-            <!--            <span v-if="errors && errors.question" style="font-size: 10px; color: red">{{ errors.question[0] }}</span>-->
-          </div>
+      <w-flex fill-height style="height: 80vh">
+        <w-card style="width: 100%" content-class="pa3">
+          <w-flex column justify-space-between fill-height>
+            <w-flex column>
+              <div class="mb4">
+                <w-select
+                    v-model="inputsTestQuestions.question_type_id"
+                    :items="questionTypes"
+                    placeholder="Виберіть тип питання"
+                    color="grey-dark5"
+                >
+                </w-select>
+              </div>
+              <div class="mb4">
+                <w-input type="number" label-color="grey-dark5" color="grey-dark5" v-model="inputsTestQuestions.points"
+                         min="0" max="10">Бал за питання
+                </w-input>
+              </div>
+              <div class="mb4">
+                <ckeditor
+                    :editor="testQuestionEditor.editor"
+                    v-model="inputsTestQuestions.question"
+                    :config="testQuestionEditor.editorConfig"
+                ></ckeditor>
+              </div>
+              <div class="mb4">
+                <w-input
+                    v-model="inputsTestQuestionPhotos.photos"
+                    color="grey-dark5" label-color="grey-dark5"
+                    type="file"
+                    label="Завантажити фото"
+                    accept=".jpg, .jpeg, .png, .gif, .svg"
+                    multiple>
+                </w-input>
+              </div>
+              <div class="mb4">
+                <w-checkbox color="grey-dark5" label-color="grey-dark5" v-model="inputsTestQuestions.status"
+                            :label="inputsTestQuestions.status ? 'Відображати' : 'Не відображати'">
 
-          <div class="mb4">
-            <w-checkbox color="grey-dark5" label-color="grey-dark5" v-model="inputsTestQuestions.status"
-                        :label="inputsTestQuestions.status ? 'Відображати' : 'Не відображати'">
-
-            </w-checkbox>
-          </div>
-          <w-flex>
-            <w-button bg-color="grey-dark5"
-                      color="white" @click="createTestQuestion" class="mt3 grow">Створити питання
-            </w-button>
+                </w-checkbox>
+              </div>
+            </w-flex>
+            <w-flex align-end justify-center>
+              <w-button bg-color="grey-dark5"
+                        color="white" @click="createTestQuestion" class="mt3">Створити питання
+              </w-button>
+            </w-flex>
           </w-flex>
         </w-card>
       </w-flex>
     </w-dialog>
     <w-dialog title="Показати питання"
-              width="75vw"
+              width="80vw"
               title-class="grey-dark5--bg white"
               v-model="showShowTestQuestionDialog">
       <w-button absolute top right bg-color="grey-dark5"
                 color="white" icon="wi-cross" tile @click="showShowTestQuestionDialog=false"></w-button>
-      <w-card shadow>
-        <template #title>
-          <div v-html="testQuestion.question"></div>
-        </template>
-        <w-flex>
-          <div class="mr3">
-            Вшдповіді:
-          </div>
-          <div style="display: flex; flex-direction: column">
-            <div v-for="(value, index) in testQuestion.answers" :key="index" v-html="value.answer" class="mb2"></div>
-          </div>
+      <w-flex fill-height style="height: 80vh; overflow-y: auto">
+        <w-card style="width: 100%" content-class="pa3">
+          <w-flex fill-height column>
+            <div class="pa2" style="width: 100%; border-bottom: 1px solid rgba(0,0,0,.15)"
+                 v-html="testQuestion.question"></div>
+            <div v-if="testQuestion.questionType===1" class="mt3 d-flex" style="flex-direction: column">
+              <w-table
+                  :headers="tableHeaderTestQuestionAnswer"
+                  :items="testQuestion.answers"
+                  fixed-headers
+                  style="width: 100%"
+              >
+                <template #item="{ item, classes,index  }">
+                  <tr :class="classes">
+                    <td>
+                      <div class="ml2">{{ index }}</div>
+                    </td>
+                    <td v-html="item.answer"></td>
+                  </tr>
+                </template>
+              </w-table>
+              <div class="mt3 pa2" style="border-bottom: 1px solid rgba(0,0,0,.15)" v-if="testQuestion.true_answer">
+                <div v-for="(testQuestionAnswer, index) in testQuestion.answers" :key="index"
+                     v-show="testQuestionAnswer.id==testQuestion.true_answer.true_answer">
+                  <div class="d-flex align-center">
+                    <div class="mr2 title3">Правельна відповідь:</div>
+                    <div v-html="testQuestionAnswer.label" class="title3 text-italic teal"></div>
+                  </div>
+                </div>
+              </div>
+              <div class="mt3 pa2" style="border-bottom: 1px solid rgba(0,0,0,.15)" v-else>
+                <div class="d-flex align-center">
+                  <div class="mr2 title3">Правельна відповідь:</div>
+                  <div class="title3 text-italic orange">Ви не встановили правильну відповідь</div>
+                </div>
+              </div>
+            </div>
+            <div v-if="testQuestion.questionType===2" class="mt3 pa2" style="border-bottom: 1px solid rgba(0,0,0,.15)">
+              <div class="d-flex align-center">
+                <div class="mr2 title3">Правельна відповідь:</div>
+                <div class="title3 text-italic teal" v-if="testQuestion.true_answer">
+                  {{ testQuestion.true_answer.true_answer }}
+                </div>
+                <div v-else class="title3 text-italic orange">Ви не встановили правильну відповідь</div>
+              </div>
+            </div>
+            <div v-if="testQuestion.questionType===3" class="mt3 pa2" style="border-bottom: 1px solid rgba(0,0,0,.15)">
+              <div class="d-flex align-center">
+                <div class="mr2 title3">Правельна відповідь:</div>
+                <div class="title3 text-italic teal" v-if="testQuestion.true_answer">
+                  {{ testQuestion.true_answer.true_answer[0] }},
+                  {{ testQuestion.true_answer.true_answer[1] }},
+                  {{ testQuestion.true_answer.true_answer[2] }}
+                </div>
+                <div v-else class="title3 text-italic orange">Ви не встановили правильну відповідь</div>
+              </div>
+            </div>
+            <div class="d-flex mt3 pa2" style="border-bottom: 1px solid rgba(0,0,0,.15)">
+              <div class="mr2 title3">Бали за питання:</div>
+              <div class="title3 text-italic teal"> {{testQuestion.points}}</div>
 
-        </w-flex>
-      </w-card>
+            </div>
+            <div class="d-flex mt3 pa2" style="flex-direction: column; border-bottom: 1px solid rgba(0,0,0,.15)"
+                 v-if="testQuestion.photos && testQuestion.photos.length!==0">
+              <div class="mr2 title3">Зображення питання:</div>
+              <div class="d-flex">
+                <div v-for="(photo, index) in testQuestion.photos" :key="index">
+                  <w-image :src="urlStorage + photo.path" tag="img" style="max-width: 150px" class="mr2"></w-image>
+                </div>
+              </div>
 
+            </div>
+          </w-flex>
+        </w-card>
+      </w-flex>
     </w-dialog>
     <w-dialog title="Видалити питання"
               width="400px"
@@ -599,12 +685,12 @@
       </w-flex>
     </w-dialog>
     <w-dialog title="Редагувати питання"
-              width="75vw"
+              width="80vw"
               title-class="grey-dark5--bg white"
               v-model="showEditTestQuestionDialog">
       <w-button absolute top right bg-color="grey-dark5"
                 color="white" icon="wi-cross" tile @click="showEditTestQuestionDialog=false"></w-button>
-      <w-flex fill-height>
+      <w-flex fill-height style="height: 80vh; overflow-y: auto">
         <w-card style="width: 100%" shadow>
           <div class="mb4">
             <w-select
@@ -626,10 +712,34 @@
                 v-model="inputsTestQuestions.question"
                 :config="testQuestionEditor.editorConfig"
             ></ckeditor>
-            <!--            <w-input color="grey-dark5" label-color="grey-dark5" v-model="inputsTestQuestions.question"-->
-            <!--                     label="Назва"></w-input>-->
-            <!--            <span v-if="errors && errors.question" style="font-size: 10px; color: red">{{ errors.question[0] }}</span>-->
           </div>
+          <div class="mb4 d-flex" style="flex-direction: column">
+            <w-input
+                v-model="inputsTestQuestionPhotos.photos"
+                color="grey-dark5" label-color="grey-dark5"
+                type="file"
+                label="Завантажити фото"
+                accept=".jpg, .jpeg, .png, .gif, .svg"
+                multiple>
+            </w-input>
+          </div>
+          <w-flex wrap class="mb4">
+            <div class="xs2  pr2 pt2" v-for="(photo,index) in inputsTestQuestions.photos" :key="index">
+              <div class="d-flex" style="flex-direction: column">
+                <div class="d-flex align-center justify-center bd1">
+                  <w-image :src="urlStorage + photo.path" tag="img" style="width: 100px"></w-image>
+                </div>
+                <w-flex>
+                  <w-button class="grow" color="white" bg-color="grey-dark5" @click="destroyTestQuestionPhoto(photo.id)">
+                   <w-icon class="mr2" color="white">
+                      mdi mdi-trash-can-outline
+                   </w-icon>
+                    Видалити
+                  </w-button>
+                </w-flex>
+              </div>
+            </div>
+          </w-flex>
           <div class="mb4">
             <w-checkbox color="grey-dark5" label-color="grey-dark5" v-model="inputsTestQuestions.status" label="Статус">
               {{ inputsTestQuestions.status ? 'Відображати' : 'Не відображати' }}
@@ -642,113 +752,148 @@
           </w-flex>
         </w-card>
       </w-flex>
-
     </w-dialog>
     <w-dialog v-model="showCreateTestQuestionAnswersDialog"
               title-class="grey-dark5--bg white"
-              width="90vw"
+              width="80vw"
+              persistent
     >
       <template #title>
         <div v-html="tableItemTestQuestion.question"></div>
       </template>
       <w-button absolute top right bg-color="grey-dark5"
-                color="white" icon="wi-cross" tile @click="showCreateTestQuestionAnswersDialog=false"></w-button>
-      <w-card shadow>
-        <div class="d-flex justify-start  mb3" style="height: 80vh; flex-direction: column">
-          <div class="text-right mb2">
-            <w-button bg-color="grey-dark5"
-                      color="white"
-                      text
-                      tile
-                      @click="openCreateTestQuestionAnswerDialog">
-              <w-icon class="pr2">mdi mdi-plus-circle-outline</w-icon>
-              Створити відповідь
-            </w-button>
+                color="white" icon="wi-cross" tile @click="closeCreateTestQuestionAnswersDialog"></w-button>
+      <w-flex fill-height style="height: 80vh; overflow-y: auto">
+        <w-card style="width: 100%">
+          <div class="d-flex justify-start  mb3" style="flex-direction: column">
+            <div class="mb2">
+              <w-button v-show="tableItemTestQuestion.questionType===1"
+                        bg-color="grey-dark5"
+                        color="white"
+                        text
+                        tile
+                        @click="openCreateTestQuestionAnswerDialog">
+                <w-icon class="pr2">mdi mdi-plus-circle-outline</w-icon>
+                Створити відповідь
+              </w-button>
 
-            <w-menu align-right shadow>
-              <template #activator="{ on }">
-                <w-button v-on="on" class="ml3" bg-color="grey-dark5"
-                          color="green">
-                  <w-icon class="pr2" color="green">mdi mdi-plus-circle-outline</w-icon>
-                  Створити правильну відповідь
-                </w-button>
-              </template>
-              <div style="width: 300px; height: 200px">
-                <div v-if="tableItemTestQuestion.questionType===1">
-                  <w-select multiple
-                            label-color="grey-dark5"
-                            label="Виберіть правильну відповідь"
-                            v-model="inputsTestQuestionTrueAnswer.true_answer"
-                            :items="testQuestionAnswers" @update:model-value="setTrueAnswer1($event)">
-                    <template #item="{ item }">
-                      <span class="ml1" v-html="item.label"></span>
-                    </template>
-                    <template #selection="{ item }">
-                      <w-tag
-                          color="grey-dark5"
-                          class="mr2"
-                          v-for="(el, i) in item"
-                          :key="i"
-                          v-html="el.label">
-                      </w-tag>
-                    </template>
-                  </w-select>
-                </div>
-                <div v-else-if="tableItemTestQuestion.questionType===2">
-                  <w-input color="grey-dark5" label-color="grey-dark5"
-                           v-model="inputsTestQuestionTrueAnswer.true_answer"
-                           label="Опис"></w-input>
-                </div>
-                <div v-else-if="tableItemTestQuestion.questionType===3">
-                  <div class="d-flex align-center mb2" v-for="n in 3"
-                       :key="n">
-                    <div class="mr3">{{ n }}.</div>
-                    <w-select :items="selectionTrueAnswer" label-color="grey-dark5" label="Виберіть правильну відповідь"
-                              @update:model-value="setTrueAnswer(n,$event)">
-
+              <w-menu align-right shadow>
+                <template #activator="{ on }">
+                  <w-button v-on="on" :class="tableItemTestQuestion.questionType===1?'ml3':''" bg-color="grey-dark5"
+                            color="white">
+                    <w-icon class="pr2" color="white">mdi mdi-plus-circle-outline</w-icon>
+                    Створити правильну відповідь
+                  </w-button>
+                </template>
+                <div style="width: 300px; height: 200px">
+                  <div v-if="tableItemTestQuestion.questionType===1">
+                    <w-select multiple
+                              label-color="grey-dark5"
+                              label="Виберіть правильну відповідь"
+                              v-model="inputsTestQuestionTrueAnswer.true_answer"
+                              :items="testQuestionAnswers" @update:model-value="setTrueAnswer1($event)">
+                      <template #item="{ item }">
+                        <span class="ml1" v-html="item.label"></span>
+                      </template>
+                      <template #selection="{ item }">
+                        <w-tag
+                            color="grey-dark5"
+                            class="mr2"
+                            v-for="(el, i) in item"
+                            :key="i"
+                            v-html="el.label">
+                        </w-tag>
+                      </template>
                     </w-select>
                   </div>
+                  <div v-else-if="tableItemTestQuestion.questionType===2">
+                    <w-input color="grey-dark5" label-color="grey-dark5"
+                             v-model="inputsTestQuestionTrueAnswer.true_answer"
+                             label="Опис"></w-input>
+                  </div>
+                  <div v-else-if="tableItemTestQuestion.questionType===3">
+                    <div class="d-flex align-center mb2" v-for="n in 3"
+                         :key="n">
+                      <div class="mr3">{{ n }}.</div>
+                      <w-select :items="selectionTrueAnswer" label-color="grey-dark5"
+                                label="Виберіть правильну відповідь"
+                                @update:model-value="setTrueAnswer(n,$event)">
+
+                      </w-select>
+                    </div>
+                  </div>
+                  <w-flex class="mt4">
+                    <w-button class="grow" @click="createTestQuestionTrueAnswer" bg-color="grey-dark5"
+                              color="white">Створити
+                    </w-button>
+                  </w-flex>
+
                 </div>
-                <w-flex class="mt4">
-                  <w-button class="grow" @click="createTestQuestionTrueAnswer" bg-color="grey-dark5"
-                            color="white">Створити
-                  </w-button>
-                </w-flex>
-
+              </w-menu>
+            </div>
+            <div v-if="tableItemTestQuestion.questionType===1">
+              <w-table
+                  :headers="tableHeaderTestQuestionAnswer"
+                  :items="testQuestionAnswers"
+                  fixed-headers
+                  style="width: 100%"
+              >
+                <template #item="{ item, classes,index  }">
+                  <tr :class="classes">
+                    <td>
+                      <div class="ml2">{{ index }}</div>
+                    </td>
+                    <td v-html="item.answer"></td>
+                    <td style="text-align: right">
+                      <w-icon class="mr1 pa3 icon" md color="grey-dark5" style="cursor: pointer"
+                              @click="openEditTestQuestionAnswerDialog(item)">
+                        mdi mdi-pencil
+                      </w-icon>
+                      <w-icon class="mr1 pa3 icon" md color="grey-dark5" style="cursor: pointer"
+                              @click="openDeleteTestQuestionAnswerDialog(item)">
+                        mdi mdi-delete
+                      </w-icon>
+                    </td>
+                  </tr>
+                </template>
+              </w-table>
+              <div class="mt3 bd1 pa2" v-if="tableItemTestQuestion.true_answer">
+                <div v-for="(testQuestionAnswer, index) in testQuestionAnswers" :key="index"
+                     v-show="testQuestionAnswer.id==tableItemTestQuestion.true_answer.true_answer">
+                  <div class="d-flex align-center">
+                    <div class="mr2 title3">Правельна відповідь:</div>
+                    <div v-html="testQuestionAnswer.answer" class="title3 text-italic teal"></div>
+                  </div>
+                </div>
               </div>
-            </w-menu>
+            </div>
+            <div v-if="tableItemTestQuestion.questionType===2" class="mt3 bd1 pa2">
+              <div class="d-flex align-center">
+                <div class="mr2 title3">Правельна відповідь:</div>
+                <div class="title3 text-italic teal">{{ tableItemTestQuestion.true_answer.true_answer }}</div>
+              </div>
+            </div>
+            <div v-if="tableItemTestQuestion.questionType===3" class="mt3 bd1 pa2">
+              <div class="d-flex align-center">
+                <div class="mr2 title3">Правельна відповідь:</div>
+                <div class="title3 text-italic teal">{{ tableItemTestQuestion.true_answer.true_answer[0] }},
+                  {{ tableItemTestQuestion.true_answer.true_answer[1] }},
+                  {{ tableItemTestQuestion.true_answer.true_answer[2] }}
+                </div>
+              </div>
+            </div>
+            <div v-show="tableItemTestQuestion.photos && tableItemTestQuestion.photos.length!==0" class="d-flex mt3 pa2 bd1" style="flex-direction: column">
+              <div class="mr2 title3">Зображення питання:</div>
+              <div class="d-flex">
+                <div v-for="(photo, index) in tableItemTestQuestion.photos" :key="index">
+                  <w-image :src="urlStorage + photo.path" tag="img" style="max-width: 150px" class="mr2"></w-image>
+                </div>
+              </div>
+
+            </div>
           </div>
-
-
-          <w-table
-              :headers="tableHeaderTestQuestionAnswer"
-              :items="testQuestionAnswers"
-              fixed-headers
-              style="width: 100%"
-          >
-            <template #item="{ item, classes,index  }">
-              <tr :class="classes">
-                <td>
-                  <div class="ml2">{{ index }}</div>
-                </td>
-                <td v-html="item.answer"></td>
-                <td style="text-align: right">
-                  <w-icon class="mr1 pa3 icon" md color="grey-dark5" style="cursor: pointer"
-                          @click="openEditTestQuestionAnswerDialog(item)">
-                    mdi mdi-pencil
-                  </w-icon>
-                  <w-icon class="mr1 pa3 icon" md color="grey-dark5" style="cursor: pointer"
-                          @click="openDeleteTestQuestionAnswerDialog(item)">
-                    mdi mdi-delete
-                  </w-icon>
-                </td>
-              </tr>
-            </template>
-
-          </w-table>
-        </div>
-      </w-card>
-
+        </w-card>
+      </w-flex>
     </w-dialog>
     <!--    Test Question Modal End     -->
 
@@ -821,65 +966,188 @@
           </w-flex>
         </w-card>
       </w-flex>
-
-
     </w-dialog>
     <!--    Test Question Answer Modal End     -->
     <w-dialog title="Прив'язати тест до студентів"
               title-class="grey-dark5--bg white"
-              width="75vw"
+              fullscreen width="75vw"
               v-model="showCreateTestStudentsDialog">
       <w-button absolute top right bg-color="grey-dark5"
                 color="white" icon="wi-cross" tile @click="showCreateTestStudentsDialog=false"></w-button>
-      <w-flex style="height: 75vh">
-        <w-card class="grow mr3" title="Тести" style="width: 50%" shadow>
-          <w-flex column>
-            <w-input
-                v-model="keywordTestS"
-                placeholder="Пошук тесту"
-                inner-icon-left="wi-search"
-                color="grey-dark5"
-                class="mb3">
-            </w-input>
-            <w-table
-                :headers="tableHeaderTestS.filter(header => !header.hidden)"
-                :items="tests"
-                :selectable-rows="1"
-                :filter="keywordFilterTestS(keywordTestS)"
-                @row-select="testRadio($event)">
-            </w-table>
-          </w-flex>
-        </w-card>
-        <w-card title="Студенти" style="width: 50%" shadow>
-          <w-flex column>
-            <w-input
-                v-model="keywordStudentT"
-                placeholder="Пошук студентів"
-                inner-icon-left="wi-search"
-                color="grey-dark5"
-                class="mb3">
-            </w-input>
-            <w-table
-                :headers="tableHeaderStudentT.filter(header => !header.hidden)"
+      <w-flex fill-height column>
+        <w-flex fill-height>
+          <w-card class="grow mr3" title="Тести" style="width: 50%; height: calc(100vh - 105px); overflow-y: auto">
+            <w-flex column>
+              <w-input
+                  v-model="keywordTestS"
+                  placeholder="Пошук тесту"
+                  inner-icon-left="wi-search"
+                  color="grey-dark5"
+                  class="mb3">
+              </w-input>
 
-                :items="students"
-                :selectable-rows="true"
-                :filter="keywordFilterStudentT(keywordStudentT)"
-                @update:selected-rows="this.inputsTestStudents.student_ids=$event">
-            </w-table>
-          </w-flex>
-        </w-card>
+              <w-table
+                  :headers="tableHeaderTestS.filter(header => !header.hidden)"
+                  :items="tests"
+                  :selectable-rows="1"
+                  :filter="keywordFilterTestS(keywordTestS)"
+                  @row-select="testRadio($event)">
+              </w-table>
+            </w-flex>
+          </w-card>
+          <w-card title="Студенти" style="width: 50%; height: calc(100vh - 105px); overflow-y: auto">
+            <w-flex column>
+              <w-input
+                  v-model="keywordStudentT"
+                  placeholder="Пошук студентів"
+                  inner-icon-left="wi-search"
+                  color="grey-dark5"
+                  @click="setActiveFilter"
+                  class="mb3">
+              </w-input>
+              <div class="w-flex wrap mb2">
+                <w-button
+                    :bg-color="activeFilter !== 0?'white':'grey-dark5'"
+                    :color="activeFilter !== 0?'grey-dark5':'white'"
+                    class="mr1 mb1"
+                    @click="activeFilter = 0"
+                    tile
+                    xs
+                    :outline="activeFilter !== 0">
+                  Без фільтра
+                </w-button>
+                <w-button
+                    :bg-color="activeFilter !== 1?'white':'grey-dark5'"
+                    :color="activeFilter !== 1?'grey-dark5':'white'"
+                    class="mr1 mb1"
+                    @click="activeFilter = 1"
+                    tile
+                    xs
+                    :outline="activeFilter !== 1">
+                  1 клас
+                </w-button>
+                <w-button
+                    :bg-color="activeFilter !== 2?'white':'grey-dark5'"
+                    :color="activeFilter !== 2?'grey-dark5':'white'"
+                    class="mr1 mb1"
+                    @click="activeFilter = 2"
+                    tile
+                    xs
+                    :outline="activeFilter !== 2">
+                  2 клас
+                </w-button>
+                <w-button
+                    :bg-color="activeFilter !== 3?'white':'grey-dark5'"
+                    :color="activeFilter !== 3?'grey-dark5':'white'"
+                    class="mr1 mb1"
+                    @click="activeFilter = 3"
+                    tile
+                    xs
+                    :outline="activeFilter !== 3">
+                  3 клас
+                </w-button>
+                <w-button
+                    :bg-color="activeFilter !== 4?'white':'grey-dark5'"
+                    :color="activeFilter !== 4?'grey-dark5':'white'"
+                    class="mr1 mb1"
+                    @click="activeFilter = 4"
+                    tile
+                    xs
+                    :outline="activeFilter !== 4">
+                  4 клас
+                </w-button>
+                <w-button
+                    :bg-color="activeFilter !== 5?'white':'grey-dark5'"
+                    :color="activeFilter !== 5?'grey-dark5':'white'"
+                    class="mr1 mb1"
+                    @click="activeFilter = 5"
+                    tile
+                    xs
+                    :outline="activeFilter !== 5">
+                  5 клас
+                </w-button>
+                <w-button
+                    :bg-color="activeFilter !== 6?'white':'grey-dark5'"
+                    :color="activeFilter !== 6?'grey-dark5':'white'"
+                    class="mr1 mb1"
+                    @click="activeFilter = 6"
+                    tile
+                    xs
+                    :outline="activeFilter !== 6">
+                  6 клас
+                </w-button>
+                <w-button
+                    :bg-color="activeFilter !== 7?'white':'grey-dark5'"
+                    :color="activeFilter !== 7?'grey-dark5':'white'"
+                    class="mr1 mb1"
+                    @click="activeFilter = 7"
+                    tile
+                    xs
+                    :outline="activeFilter !== 7">
+                  7 клас
+                </w-button>
+                <w-button
+                    :bg-color="activeFilter !== 8?'white':'grey-dark5'"
+                    :color="activeFilter !== 8?'grey-dark5':'white'"
+                    class="mr1 mb1"
+                    @click="activeFilter = 8"
+                    tile
+                    xs
+                    :outline="activeFilter !== 8">
+                  8 клас
+                </w-button>
+                <w-button
+                    :bg-color="activeFilter !== 9?'white':'grey-dark5'"
+                    :color="activeFilter !== 9?'grey-dark5':'white'"
+                    class="mr1 mb1"
+                    @click="activeFilter = 9"
+                    tile
+                    xs
+                    :outline="activeFilter !== 9">
+                  9 клас
+                </w-button>
+                <w-button
+                    :bg-color="activeFilter !== 10?'white':'grey-dark5'"
+                    :color="activeFilter !== 10?'grey-dark5':'white'"
+                    class="mr1 mb1"
+                    @click="activeFilter = 10"
+                    tile
+                    xs
+                    :outline="activeFilter !== 10">
+                  10 клас
+                </w-button>
+                <w-button
+                    :bg-color="activeFilter !== 11?'white':'grey-dark5'"
+                    :color="activeFilter !== 11?'grey-dark5':'white'"
+                    class="mr1 mb1"
+                    @click="activeFilter = 11"
+                    tile
+                    xs
+                    :outline="activeFilter !== 11">
+                  11 клас
+                </w-button>
+              </div>
+              <w-table
+                  :headers="tableHeaderStudentT.filter(header => !header.hidden)"
+                  :filter="filters[activeFilter]"
+                  :items="students"
+                  :selectable-rows="true"
+                  @update:selected-rows="this.inputsTestStudents.student_ids=$event">
+              </w-table>
+            </w-flex>
+          </w-card>
+        </w-flex>
+        <w-flex justify-center class="mt2">
+          <w-button class="grow"
+                    lg
+                    shadow
+                    bg-color="grey-dark5"
+                    color="white"
+                    @click="saveTestFotStudents">Зберегти
+          </w-button>
+        </w-flex>
+      </w-flex>
 
-      </w-flex>
-      <w-flex justify-center class="mt2 ">
-        <w-button class="grow"
-                  lg
-                  shadow
-                  bg-color="grey-dark5"
-                  color="white"
-                  @click="saveTestFotStudents">Зберегти
-        </w-button>
-      </w-flex>
 
     </w-dialog>
     <w-overlay
@@ -903,12 +1171,18 @@ import {mapActions, mapGetters} from "vuex";
 import 'he-tree-vue/dist/he-tree-vue.css'
 import {Tree, Fold} from 'he-tree-vue'
 import ClassicEditor from "ckeditor5-mathtype/build/ckeditor"
+
+const URL_STORAGE = process.env.VUE_APP_URL_STORAGE
+const BASE_URL = process.env.VUE_APP_API_URL
 export default {
 
   name: 'HelloWorld',
   components: {Tree: Tree.mixPlugins([Fold])},
   data() {
     return {
+      activeFilter: 0,
+      urlStorage: URL_STORAGE,
+      baseUrlApi: BASE_URL,
       selection: {
         answers: {},
         testId: null,
@@ -936,6 +1210,7 @@ export default {
         {label: 'Категорія', key: 'categoryName'},
         {label: 'Назва', key: 'name'},
         {label: 'Опис', key: 'description'},
+        {label: 'Час, хв.', key: 'time'},
         {label: 'Статус', key: 'status'},
       ],
       keywordTest: '',
@@ -947,6 +1222,7 @@ export default {
       inputsTests: {
         name: null,
         description: null,
+        time: null,
         status: null,
         tree_category_id: null,
       },
@@ -970,6 +1246,12 @@ export default {
         test_id: null,
         question_type_id: null,
         points: null,
+        photos: null,
+        file: null,
+      },
+      inputsTestQuestionPhotos:{
+        testQuestionId: null,
+        photos: null,
       },
       testQuestionEditor: {
         editor: ClassicEditor,
@@ -1072,7 +1354,26 @@ export default {
       treeCategories: 'treeCategories/treeCategories',
       errors: 'tests/errors',
       questionTypes: 'questionTypes/questionTypes',
+      testQuestionPhotos: 'testQuestionPhotos/testQuestionPhotos',
     }),
+    filters() {
+      return [
+        null,
+        item => item.class === 1,
+        item => item.class === 2,
+        item => item.class === 3,
+        item => item.class === 4,
+        item => item.class === 5,
+        item => item.class === 6,
+        item => item.class === 7,
+        item => item.class === 8,
+        item => item.class === 9,
+        item => item.class === 10,
+        item => item.class === 11,
+
+        this.keywordFilterStudentT(this.keywordStudentT)
+      ]
+    }
   },
   methods: {
     ...mapActions({
@@ -1107,6 +1408,8 @@ export default {
       storeTestQuestion: 'testQuestions/store',
       updateTestQuestion: 'testQuestions/update',
       deleteTestQuestion: 'testQuestions/delete',
+      deleteTestQuestionPhoto: 'testQuestionPhotos/delete',
+      storeTestQuestionPhotos: 'testQuestionPhotos/store',
       /**
        * TestQuestionAnswer
        */
@@ -1138,7 +1441,6 @@ export default {
         this.showProgress = false
         this.showShowTestDialog = true
       })
-
     },
     openCreateTestQuestionsDialog(item) {
       this.tableItemTest = item
@@ -1163,11 +1465,11 @@ export default {
         this.showProgress = false
         this.showShowTestStudentsDialog = true
       })
-
     },
     createTest() {
       this.inputsTests.status ? this.inputsTests.status = 1 : this.inputsTests.status = 0
       this.inputsTests.tree_category_id = this.isParentCategory
+      this.inputsTests.time = this.inputsTests.time * 60
       this.storeTest(this.inputsTests).then(() => {
         this.notify('Тест створено.')
         this.showCreateTestDialog = false
@@ -1176,6 +1478,7 @@ export default {
     editTest() {
       this.inputsTests.status ? this.inputsTests.status = 1 : this.inputsTests.status = 0
       this.inputsTests.tree_category_id = this.isParentCategory
+      this.inputsTests.time = this.inputsTests.time * 60
       this.updateTest(this.inputsTests).then(() => {
         this.showEditTestDialog = false
         this.notify('Тест оновлено.')
@@ -1203,16 +1506,10 @@ export default {
       this.showShowTestQuestionDialog = true
     },
     openEditTestQuestionDialog(item) {
+      this.getAllQuestionTypes()
       this.inputsTestQuestions = Object.assign({}, item)
+      console.log(  this.inputsTestQuestions)
       this.inputsTestQuestions.question_type_id = this.inputsTestQuestions.questionType
-      // console.log(this.inputsTestQuestions)
-      //     this.questionTypes.forEach(el=>{
-      //       console.log(el.id===this.inputsTestQuestions.questionType)
-      //       if(el.id===this.inputsTestQuestions.questionType){
-      //
-      //         this.inputsTestQuestions.questionType={}
-      //       }
-      //     })
       this.showEditTestQuestionDialog = true
     },
     openDeleteTestQuestionDialog(item) {
@@ -1228,18 +1525,46 @@ export default {
       })
       this.showCreateTestQuestionAnswersDialog = true
     },
+    closeCreateTestQuestionAnswersDialog() {
+      if (this.inputsTestQuestionTrueAnswer.true_answer !== null || this.tableItemTestQuestion.true_answer !== null) {
+        this.showCreateTestQuestionAnswersDialog = false
+      } else {
+        this.notify('Ви не створили правильної відповіді', 'red')
+      }
+
+    },
     createTestQuestion() {
       this.inputsTestQuestions.status ? this.inputsTestQuestions.status = 1 : this.inputsTestQuestions.status = 0
       this.inputsTestQuestions.test_id = this.tableItemTest.id
       this.storeTestQuestion(this.inputsTestQuestions).then(() => {
-        this.notify('Питання створено.')
-        this.showCreateTestQuestionDialog = false
+        this.inputsTestQuestionPhotos.testQuestionId=this.testQuestion.id
+        this.storeTestQuestionPhotos(this.inputsTestQuestionPhotos).then(()=>{
+          let index = this.testQuestions.findIndex((c) => c.id === this.testQuestion.id);
+          if (index > -1) {
+            this.testQuestions[index].photos= this.testQuestionPhotos
+          }
+          this.inputsTestQuestionPhotos.testQuestionId=null
+          this.inputsTestQuestionPhotos.photos=null
+          this.notify('Питання створено.')
+          this.showCreateTestQuestionDialog = false
+        })
       })
     },
     editTestQuestion() {
       this.inputsTestQuestions.status ? this.inputsTestQuestions.status = 1 : this.inputsTestQuestions.status = 0
       this.inputsTestQuestions.test_id = this.tableItemTest.id
       this.updateTestQuestion(this.inputsTestQuestions).then(() => {
+        this.inputsTestQuestionPhotos.testQuestionId=this.inputsTestQuestions.id
+        this.storeTestQuestionPhotos(this.inputsTestQuestionPhotos).then(()=>{
+          let index = this.testQuestions.findIndex((c) => c.id === this.inputsTestQuestions.id);
+          if (index > -1) {
+            this.testQuestions[index].photos= this.testQuestionPhotos
+          }
+          this.inputsTestQuestionPhotos.testQuestionId=null
+          this.inputsTestQuestionPhotos.photos=null
+          this.notify('Питання створено.')
+          this.showCreateTestQuestionDialog = false
+        })
         this.notify('Питання відрадеговано.')
         this.showEditTestQuestionDialog = false
       })
@@ -1248,6 +1573,14 @@ export default {
       this.deleteTestQuestion(this.editTestQuestionId).then(() => {
         this.notify('Питання видалено.')
         this.showDeleteTestQuestionDialog = false
+      })
+    },
+    destroyTestQuestionPhoto(id){
+      this.deleteTestQuestionPhoto(id).then(()=>{
+        let index = this.inputsTestQuestions.photos.findIndex((c) => c.id === id);
+        if (index > -1) {
+          this.inputsTestQuestions.photos.splice(index, 1);
+        }
       })
     },
     /**
@@ -1288,16 +1621,11 @@ export default {
      * TestQuestionTrueAnswer
      */
     createTestQuestionTrueAnswer() {
-      console.log(typeof  this.inputsTestQuestionTrueAnswer.true_answer )
-      if(typeof  this.inputsTestQuestionTrueAnswer.true_answer !=='string' ){
       this.inputsTestQuestionTrueAnswer.true_answer = JSON.stringify(this.inputsTestQuestionTrueAnswer.true_answer)
-      }
       this.inputsTestQuestionTrueAnswer.test_question_id = this.tableItemTestQuestion.id
-      // if(this.inputsTestQuestionTrueAnswer.test_question_answer_id!==null){
-      //   this.inputsTestQuestionTrueAnswer.test_question_answer_id=this.inputsTestQuestionTrueAnswer.test_question_answer_id[0]
-      // }
-      console.log(this.inputsTestQuestionTrueAnswer)
       this.storeTestQuestionTrueAnswer(this.inputsTestQuestionTrueAnswer).then(() => {
+        this.tableItemTestQuestion.true_answer = this.testQuestionTrueAnswers
+        this.inputsTestQuestionTrueAnswer.true_answer = null
         this.notify('Правильна відповідь створено.')
       })
     },
@@ -1351,15 +1679,20 @@ export default {
         })
       })
     },
+    setActiveFilter() {
+      this.activeFilter = 12
+    },
     /**
      * Other
      * @param message
+     * @param color
      */
-    notify(message) {
+    notify(message, color = 'green') {
       this.$waveui.notify({
         message: message,
         timeout: 2000,
-        success: true
+        success: true,
+        color: color,
       })
     },
     parentCategory(node) {
@@ -1379,30 +1712,34 @@ export default {
         }
       }
       this.selection.answers[`question${index}`].sort((a, b) => {
-        return a.answer[0]-b.answer[0]
+        return a.answer[0] - b.answer[0]
       })
 
     },
     input2(event, questionId, index) {
       this.selection.answers[`question${index}`] = {questionId: questionId, answerId: event}
     },
-    input3(event,questionId, index) {
-      this.selection.answers[`question${index}`] = {questionId: questionId, answerId:event}
+    input3(event, questionId, index) {
+      this.selection.answers[`question${index}`] = {questionId: questionId, answerId: event}
     },
     testRadio(event) {
       this.inputsTestStudents.test_id = event.item.id
-      console.log(event.item.id)
     },
     createTestResult() {
       this.selection.testId = this.test.id
       this.selection.studentId = 6
-      this.storeTestResult( JSON.stringify(this.selection))
+      this.storeTestResult(JSON.stringify(this.selection))
     },
   }
 }
 </script>
 
 <style>
+.w-notification-manager {
+  width: 100%;
+  max-width: 500px;
+}
+
 td {
   padding: 5px;
 }

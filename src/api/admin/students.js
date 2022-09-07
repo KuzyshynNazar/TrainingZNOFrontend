@@ -1,10 +1,11 @@
 const axios = require('axios');
 
-const origin = 'http://training-zno/api';
+const origin = 'http://training-zno/api-admin';
 const routes = {
     get: {
         students: `${origin}/students`,
         student: `${origin}/students/{id}`,
+        studentTestResult: `${origin}/get-test-result`,
     },
     post: {
         create: `${origin}/students`,
@@ -22,6 +23,10 @@ exports.getRoutes = () => {
 };
 exports.index = (headers) => {
     const url = routes.get.students;
+    return axios.get(url, headers);
+};
+exports.getStudentTestResult = (headers) => {
+    const url = routes.get.studentTestResult;
     return axios.get(url, headers);
 };
 exports.show = (id, headers) => {

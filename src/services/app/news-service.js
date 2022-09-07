@@ -14,6 +14,7 @@ export default {
             //     'Access-Control-Allow-Origin' : '*',
             //     'Access-Control-Allow-Methods':'GET,PUT,POST,DELETE,PATCH,OPTIONS',
             // }
+            headers: {'Authorization': `Bearer ${context.rootGetters["auth/token"]}` },
         }).then((response) => {
             context.commit(types.SET_APP_NEWS, response.data.data);
         }).catch(err => {

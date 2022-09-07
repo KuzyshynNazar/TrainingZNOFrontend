@@ -11,7 +11,7 @@
       </w-tooltip>
     </w-toolbar>
     <w-flex column fill-height style="margin-left: 36px;" class="pa1">
-      <w-card shadow style="height: calc(100vh - 50px)">
+      <w-card no-border style="height: calc(100vh - 50px)">
         <w-input
             color="grey-dark5"
             v-model="keywordNews"
@@ -84,6 +84,36 @@
             ></ckeditor>
           </div>
           <div class="mb4">
+            <w-input
+                v-model="inputsNewsPhotos.photos"
+                color="grey-dark5" label-color="grey-dark5"
+                type="file"
+                label="Завантажити фото"
+                accept=".jpg, .jpeg, .png, .gif, .svg"
+                multiple>
+            </w-input>
+          </div>
+          <div class="mb4">
+            <w-input
+                v-model="inputsNewsDocuments.documents"
+                color="grey-dark5" label-color="grey-dark5"
+                type="file"
+                label="Завантажити документ"
+                accept=".pdf,.djvu"
+                multiple>
+            </w-input>
+          </div>
+          <div class="mb4">
+            <w-input
+                v-model="inputsNewsVideos.videos"
+                color="grey-dark5" label-color="grey-dark5"
+                type="file"
+                label="Завантажити відео"
+                accept=".mp4"
+                multiple>
+            </w-input>
+          </div>
+          <div class="mb4">
             <w-checkbox color="grey-dark5" label-color="grey-dark5" v-model="inputsNews.status" label="Статус">
               {{ inputsNews.status ? 'Відображати' : 'Не відображати' }}
             </w-checkbox>
@@ -102,22 +132,102 @@
               v-model="showShowNewsDialog">
       <w-button absolute top right bg-color="grey-dark5"
                 color="white" icon="wi-cross" tile @click="showShowNewsDialog=false"></w-button>
-      <w-flex style="height: 85vh">
+      <w-flex style="height: 85vh; overflow-y: auto">
 
-          <w-flex column class="pl2">
-            <w-card title="Заголовок новини" class="mb3">
-              {{ oneNews.title }}
-            </w-card>
+        <w-flex column class="pl2">
+          <w-card title="Заголовок новини" class="mb3">
+            {{ oneNews.title }}
+          </w-card>
 
-            <w-card title="Опис новини" class="mb3">
-              {{ oneNews.description }}
-            </w-card>
+          <w-card title="Опис новини" class="mb3">
+            {{ oneNews.description }}
+          </w-card>
 
-            <w-card title="Текст новини" >
-              <div v-html="oneNews.text"></div>
-            </w-card>
+          <w-card title="Текст новини" class="mb3">
+            <div v-html="oneNews.text"></div>
+          </w-card>
 
-          </w-flex>
+          <w-card title="Фото новини" class="mb3" no-border content-class="pa0" title-class="bd1">
+            <w-table
+                :headers="tableHeaderNewsPhoto"
+                :items="oneNews.photos"
+                fixed-headers
+                style="width: 100%"
+            >
+              <template #item="{ item, classes, index  }">
+                <tr :class="classes">
+                  <td>
+                    <div class="ml3">{{ index }}</div>
+                  </td>
+                  <td>{{ item.name }}</td>
+                  <td>
+                    <a
+                        class="black"
+                        :href="urlStorage + item.path"
+                        target="_blank">
+                      <w-image :src="urlStorage + item.path" tag="img" width="20px"></w-image>
+                    </a>
+                  </td>
+                </tr>
+              </template>
+            </w-table>
+          </w-card>
+          <w-card title="Документи новини" class="mb3" no-border content-class="pa0" title-class="bd1">
+            <w-table
+                :headers="tableHeaderNewsDocument"
+                :items="oneNews.documents"
+                fixed-headers
+                style="width: 100%"
+            >
+              <template #item="{ item, classes, index  }">
+                <tr :class="classes">
+                  <td>
+                    <div class="ml3">{{ index }}</div>
+                  </td>
+                  <td>{{ item.name }}</td>
+                  <td>
+                    <a
+                        class="black"
+                        :href="urlStorage + item.path"
+                        target="_blank">
+                      <w-icon xl>
+                        mdi mdi-eye-outline
+                      </w-icon>
+                    </a>
+                  </td>
+                </tr>
+              </template>
+            </w-table>
+          </w-card>
+          <w-card title="Відео новини" no-border content-class="pa0" title-class="bd1">
+            <w-table
+                :headers="tableHeaderNewsVideo"
+                :items="oneNews.videos"
+                fixed-headers
+                style="width: 100%"
+            >
+              <template #item="{ item, classes, index  }">
+                <tr :class="classes">
+                  <td>
+                    <div class="ml3">{{ index }}</div>
+                  </td>
+                  <td>{{ item.name }}</td>
+                  <td>
+                    <a
+                        class="black"
+                        :href="urlStorage + item.path"
+                        target="_blank">
+                      <w-icon xl>
+                        mdi mdi-play
+                      </w-icon>
+                    </a>
+                  </td>
+                </tr>
+              </template>
+            </w-table>
+          </w-card>
+
+        </w-flex>
 
       </w-flex>
 
@@ -144,13 +254,13 @@
       </w-flex>
     </w-dialog>
     <w-dialog title="Редагувати тест"
-              width="90vw"
+              width="80vw"
               title-class="grey-dark5--bg white"
               v-model="showEditNewsDialog">
       <w-button absolute top right bg-color="grey-dark5"
                 color="white" icon="wi-cross" tile @click="showEditNewsDialog=false"></w-button>
-      <w-flex fill-height>
-        <w-card class="mr3" title="Форма редагування новини" style="width: 100%">
+      <w-flex fill-height style="height: 80vh; overflow-y: auto">
+        <w-card class="mr3" no-border title="Форма редагування новини" style="width: 100%;">
           <div class="mb4">
             <w-input color="grey-dark5" label-color="grey-dark5" v-model="inputsNews.title"
                      label="Заголовок новини"></w-input>
@@ -170,6 +280,154 @@
                 :config="editorConfig"
             ></ckeditor>
           </div>
+          <div class="mb4 d-flex" style="flex-direction: column">
+            <w-input
+                v-model="inputsNewsPhotos.photos"
+                color="grey-dark5" label-color="grey-dark5"
+                type="file"
+                label="Завантажити фото"
+                accept=".jpg, .jpeg, .png, .gif, .svg"
+                multiple>
+            </w-input>
+          </div>
+          <w-flex class="mb4">
+            <w-table
+                :headers="tableHeaderNewsPhoto"
+                :items="inputsNews.photos"
+                fixed-headers
+                style="width: 100%"
+            >
+              <template #item="{ item, classes, index  }">
+                <tr :class="classes">
+                  <td>
+                    <div class="ml3">{{ index }}</div>
+                  </td>
+                  <td>{{ item.name }}</td>
+                  <td>
+                    <a
+                        class="black"
+                        :href="urlStorage + item.path"
+                        target="_blank">
+                      <w-image :src="urlStorage + item.path" tag="img" width="20px"></w-image>
+                    </a>
+                  </td>
+                  <td>
+                    <w-button class="grow" color="white" bg-color="grey-dark5" @click="destroyNewsPhoto(item.id)">
+                      <w-icon class="mr2" color="white">
+                        mdi mdi-trash-can-outline
+                      </w-icon>
+                      Видалити
+                    </w-button>
+                  </td>
+                </tr>
+              </template>
+            </w-table>
+            <!--            <div class="xs2  pr2 pt2" v-for="(photo,index) in inputsNews.photos" :key="index">-->
+            <!--              <div class="d-flex" style="flex-direction: column">-->
+            <!--                <div class="d-flex align-center justify-center bd1">-->
+            <!--                  <w-image :src="urlStorage + photo.path" tag="img" style="width: 100px"></w-image>-->
+            <!--                </div>-->
+            <!--                <w-flex>-->
+            <!--                  <w-button class="grow" color="white" bg-color="grey-dark5" @click="destroyNewsPhoto(photo.id)">-->
+            <!--                    <w-icon class="mr2" color="white">-->
+            <!--                      mdi mdi-trash-can-outline-->
+            <!--                    </w-icon>-->
+            <!--                    Видалити-->
+            <!--                  </w-button>-->
+            <!--                </w-flex>-->
+            <!--              </div>-->
+            <!--            </div>-->
+          </w-flex>
+          <div class="mb4">
+            <w-input
+                v-model="inputsNewsDocuments.documents"
+                color="grey-dark5" label-color="grey-dark5"
+                type="file"
+                label="Завантажити документ"
+                accept=".pdf,.djvu"
+                multiple>
+            </w-input>
+          </div>
+          <w-flex class="mb4">
+            <w-table
+                :headers="tableHeaderNewsDocument"
+                :items="inputsNews.documents"
+                fixed-headers
+                style="width: 100%"
+            >
+              <template #item="{ item, classes, index  }">
+                <tr :class="classes">
+                  <td>
+                    <div class="ml3">{{ index }}</div>
+                  </td>
+                  <td>{{ item.name }}</td>
+                  <td>
+                    <a
+                        class="black"
+                        :href="urlStorage + item.path"
+                        target="_blank">
+                      <w-icon xl>
+                        mdi mdi-eye-outline
+                      </w-icon>
+                    </a>
+                  </td>
+                  <td>
+                    <w-button class="grow" color="white" bg-color="grey-dark5" @click="destroyNewsDocument(item.id)">
+                      <w-icon class="mr2" color="white">
+                        mdi mdi-trash-can-outline
+                      </w-icon>
+                      Видалити
+                    </w-button>
+                  </td>
+                </tr>
+              </template>
+            </w-table>
+          </w-flex>
+          <div class="mb4">
+            <w-input
+                v-model="inputsNewsVideos.videos"
+                color="grey-dark5" label-color="grey-dark5"
+                type="file"
+                label="Завантажити відео"
+                accept=".mp4"
+                multiple>
+            </w-input>
+          </div>
+          <w-flex class="mb4">
+            <w-table
+                :headers="tableHeaderNewsVideo"
+                :items="inputsNews.videos"
+                fixed-headers
+                style="width: 100%"
+            >
+              <template #item="{ item, classes, index  }">
+                <tr :class="classes">
+                  <td>
+                    <div class="ml3">{{ index }}</div>
+                  </td>
+                  <td>{{ item.name }}</td>
+                  <td>
+                    <a
+                        class="black"
+                        :href="urlStorage + item.path"
+                        target="_blank">
+                      <w-icon xl>
+                        mdi mdi-play
+                      </w-icon>
+                    </a>
+                  </td>
+                  <td>
+                    <w-button class="grow" color="white" bg-color="grey-dark5" @click="destroyNewsVideo(item.id)">
+                      <w-icon class="mr2" color="white">
+                        mdi mdi-trash-can-outline
+                      </w-icon>
+                      Видалити
+                    </w-button>
+                  </td>
+                </tr>
+              </template>
+            </w-table>
+          </w-flex>
           <div class="mb4">
             <w-checkbox color="grey-dark5" label-color="grey-dark5" v-model="inputsNews.status" label="Статус">
               {{ inputsNews.status ? 'Відображати' : 'Не відображати' }}
@@ -204,10 +462,14 @@
 import {mapActions, mapGetters} from "vuex";
 import ClassicEditor from "ckeditor5-mathtype/build/ckeditor"
 
+const URL_STORAGE = process.env.VUE_APP_URL_STORAGE
+const BASE_URL = process.env.VUE_APP_API_URL
 export default {
   name: 'NewsPage',
   data() {
     return {
+      urlStorage: URL_STORAGE,
+      baseUrlApi: BASE_URL,
       editor: ClassicEditor,
       editorData: "",
       editorConfig: {},
@@ -220,9 +482,24 @@ export default {
       showShowNewsDialog: false,
       showDeleteNewsDialog: false,
       tableHeaderNews: [
-        {label: 'id', key: 'id',width: 50},
-        {label: 'Опис', key: 'description',width: '80%'},
+        {label: 'id', key: 'id', width: 50},
+        {label: 'Опис', key: 'description', width: '80%'},
         {label: 'Статус', key: 'status'},
+      ],
+      tableHeaderNewsVideo: [
+        {label: 'id', key: 'id', width: 50},
+        {label: 'Назва', key: 'name', width: '80%'},
+        {label: 'Дія'},
+      ],
+      tableHeaderNewsDocument: [
+        {label: 'id', key: 'id', width: 50},
+        {label: 'Назва', key: 'name', width: '80%'},
+        {label: 'Дія'},
+      ],
+      tableHeaderNewsPhoto: [
+        {label: 'id', key: 'id', width: 50},
+        {label: 'Назва', key: 'name', width: '80%'},
+        {label: 'Дія'},
       ],
       keywordNews: '',
       keywordFilterNews: keywordNews => item => {
@@ -236,6 +513,18 @@ export default {
         text: 'Введіть текст новини',
         status: null,
       },
+      inputsNewsPhotos: {
+        newsId: null,
+        photos: null
+      },
+      inputsNewsDocuments: {
+        newsId: null,
+        documents: null
+      },
+      inputsNewsVideos: {
+        newsId: null,
+        videos: null
+      }
     }
   },
   created() {
@@ -250,6 +539,9 @@ export default {
       news: 'news/news',
       oneNews: 'news/oneNews',
       errors: 'news/errors',
+      newsPhotos: 'newsPhotos/newsPhotos',
+      newsDocuments: 'newsDocuments/newsDocuments',
+      newsVideos: 'newsVideos/newsVideos',
     }),
   },
   methods: {
@@ -259,13 +551,19 @@ export default {
       show: 'news/show',
       update: 'news/update',
       delete: 'news/delete',
+      storeNewsPhotos: 'newsPhotos/store',
+      deleteNewsPhoto: 'newsPhotos/delete',
+      storeNewsDocuments: 'newsDocuments/store',
+      deleteNewsDocument: 'newsDocuments/delete',
+      storeNewsVideos: 'newsVideos/store',
+      deleteNewsVideo: 'newsVideos/delete',
     }),
     /**
      * Test
      */
     openCreateNewsDialog() {
       this.inputsNews = Object.assign({}, {})
-      this.inputsNews.text='Введіть текст новини'
+      this.inputsNews.text = 'Введіть текст новини'
       this.showCreateNewsDialog = true
     },
     openShowNewsDialog(item) {
@@ -287,6 +585,41 @@ export default {
     create() {
       this.inputsNews.status ? this.inputsNews.status = 1 : this.inputsNews.status = 0
       this.store(this.inputsNews).then(() => {
+        if (this.inputsNewsPhotos.photos !== null) {
+          this.inputsNewsPhotos.newsId = this.oneNews.id
+          this.storeNewsPhotos(this.inputsNewsPhotos).then(() => {
+            let index = this.news.findIndex((c) => c.id === this.oneNews.id);
+            if (index > -1) {
+              this.news[index].photos = this.newsPhotos
+            }
+            this.inputsNewsPhotos.newsId = null
+            this.inputsNewsPhotos.photos = null
+          })
+        }
+        if (this.inputsNewsDocuments.documents !== null) {
+          this.inputsNewsDocuments.newsId = this.oneNews.id
+          this.storeNewsDocuments(this.inputsNewsDocuments).then(() => {
+            let index = this.news.findIndex((c) => c.id === this.oneNews.id);
+            if (index > -1) {
+              this.news[index].documents = this.newsDocuments
+            }
+            this.inputsNewsDocuments.newsId = null
+            this.inputsNewsDocuments.documents = null
+
+          })
+        }
+        if (this.inputsNewsVideos.videos !== null) {
+          this.inputsNewsVideos.newsId = this.oneNews.id
+          this.storeNewsVideos(this.inputsNewsVideos).then(() => {
+            let index = this.news.findIndex((c) => c.id === this.oneNews.id);
+            if (index > -1) {
+              this.news[index].videos = this.newsVideos
+            }
+            this.inputsNewsVideos.newsId = null
+            this.inputsNewsVideos.documents = null
+
+          })
+        }
         this.notify('Новину створено.')
         this.showCreateNewsDialog = false
       })
@@ -294,6 +627,39 @@ export default {
     edit() {
       this.inputsNews.status ? this.inputsNews.status = 1 : this.inputsNews.status = 0
       this.update(this.inputsNews).then(() => {
+        if (this.inputsNewsPhotos.photos !== null) {
+          this.inputsNewsPhotos.newsId = this.inputsNews.id
+          this.storeNewsPhotos(this.inputsNewsPhotos).then(() => {
+            let index = this.news.findIndex((c) => c.id === this.inputsNews.id);
+            if (index > -1) {
+              this.news[index].photos = this.newsPhotos
+            }
+            this.inputsNewsPhotos.newsId = null
+            this.inputsNewsPhotos.photos = null
+          })
+        }
+        if (this.inputsNewsDocuments.documents !== null) {
+          this.inputsNewsDocuments.newsId = this.inputsNews.id
+          this.storeNewsDocuments(this.inputsNewsDocuments).then(() => {
+            let index = this.news.findIndex((c) => c.id === this.inputsNews.id);
+            if (index > -1) {
+              this.news[index].documents = this.newsDocuments
+            }
+            this.inputsNewsDocuments.newsId = null
+            this.inputsNewsDocuments.documents = null
+          })
+        }
+        if (this.inputsNewsVideos.videos !== null) {
+          this.inputsNewsVideos.newsId = this.inputsNews.id
+          this.storeNewsVideos(this.inputsNewsVideos).then(() => {
+            let index = this.news.findIndex((c) => c.id === this.inputsNews.id);
+            if (index > -1) {
+              this.news[index].videos = this.newsVideos
+            }
+            this.inputsNewsVideos.newsId = null
+            this.inputsNewsVideos.documents = null
+          })
+        }
         this.showEditNewsDialog = false
         this.notify('Новину оновлено.')
       })
@@ -302,6 +668,30 @@ export default {
       this.delete(this.inputsNews.id).then(() => {
         this.notify('Тест видалено.')
         this.showDeleteNewsDialog = false
+      })
+    },
+    destroyNewsPhoto(id) {
+      this.deleteNewsPhoto(id).then(() => {
+        let index = this.inputsNews.photos.findIndex((c) => c.id === id);
+        if (index > -1) {
+          this.inputsNews.photos.splice(index, 1);
+        }
+      })
+    },
+    destroyNewsVideo(id) {
+      this.deleteNewsVideo(id).then(() => {
+        let index = this.inputsNews.videos.findIndex((c) => c.id === id);
+        if (index > -1) {
+          this.inputsNews.videos.splice(index, 1);
+        }
+      })
+    },
+    destroyNewsDocument(id) {
+      this.deleteNewsDocument(id).then(() => {
+        let index = this.inputsNews.documents.findIndex((c) => c.id === id);
+        if (index > -1) {
+          this.inputsNews.documents.splice(index, 1);
+        }
       })
     },
     /**
@@ -316,7 +706,7 @@ export default {
       })
     },
     focus() {
-      this.inputsNews.text=''
+      this.inputsNews.text = ''
     },
   }
 }

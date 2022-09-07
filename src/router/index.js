@@ -21,6 +21,10 @@ const routes = [
         component: () => import( '../views/BooksPage'),
       },
       {
+        path: '/formulas-and-rules',
+        component: () => import( '../views/FormulasPage'),
+      },
+      {
         path: '/account-settings',
         component: () => import( '../views/account-settings/AccountSettingsPage'),
         children: [
@@ -59,6 +63,10 @@ const routes = [
           {
             path: '/account/my-books',
             component: () => import( '../views/account/MyBooksPage'),
+          },
+          {
+            path: '/account/my-formulas-and-rules',
+            component: () => import( '../views/account/MyFormulasPage'),
           },
           {
             path: '/account/my-grades',
@@ -106,6 +114,14 @@ const routes = [
       {
         path: '/dashboard/news',
         component: () => import( '../views/dashboard/NewsPage'),
+      },
+      {
+        path: '/dashboard/books',
+        component: () => import( '../views/dashboard/BooksPage'),
+      },
+      {
+        path: '/dashboard/formulas-and-rules',
+        component: () => import( '../views/dashboard/FormulasPage'),
       },
       {
         path: '/:pathMatch(.*)*',

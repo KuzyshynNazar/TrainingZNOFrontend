@@ -2,33 +2,38 @@
   <w-app
       row
       class="p-0"
-      justify-space-around
+      justify-end
       align-center
-      style="background-color:#383838"
+      style="background-color:#b3c0c7"
   >
 
   <w-card
-      bg-color="white"
-      shadow color="grey-dark5"
-      class="pa2 mr5"
+style="width: 50vw"
+       color="blue-grey-dark4"
+      class="pa2 mr12"
       no-border
-      :style="{width:$waveui.breakpoint.xs? '90vw':'40vw'}"
+
 
   >
     <div
-        class="d-flex"
+        class="d-flex align-center justify-end"
         style="width: 100%"
     >
+<!--      <div class="pr10">-->
+<!--        <w-image :src="require('./../../assets/math-logo.png')" tag="img" style="max-width: 300px"></w-image>-->
+<!--      </div>-->
       <div
-          class="d-flex justify-center align-center pl2"
+          class="d-flex justify-start align-start pl2"
           style="flex-direction: column; width: 100%"
       >
         <w-input
             v-model="inputs.nick_name"
             style="width: 100%"
             class="mb2"
-            placeholder="username"
-            outline
+            label="Псевдонім"
+            color="blue-grey-dark5"
+            label-color="blue-grey-dark5"
+            bg-color="blue-grey-light3"
         >
         </w-input>
         <w-input
@@ -36,22 +41,26 @@
             style="width: 100%"
             class="mb2"
             type="password"
-            placeholder="password"
-            outline
+            label="Пароль"
+            color="blue-grey-dark5"
+            label-color="blue-grey-dark5"
+            bg-color="blue-grey-light3"
+
         >
         </w-input>
         <w-button
             text
             style="width: 100%" height="28"
-            bg-color="grey-dark5"
-            color="white"
+            color="blue-grey-light3" bg-color="blue-grey-dark5"
             @click="logInStudent"
         >
-          Login
+          Ввійти
         </w-button>
       </div>
     </div>
   </w-card>
+    <w-image :src="require('./../../assets/math-logo.png')" tag="img" style="max-width: 40vw; position: fixed; bottom:0; left: 15px;" ></w-image>
+
   </w-app>
 </template>
 

@@ -94,7 +94,7 @@ const mutations = {
      * @param testQuestion
      */
     [types.SAVE_NEW_TEST_QUESTION]: (state, testQuestion) => {
-        state.testQuestions.unshift(testQuestion)
+        state.testQuestions.push(testQuestion)
         state.testQuestion = testQuestion
 
     },

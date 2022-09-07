@@ -1,5 +1,5 @@
 import * as types from '../../mutayion-types';
-import testResultService from '../../../services/admin/test-results-service';
+import testResultService from '../../../services/students/test-results-service';
 
 const state = () => ({
     testResult: [],

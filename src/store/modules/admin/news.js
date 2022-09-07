@@ -95,6 +95,7 @@ const mutations = {
      */
     [types.SAVE_NEW_NEWS]: (state, oneNews) => {
         state.news.unshift(oneNews)
+        state.oneNews=oneNews
     },
     /**
      *

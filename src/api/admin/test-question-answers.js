@@ -1,6 +1,6 @@
 const axios = require('axios');
 
-const origin = 'http://training-zno/api';
+const origin = 'http://training-zno/api-admin';
 const routes = {
     get: {
         testQuestionAnswers: `${origin}/testQuestionAnswers`,

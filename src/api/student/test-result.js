@@ -1,7 +1,10 @@
 const axios = require('axios');
 
-const origin = 'http://training-zno/api';
+const origin = 'http://training-zno/api-student';
 const routes = {
+    get: {
+        testResults : `${origin}/test-results`,
+    },
     post: {
         create: `${origin}/test-results`,
     },
@@ -9,6 +12,10 @@ const routes = {
 
 exports.getRoutes = () => {
     return routes;
+};
+exports.index = (headers) => {
+    const url = routes.get.testResults;
+    return axios.get(url, headers);
 };
 exports.create = (data, headers) => {
     const url = routes.post.create;

@@ -16,9 +16,9 @@
     </w-tooltip>
   </w-toolbar>
 
-  <w-flex column style="margin-left: 40px;" class="pa3" fill-height>
-    <w-card class="grow" title="Відображення дерева категорії" style="height: calc(100vh - 70px)">
-      <div style="width:100%; height: calc(100vh - 120px); overflow: auto;">
+  <w-flex style="margin-left: 40px;" fill-height>
+    <w-card class="grow" no-border style=" height: calc(100vh - 40px); overflow: auto;">
+      <div style="width:100%">
         <Tree :value="treeCategories">
           <template v-slot="{node,  path, tree}">
             <w-flex justify-space-between align-center class="hover-tree">
@@ -70,6 +70,7 @@
   </w-flex>
   <w-dialog title="Створити Батьківську Категорію"
             width="600px"
+            title-class="grey-dark5--bg white"
             v-model="showCreateDialog">
     <w-button absolute top right bg-color="grey-dark5"
               color="white" icon="wi-cross" tile @click="showCreateDialog=false"></w-button>
@@ -96,6 +97,7 @@
   </w-dialog>
   <w-dialog title="Створити категорію"
             width="600px"
+            title-class="grey-dark5--bg white"
             v-model="showCreateChildDialog">
     <w-button absolute top right bg-color="grey-dark5"
               color="white" icon="wi-cross" tile @click="showCreateChildDialog=false"></w-button>
@@ -119,6 +121,7 @@
   </w-dialog>
   <w-dialog title="Редагувати категорію"
             width="1000px"
+            title-class="grey-dark5--bg white"
             v-model="showEditDialog">
     <w-button absolute top right bg-color="grey-dark5"
               color="white" icon="wi-cross" tile @click="showEditDialog=false"></w-button>
@@ -194,6 +197,7 @@
   </w-dialog>
   <w-dialog title="Видалити категорію"
             width="400px"
+            title-class="grey-dark5--bg white"
             v-model="showDeleteDialog">
     <w-button absolute top right bg-color="grey-dark5"
               color="white" icon="wi-cross" tile @click="showDeleteDialog=false">
@@ -206,13 +210,14 @@
     </w-flex>
   </w-dialog>
   <w-dialog title="Показати категорії і тести"
-            width="90vw"
+            fullscreen width="90vw"
+            title-class="grey-dark5--bg white"
             v-model="showCategoryAndFilesDialog">
     <w-button absolute top right bg-color="grey-dark5"
               color="white" icon="wi-cross" tile @click="showCategoryAndFilesDialog=false"></w-button>
     <w-flex fill-height>
-      <w-card class="grow mr3" style="height: 80vh">
-        <div style="width:100%; height: 75vh; overflow: auto;">
+      <w-card class="grow" no-border content-class="pa0" style="height: calc(100vh - 65px); overflow: auto;">
+        <div>
           <Tree :value="categoryAndTests">
             <template v-slot="{node,  path, tree}">
               <w-flex justify-space-between align-center>

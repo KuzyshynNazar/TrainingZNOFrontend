@@ -3,6 +3,7 @@ import studentService from '../../../services/admin/students-service';
 
 const state = () => ({
     students: [],
+    studentsTestResult: [],
     errors: [],
 })
 
@@ -12,6 +13,7 @@ const getters = {
      * @param state
      */
     students: state => state.students,
+    studentsTestResult: state => state.studentsTestResult,
     errors: state => state.errors,
 
 };
@@ -26,6 +28,17 @@ const actions = {
     async getAll(context) {
         await studentService.getAll(context)
     },
+
+    /**
+     *
+     * @param context
+     * @param data
+     * @returns {Promise<void>}
+     */
+    async getStudentTestResult(context, data) {
+        await studentService.getStudentTestResult(context, data)
+    },
+
 
     /**
      *
@@ -66,6 +79,17 @@ const mutations = {
     [types.SET_STUDENTS]: (state, students) => {
         state.students = students
     },
+
+
+    /**
+     *
+     * @param state
+     * @param studentsTestResult
+     */
+    [types.SET_STUDENT_TEST_RESULT]: (state, studentsTestResult) => {
+        state.studentsTestResult = studentsTestResult
+    },
+
 
 
     /**

@@ -7,12 +7,11 @@
       left
       no-overlay>
     <w-flex column>
-      <w-list  style="margin-top: 50px; display: inline-grid" :items="items" nav hover>
+      <w-list  style="margin-top: 40px; width: 100%; display: inline-grid" :items="items" nav hover item-class="ma0">
         <template #item="{ item }" >
           <div>{{ item.label }}</div>
           <div class="spacer"></div>
           <w-icon md>{{ item.icon }}</w-icon>
-
         </template>
       </w-list>
     </w-flex>

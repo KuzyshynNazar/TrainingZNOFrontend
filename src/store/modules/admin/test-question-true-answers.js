@@ -77,7 +77,7 @@ const mutations = {
      * @param testQuestionTrueAnswer
      */
     [types.SAVE_NEW_TEST_QUESTION_TRUE_ANSWER]: (state, testQuestionTrueAnswer) => {
-        state.testQuestionTrueAnswers.unshift(testQuestionTrueAnswer)
+        state.testQuestionTrueAnswers = testQuestionTrueAnswer
 
     },
     /**

@@ -1,15 +1,16 @@
 const axios = require('axios');
 
-const origin = 'http://training-zno/api';
+const origin = 'http://training-zno/api-admin';
+const origin1 = 'http://training-zno/api-student';
 const routes = {
     post: {
         loginAdmin: `${origin}/login-admin`,
-        loginStudent: `${origin}/login-student`,
+        loginStudent: `${origin1}/login-student`,
 
     },
     get:{
         logoutAdmin: `${origin}/logout-admin`,
-        logoutStudent: `${origin}/logout-student`,
+        logoutStudent: `${origin1}/logout-student`,
     }
 };
 

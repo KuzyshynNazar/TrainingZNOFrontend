@@ -59,7 +59,7 @@
             Згорнути бічну панель
           </w-tooltip>
           <w-flex column>
-            <w-list style="display: inline-grid" :items="items" nav hover>
+            <w-list style="display: inline-grid" :items="items" nav hover item-class="ma0">
               <template #item="{ item }">
                 <div>{{ item.label }}</div>
                 <div class="spacer"></div>
@@ -92,6 +92,8 @@ export default {
         {label: 'Дерево категорій', id: 'treeCategories', color: 'white', icon: 'mdi mdi-file-tree-outline', route: '/dashboard/tree-categories'},
         {label: 'Тест', id: 'tests', color: 'white', icon: 'mdi mdi-ab-testing', route: '/dashboard/tests'},
         {label: 'Новина', id: 'tests', color: 'white', icon: 'mdi mdi-newspaper-variant', route: '/dashboard/news'},
+        {label: 'Книги', id: 'tests', color: 'white', icon: 'mdi mdi-bookshelf', route: '/dashboard/books'},
+        {label: 'Формули та правила', id: 'tests', color: 'white', icon: 'mdi mdi-function-variant', route: '/dashboard/formulas-and-rules'},
       ]
     }
   },

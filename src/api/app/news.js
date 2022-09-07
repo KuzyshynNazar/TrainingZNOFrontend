@@ -1,9 +1,9 @@
 const axios = require('axios');
 
-const origin = 'http://training-zno/api';
+const origin = 'http://training-zno/api-app';
 const routes = {
     get: {
-        news: `${origin}/get-all-news`,
+        news: `${origin}/news`,
     },
 };
 
