@@ -55,7 +55,7 @@
               <div class="body"> Читати книгу</div>
 
             </w-tooltip>
-            <w-tooltip top color="blue-grey-light3" bg-color="blue-grey-dark5">
+            <w-tooltip top color="blue-grey-light3" bg-color="blue-grey-dark5" v-if="!user.isAdmin">
               <template #activator="{ on }">
                 <w-button
                     v-on="on"
@@ -113,6 +113,7 @@ export default {
   computed: {
     ...mapGetters({
       saveBooks: 'saveBooks/saveBooks',
+      user: 'auth/user',
     }),
   },
   methods:{

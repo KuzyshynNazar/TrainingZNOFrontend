@@ -17,14 +17,18 @@ import books from './modules/admin/books'
 import bookDocuments from './modules/admin/book-documents'
 import formulas from './modules/admin/formulas'
 import formulaDocuments from './modules/admin/formula-documents'
+import testSamples from './modules/admin/test-samples'
+import testSampleDocuments from './modules/admin/test-sample-documents'
 import appNews from './modules/app/news'
 import appBooks from './modules/app/books'
 import appFormulas from './modules/app/formulas'
+import appTestSamples from './modules/app/test-samples'
 import questionTypes from './modules/admin/question-types'
 import testResults from './modules/students/test-results'
 import studentTests from './modules/students/student-tests'
 import saveBooks from './modules/students/save-books'
 import saveFormulas from './modules/students/save-formulas'
+import saveTestSamples from './modules/students/save-test-samples'
 
 
 export default createStore({
@@ -45,14 +49,18 @@ export default createStore({
     bookDocuments,
     formulas,
     formulaDocuments,
+    testSamples,
+    testSampleDocuments,
     appNews,
     appBooks,
     appFormulas,
+    appTestSamples,
     questionTypes,
     testQuestionTrueAnswers,
     testResults,
     studentTests,
     saveBooks,
     saveFormulas,
+    saveTestSamples,
   }
 })

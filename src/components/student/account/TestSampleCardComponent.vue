@@ -2,21 +2,20 @@
   <w-flex fill-height >
     <w-card class="book-card" style="width: 100%" bg-color="blue-grey-dark3" content-class="pb0 blue-grey-light3" title-class="blue-grey-light3 bd0">
       <template #title>
-        <div class="body blue-grey-light3">{{ formula.author }}</div>
+        <div class="body blue-grey-light3">{{ testSample.title }}</div>
 
       </template>
 
       <w-flex column align-start justify-space-between>
         <div class="d-flex align-center justify-center" style="width: 100%">
-          <w-image :src="require('../../../assets/formulas.png')" tag="img" style="max-width: 100px"></w-image>
+          <w-image :src="require('../../../assets/test-sample.png')" tag="img" style="max-width: 100px"></w-image>
         </div>
-        <div class="body blue-grey-light3">{{ formula.title }}</div>
       </w-flex>
-
+<!--      <w-divider class="mt2 mx-3 cyan-dark4&#45;&#45;bg"></w-divider>-->
 
       <template #actions>
         <w-button
-            @click="drawer?drawer=false:openDrawer($event, formula)"
+            @click="drawer?drawer=false:openDrawer($event, testSample)"
             class="grow caption"
             sm
            color="blue-grey-dark4"  bg-color="blue-grey-light3"
@@ -29,16 +28,13 @@
           v-model="drawer"
           absolute
           color="blue-grey-dark3" bg-color="blue-grey-light3"
-          height="50%"
+          height="25%"
       >
         <w-button absolute bottom right color="blue-grey-dark3" text style="right: 0;bottom: 0"
                   bg-color="blue-grey-light3" icon="wi-cross" xs tile @click="drawer=false"></w-button>
-        <w-flex column >
-          <w-flex class="body black pa1">
-            {{ formula.description }}
-          </w-flex>
+        <w-flex column align-center justify-center>
           <w-flex no-grow justify-center align-center>
-            <w-tooltip top color="blue-grey-light3" bg-color="blue-grey-dark5">
+            <w-tooltip bottom bg-color="blue-grey-light3" color="blue-grey-dark5">
               <template #activator="{ on }">
                 <w-button
                     v-on="on"
@@ -46,31 +42,31 @@
                     text
                     icon="mdi mdi-book-open-page-variant"
                     color="blue-grey-dark4"
-                    :route="urlStorage + formula.document.path"
+                    :route="urlStorage + testSample.document.path"
                     target="_blank"
                     xl
                 >
                 </w-button>
               </template>
-              <div class="body"> Читати книгу</div>
+              <div class="body">Читати книгу</div>
 
             </w-tooltip>
-            <w-tooltip top color="blue-grey-light3" bg-color="blue-grey-dark5" v-if="!user.isAdmin">
+            <w-tooltip bottom  bg-color="blue-grey-light3" color="blue-grey-dark5">
               <template #activator="{ on }">
                 <w-button
                     v-on="on"
                     tile
                     text
                     icon="mdi mdi-book-account-outline"
-                    :color="formula.document.isSaveDocument?'cyan-dark4':'blue-grey-dark4'"
-                    @click="formula.document.isSaveDocument?destroySaveFormulas(formula):storeSaveFormulas(formula)"
+                    :color="'blue-grey-dark4'"
+                    @click="destroySaveTestSamples(testSample)"
                     xl
                 >
 
                 </w-button>
               </template>
               <div class="body">
-                {{ formula.document.isSaveDocument?'Видалити з кабінету':'Зберегти в кабінеті' }}
+                {{'Видалити з ос. кабінету' }}
               </div>
 
             </w-tooltip>
@@ -90,7 +86,7 @@ const BASE_URL = process.env.VUE_APP_API_URL
 // https://chrome.google.com/webstore/detail/djvujs-viewer/bpnedgjmphmmdgecmklcopblfcbhpefm/related
 // https://addons.mozilla.org/uk/firefox/addon/djvu-js-viewer/
 export default {
-  name: "FormulaCardComponent",
+  name: "TestSampleCardComponent",
   data() {
     return {
       urlStorage: URL_STORAGE,
@@ -105,36 +101,35 @@ export default {
       type: Boolean,
       default: false
     },
-    formula: {
+    testSample: {
       type: Object,
       default: () => {}
     },
   },
   computed: {
     ...mapGetters({
-      saveFormulas: 'saveFormulas/saveFormulas',
-      user: 'auth/user',
+      saveTestSamples: 'saveTestSamples/saveTestSamples',
     }),
   },
   methods:{
     ...mapActions({
-      saveFormula: 'saveFormulas/saveFormula',
-      deleteSavedFormula: 'saveFormulas/deleteSavedFormula',
+      saveTestSample: 'saveTestSamples/saveTestSample',
+      deleteSavedTestSample: 'saveTestSamples/deleteSavedTestSample',
 
     }),
     openDrawer() {
       this.drawer = true
     },
-    storeSaveFormulas(formula){
-      let data={formulaId:formula.id}
-      this.saveFormula(data).then(()=>{
-        formula.document.isSaveDocument=true
+    storeSaveTestSamples(testSample){
+      let data={testSampleId:testSample.id}
+      this.saveTestSample(data).then(()=>{
+        testSample.isSaveDocument=true
         this.notify('Збережено в особистому кабінеті.')
       })
     },
-    destroySaveFormulas(formula){
-      this.deleteSavedFormula(formula.id).then(()=>{
-        formula.document.isSaveDocument=false
+    destroySaveTestSamples(testSample){
+      this.deleteSavedTestSample(testSample.id).then(()=>{
+        testSample.isSaveDocument=false
         this.notify('Книгу видалено з особистого кабінену','red')
       })
     },

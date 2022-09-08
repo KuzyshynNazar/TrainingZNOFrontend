@@ -2,21 +2,21 @@
   <w-flex fill-height >
     <w-card class="book-card" style="width: 100%" bg-color="blue-grey-dark3" content-class="pb0 blue-grey-light3" title-class="blue-grey-light3 bd0">
       <template #title>
-        <div class="body blue-grey-light3">{{ formula.author }}</div>
+        <div class="body blue-grey-light3">{{ testSample.author }}</div>
 
       </template>
 
       <w-flex column align-start justify-space-between>
         <div class="d-flex align-center justify-center" style="width: 100%">
-          <w-image :src="require('../../../assets/formulas.png')" tag="img" style="max-width: 100px"></w-image>
+          <w-image :src="require('../../../assets/test-sample.png')" tag="img" style="max-width: 100px"></w-image>
         </div>
-        <div class="body blue-grey-light3">{{ formula.title }}</div>
+        <div class="body blue-grey-light3">{{ testSample.title }}</div>
       </w-flex>
 
 
       <template #actions>
         <w-button
-            @click="drawer?drawer=false:openDrawer($event, formula)"
+            @click="drawer?drawer=false:openDrawer($event, testSample)"
             class="grow caption"
             sm
            color="blue-grey-dark4"  bg-color="blue-grey-light3"
@@ -35,7 +35,7 @@
                   bg-color="blue-grey-light3" icon="wi-cross" xs tile @click="drawer=false"></w-button>
         <w-flex column >
           <w-flex class="body black pa1">
-            {{ formula.description }}
+            {{ testSample.description }}
           </w-flex>
           <w-flex no-grow justify-center align-center>
             <w-tooltip top color="blue-grey-light3" bg-color="blue-grey-dark5">
@@ -46,7 +46,7 @@
                     text
                     icon="mdi mdi-book-open-page-variant"
                     color="blue-grey-dark4"
-                    :route="urlStorage + formula.document.path"
+                    :route="urlStorage + testSample.document.path"
                     target="_blank"
                     xl
                 >
@@ -62,15 +62,15 @@
                     tile
                     text
                     icon="mdi mdi-book-account-outline"
-                    :color="formula.document.isSaveDocument?'cyan-dark4':'blue-grey-dark4'"
-                    @click="formula.document.isSaveDocument?destroySaveFormulas(formula):storeSaveFormulas(formula)"
+                    :color="testSample.document.isSaveDocument?'cyan-dark4':'blue-grey-dark4'"
+                    @click="testSample.document.isSaveDocument?destroySaveTestSamples(testSample):storeSaveTestSamples(testSample)"
                     xl
                 >
 
                 </w-button>
               </template>
               <div class="body">
-                {{ formula.document.isSaveDocument?'Видалити з кабінету':'Зберегти в кабінеті' }}
+                {{ testSample.document.isSaveDocument?'Видалити з кабінету':'Зберегти в кабінеті' }}
               </div>
 
             </w-tooltip>
@@ -90,7 +90,7 @@ const BASE_URL = process.env.VUE_APP_API_URL
 // https://chrome.google.com/webstore/detail/djvujs-viewer/bpnedgjmphmmdgecmklcopblfcbhpefm/related
 // https://addons.mozilla.org/uk/firefox/addon/djvu-js-viewer/
 export default {
-  name: "FormulaCardComponent",
+  name: "TestSampleCardComponent",
   data() {
     return {
       urlStorage: URL_STORAGE,
@@ -105,36 +105,37 @@ export default {
       type: Boolean,
       default: false
     },
-    formula: {
+    testSample: {
       type: Object,
       default: () => {}
     },
   },
   computed: {
     ...mapGetters({
-      saveFormulas: 'saveFormulas/saveFormulas',
+      saveTestSamples: 'saveTestSamples/saveTestSamples',
       user: 'auth/user',
     }),
   },
   methods:{
     ...mapActions({
-      saveFormula: 'saveFormulas/saveFormula',
-      deleteSavedFormula: 'saveFormulas/deleteSavedFormula',
+      saveTestSample: 'saveTestSamples/saveTestSample',
+      deleteSavedTestSample: 'saveTestSamples/deleteSavedTestSample',
 
     }),
-    openDrawer() {
+    openDrawer(event, testSample) {
+      console.log(testSample.document.isSaveDocument)
       this.drawer = true
     },
-    storeSaveFormulas(formula){
-      let data={formulaId:formula.id}
-      this.saveFormula(data).then(()=>{
-        formula.document.isSaveDocument=true
+    storeSaveTestSamples(testSample){
+      let data={testSampleId:testSample.id}
+      this.saveTestSample(data).then(()=>{
+        testSample.document.isSaveDocument=true
         this.notify('Збережено в особистому кабінеті.')
       })
     },
-    destroySaveFormulas(formula){
-      this.deleteSavedFormula(formula.id).then(()=>{
-        formula.document.isSaveDocument=false
+    destroySaveTestSamples(testSample){
+      this.deleteSavedTestSample(testSample.id).then(()=>{
+        testSample.document.isSaveDocument=false
         this.notify('Книгу видалено з особистого кабінену','red')
       })
     },

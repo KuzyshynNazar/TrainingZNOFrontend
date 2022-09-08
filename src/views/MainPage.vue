@@ -144,6 +144,7 @@ export default {
         {label: 'Новина', id: 'tests', color: 'white', icon: 'mdi mdi-newspaper-variant-outline', route: '/home'},
         {label: 'Книги', id: 'books', color: 'white', icon: 'mdi mdi-bookshelf', route: '/books'},
         {label: 'Формули та правила', id: 'formulas', color: 'white', icon: 'mdi mdi-function-variant', route: '/formulas-and-rules'},
+        {label: 'Зразки тестів', id: 'TestSamples', color: 'white', icon: 'mdi mdi-ballot-outline', route: '/test-samples'},
         // {label: 'Додаткові матеріали', id: 'treeCategories', color: 'white', icon: 'mdi mdi-file-tree-outline', route: '/dashboard/tree-categories'},
       ]
     }

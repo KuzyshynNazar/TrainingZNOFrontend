@@ -37,6 +37,7 @@ export default {
         {label: 'Мої тести', id: 'item1', color: 'white',icon: 'mdi mdi-ab-testing', route: '/account/tests'},
         {label: 'Мої книги', id: 'item2', color: 'white',icon: 'mdi mdi-book-open-page-variant', route: '/account/my-books'},
         {label: 'Мої формули і правила', id: 'item3', color: 'white',icon: 'mdi mdi-function-variant', route: '/account/my-formulas-and-rules'},
+        {label: 'Мої зразки тестів', id: 'item3', color: 'white',icon: 'mdi mdi-ballot-outline', route: '/account/my-test-samples'},
         {label: 'Мої оцінки', id: 'item4', color: 'white',icon: 'mdi mdi-star', route: '/account/my-grades'},
       ]
     }
