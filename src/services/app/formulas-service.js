@@ -1,4 +1,4 @@
-import * as types from '../../store/mutayion-types';
+import * as types from '../../store/modules/app/_mutayion-types';
 
 const apiAppFormulas = require('../../api/app/formulas');
 

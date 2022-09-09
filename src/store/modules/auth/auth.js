@@ -1,5 +1,5 @@
-import * as types from '../mutayion-types';
-import apiAuth from "../../api/auth"
+import * as types from './_mutayion-types';
+import apiAuth from "../../../api/auth"
 
 
 const state = {

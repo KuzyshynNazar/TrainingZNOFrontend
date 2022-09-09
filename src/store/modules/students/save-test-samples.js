@@ -1,4 +1,4 @@
-import * as types from '../../mutayion-types';
+import * as types from "./_mutayion-types";
 import saveTestSamplesService from '../../../services/students/save-test-samples-service';
 
 const state = () => ({
@@ -69,7 +69,7 @@ const mutations = {
      * @param state
      * @param testSampleId
      */
-    [types.SET_DELETE_SAVED_FORMULA]: (state, testSampleId) => {
+    [types.SET_DELETE_SAVED_TEST_SAMPLE]: (state, testSampleId) => {
         let index = state.saveTestSamples.findIndex((c) => c.id === testSampleId);
         if (index > -1) {
             state.saveTestSamples.splice(index, 1);

@@ -1,5 +1,5 @@
 import bookDocumentsService from '../../../services/admin/book-documents-service';
-import * as types from "@/store/mutayion-types";
+import * as types from "./_mutayion-types";
 
 const state = () => ({
     bookDocuments: [],

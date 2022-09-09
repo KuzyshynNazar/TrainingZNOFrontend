@@ -1,4 +1,4 @@
-import * as types from '../../store/mutayion-types';
+import * as types from '../../store/modules/students/_mutayion-types';
 
 const apiTestResult = require('../../api/student/test-result');
 

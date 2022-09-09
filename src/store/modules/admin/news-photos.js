@@ -1,5 +1,5 @@
 import newsPhotosService from '../../../services/admin/news-photos-service';
-import * as types from "@/store/mutayion-types";
+import * as types from "./_mutayion-types";
 
 const state = () => ({
     newsPhotos: [],

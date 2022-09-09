@@ -29,6 +29,10 @@ const routes = [
         component: () => import( '../views/TestSamplesPage'),
       },
       {
+        path: '/task-templates',
+        component: () => import( '../views/TaskTemplatesPage'),
+      },
+      {
         path: '/account-settings',
         component: () => import( '../views/account-settings/AccountSettingsPage'),
         children: [
@@ -75,6 +79,10 @@ const routes = [
           {
             path: '/account/my-test-samples',
             component: () => import( '../views/account/MyTestSamplesPage'),
+          },
+          {
+            path: '/account/my-task-templates',
+            component: () => import( '../views/account/MyTaskTemplatesPage'),
           },
           {
             path: '/account/my-grades',
@@ -134,6 +142,10 @@ const routes = [
       {
         path: '/dashboard/test-samples',
         component: () => import( '../views/dashboard/TestSamplesPage'),
+      },
+      {
+        path: '/dashboard/task-templates',
+        component: () => import( '../views/dashboard/TaskTemplatesPage'),
       },
       {
         path: '/:pathMatch(.*)*',

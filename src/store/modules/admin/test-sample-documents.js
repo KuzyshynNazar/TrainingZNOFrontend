@@ -1,5 +1,5 @@
 import testSampleDocumentsService from '../../../services/admin/test-sample-documents-service';
-import * as types from "@/store/mutayion-types";
+import * as types from "./_mutayion-types";
 
 const state = () => ({
     testSampleDocuments: [],

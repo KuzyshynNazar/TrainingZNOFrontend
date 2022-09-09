@@ -1,4 +1,4 @@
-import * as types from '../../store/mutayion-types';
+import * as types from '../../store/modules/admin/_mutayion-types';
 const apiNewsVideos = require('../../api/admin/news-videos');
 
 export default {

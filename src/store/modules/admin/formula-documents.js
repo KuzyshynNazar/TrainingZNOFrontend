@@ -1,5 +1,5 @@
 import formulaDocumentsService from '../../../services/admin/formula-documents-service';
-import * as types from "@/store/mutayion-types";
+import * as types from "./_mutayion-types";
 
 const state = () => ({
     formulaDocuments: [],

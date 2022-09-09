@@ -1,4 +1,4 @@
-import * as types from '../../store/mutayion-types';
+import * as types from '../../store/modules/admin/_mutayion-types';
 const apiBookDocuments = require('../../api/admin/book-documents');
 
 export default {

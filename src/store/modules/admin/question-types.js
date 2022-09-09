@@ -1,4 +1,4 @@
-import * as types from '../../mutayion-types';
+import * as types from "./_mutayion-types";
 import questionTypesService from "@/services/admin/question-types-service";
 
 const state = () => ({
