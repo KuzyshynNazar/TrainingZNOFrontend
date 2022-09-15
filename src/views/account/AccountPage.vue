@@ -39,6 +39,7 @@ export default {
         {label: 'Мої формули і правила', id: 'item3', color: 'white',icon: 'mdi mdi-function-variant', route: '/account/my-formulas-and-rules'},
         {label: 'Мої зразки тестів', id: 'item4', color: 'white',icon: 'mdi mdi-ballot-outline', route: '/account/my-test-samples'},
         {label: 'Мої шаблони завдань', id: 'item5', color: 'white',icon: 'mdi mdi-calculator-variant-outline', route: '/account/my-task-templates'},
+        {label: 'Мої завданя', id: 'item5', color: 'white',icon: 'mdi mdi-calendar-check', route: '/account/my-tasks'},
         {label: 'Мої оцінки', id: 'item4', color: 'white',icon: 'mdi mdi-star', route: '/account/my-grades'},
       ]
     }

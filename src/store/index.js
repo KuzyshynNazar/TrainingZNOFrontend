@@ -24,6 +24,8 @@ import testSamples from './modules/admin/test-samples'
 import testSampleDocuments from './modules/admin/test-sample-documents'
 import taskTemplates from './modules/admin/task-templates'
 import taskTemplateDocuments from './modules/admin/task-template-documents'
+import tasks from './modules/admin/tasks'
+import taskDocuments from './modules/admin/task-documents'
 import questionTypes from './modules/admin/question-types'
 
 /**
@@ -34,6 +36,7 @@ import appBooks from './modules/app/books'
 import appFormulas from './modules/app/formulas'
 import appTestSamples from './modules/app/test-samples'
 import appTaskTemplates from './modules/app/task-templates'
+import appTasks from './modules/app/tasks'
 
 /**
  * Store Student
@@ -44,6 +47,7 @@ import saveBooks from './modules/students/save-books'
 import saveFormulas from './modules/students/save-formulas'
 import saveTestSamples from './modules/students/save-test-samples'
 import saveTaskTemplates from './modules/students/save-task-templates'
+import saveTasks from './modules/students/save-tasks'
 
 export default createStore({
   modules: {
@@ -74,6 +78,8 @@ export default createStore({
     testSampleDocuments,
     taskTemplates,
     taskTemplateDocuments,
+    tasks,
+    taskDocuments,
     questionTypes,
     testQuestionTrueAnswers,
 
@@ -85,6 +91,7 @@ export default createStore({
     appFormulas,
     appTestSamples,
     appTaskTemplates,
+    appTasks,
 
     /**
      * Student
@@ -95,5 +102,6 @@ export default createStore({
     saveFormulas,
     saveTestSamples,
     saveTaskTemplates,
+    saveTasks,
   }
 })

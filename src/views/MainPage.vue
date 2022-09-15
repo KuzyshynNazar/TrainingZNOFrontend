@@ -146,6 +146,7 @@ export default {
         {label: 'Формули та правила', id: 'formulas', color: 'white', icon: 'mdi mdi-function-variant', route: '/formulas-and-rules'},
         {label: 'Зразки тестів', id: 'TestSamples', color: 'white', icon: 'mdi mdi-ballot-outline', route: '/test-samples'},
         {label: 'Шаблони завдань', id: 'TaskTemplates', color: 'white', icon: 'mdi mdi-calculator-variant-outline', route: '/task-templates'},
+        {label: 'Завданя', id: 'TaskTemplates', color: 'white', icon: 'mdi mdi-calendar-check', route: '/tasks'},
         // {label: 'Додаткові матеріали', id: 'treeCategories', color: 'white', icon: 'mdi mdi-file-tree-outline', route: '/dashboard/tree-categories'},
       ]
     }

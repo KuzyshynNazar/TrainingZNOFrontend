@@ -96,6 +96,7 @@ export default {
         {label: 'Формули та правила', id: 'tests', color: 'white', icon: 'mdi mdi-function-variant', route: '/dashboard/formulas-and-rules'},
         {label: 'Зразки тестів', id: 'tests', color: 'white', icon: 'mdi mdi-ballot-outline', route: '/dashboard/test-samples'},
         {label: 'Шаблони завдань', id: 'tests', color: 'white', icon: 'mdi mdi-calculator-variant-outline', route: '/dashboard/task-templates'},
+        {label: 'Завданя', id: 'tests', color: 'white', icon: 'mdi mdi-calendar-check', route: '/dashboard/tasks'},
       ]
     }
   },

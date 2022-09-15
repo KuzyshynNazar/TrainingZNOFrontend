@@ -33,6 +33,10 @@ const routes = [
         component: () => import( '../views/TaskTemplatesPage'),
       },
       {
+        path: '/tasks',
+        component: () => import( '../views/TasksPage'),
+      },
+      {
         path: '/account-settings',
         component: () => import( '../views/account-settings/AccountSettingsPage'),
         children: [
@@ -83,6 +87,10 @@ const routes = [
           {
             path: '/account/my-task-templates',
             component: () => import( '../views/account/MyTaskTemplatesPage'),
+          },
+          {
+            path: '/account/my-tasks',
+            component: () => import( '../views/account/MyTasksPage'),
           },
           {
             path: '/account/my-grades',
@@ -146,6 +154,10 @@ const routes = [
       {
         path: '/dashboard/task-templates',
         component: () => import( '../views/dashboard/TaskTemplatesPage'),
+      },
+      {
+        path: '/dashboard/tasks',
+        component: () => import( '../views/dashboard/TasksPage'),
       },
       {
         path: '/:pathMatch(.*)*',
