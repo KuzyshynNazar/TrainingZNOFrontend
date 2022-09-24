@@ -34,7 +34,7 @@ export default {
 
     data(data){
         let dataForm = new FormData();
-        if(data.photos!==undefined){
+        if(data.photos.length!==undefined){
             for (let i = 0; i < data.photos.length; i++) {
                 let photo = data.photos[i];
                 dataForm.append('photos[' + i + ']', photo.file);

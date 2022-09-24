@@ -1,83 +1,150 @@
 <template>
-  <w-flex fill-height >
-    <w-card class="book-card" style="width: 100%" bg-color="blue-grey-dark3" content-class="pb0 blue-grey-light3" title-class="blue-grey-light3 bd0">
-      <template #title>
-        <div class="body blue-grey-light3">{{ book.author }}</div>
-
-      </template>
-
-      <w-flex column align-start justify-space-between>
-        <div class="d-flex align-center justify-center" style="width: 100%">
+  <w-flex fill-height>
+    <w-flex align-center justify-space-between class="news-card blue-grey-dark3--bg bdrs3">
+        <div class="d-flex align-center justify-center pa2" style="width: 100px">
           <w-image :src="require('../../../assets/book.png')" tag="img" style="max-width: 100px"></w-image>
         </div>
-        <div class="body blue-grey-light3">{{ book.title }}</div>
-      </w-flex>
+      <w-divider class="my4"  vertical></w-divider>
+      <div class="d-flex justify-start pa2" style="flex-direction: column; width: calc(100% - 200px)">
+        <div class="blue-grey-light4 title2">{{ book.author }} - {{ book.title }}</div>
+        <div class="blue-grey-light4 title3 text-italic text-muted book-description"> {{ book.description }}</div>
+      </div>
+      <w-divider class="my4"  vertical></w-divider>
+      <div class="d-flex justify-center align-center pa2" style="width: 100px; flex-direction: column">
+        <w-tooltip left color="blue-grey-light4" bg-color="blue-grey-dark5">
+          <template #activator="{ on }">
+            <w-button
+                v-on="on"
+                tile
+                text
+                icon="mdi mdi-book-open-page-variant"
+                color="blue-grey-light4"
+                :route="urlStorage + book.document.path"
+                target="_blank"
+                lg
+            >
+            </w-button>
+          </template>
+          <div class="title3"> Читати книгу</div>
+        </w-tooltip>
+        <w-tooltip left color="blue-grey-light4" bg-color="blue-grey-dark5">
+          <template #activator="{ on }">
+                    <w-button
+                        v-on="on"
+                        @click="drawer?drawer=false:openDrawer($event, book)"
+                        class="grow caption"
+                        icon="mdi mdi-eye-outline"
+                        lg
+                        tile
+                        text
+                        color="blue-grey-light4"
+                    >
 
+                    </w-button>
+          </template>
+          <div class="title3">Дізнатись більше</div>
+        </w-tooltip>
+        <w-tooltip left color="blue-grey-light4" bg-color="blue-grey-dark5" v-if="!user.isAdmin">
+          <template #activator="{ on }">
+            <w-button
+                v-on="on"
+                tile
+                text
+                icon="mdi mdi-bookmark"
+                :color="book.isStudentBook?'teal':'blue-grey-light4'"
+                @click="book.isStudentBook?destroySaveBooks(book):storeSaveBooks(book)"
+                lg
+            >
+            </w-button>
+          </template>
+          <div class="title3">
+            {{ book.isStudentBook?'Книга збережена':'Зберегти книгу' }}
+          </div>
 
-      <template #actions>
-        <w-button
-            @click="drawer?drawer=false:openDrawer($event, book)"
-            class="grow caption"
-            sm
-           color="blue-grey-dark4"  bg-color="blue-grey-light3"
-        >
-          Дізнатись більше
-        </w-button>
-      </template>
-      <w-drawer
-          top
-          v-model="drawer"
-          absolute
-          color="blue-grey-dark3" bg-color="blue-grey-light3"
-          height="50%"
-      >
-        <w-button absolute bottom right color="blue-grey-dark3" text style="right: 0;bottom: 0"
-                  bg-color="blue-grey-light3" icon="wi-cross" xs tile @click="drawer=false"></w-button>
-        <w-flex column >
-          <w-flex class="body black pa1">
-            {{ book.description }}
-          </w-flex>
-          <w-flex no-grow justify-center align-center>
-            <w-tooltip top color="blue-grey-light3" bg-color="blue-grey-dark5">
-              <template #activator="{ on }">
-                <w-button
-                    v-on="on"
-                    tile
-                    text
-                    icon="mdi mdi-book-open-page-variant"
-                    color="blue-grey-dark4"
-                    :route="urlStorage + book.document.path"
-                    target="_blank"
-                    xl
-                >
-                </w-button>
-              </template>
-              <div class="body"> Читати книгу</div>
+        </w-tooltip>
+      </div>
+    </w-flex>
+    <w-drawer
+        right
+        v-model="drawer"
+        absolute
+        bg-color="blue-grey-dark3" color="blue-grey-light4"
+        height="50%"
+        z-index="100"
+    >
+      <w-button absolute top right color="blue-grey-dark3" text
+                bg-color="blue-grey-light4" icon="wi-cross" lg tile @click="drawer=false"></w-button>
+      <w-flex column style="padding: 24px">
+        <div class="title2 text-center mb4">{{ book.author }} - {{ book.title }}</div>
+        <div class="title3 text-italic book-description1"> {{ book.description }}</div>
+        <w-flex no-grow justify-center align-center>
+          <w-tooltip bottom color="blue-grey-light4" bg-color="blue-grey-dark5">
+            <template #activator="{ on }">
+              <w-button
+                  absolute top left
+                  v-on="on"
+                  tile
+                  text
+                  icon="mdi mdi-book-open-page-variant"
+                  color="blue-grey-light4"
+                  :route="urlStorage + book.document.path"
+                  target="_blank"
+                  xl
+              >
+              </w-button>
+            </template>
+            <div class="title3"> Читати книгу</div>
 
-            </w-tooltip>
-            <w-tooltip top color="blue-grey-light3" bg-color="blue-grey-dark5" v-if="!user.isAdmin">
-              <template #activator="{ on }">
-                <w-button
-                    v-on="on"
-                    tile
-                    text
-                    icon="mdi mdi-book-account-outline"
-                    :color="book.document.isSaveDocument?'cyan-dark4':'blue-grey-dark4'"
-                    @click="book.document.isSaveDocument?destroySaveBooks(book):storeSaveBooks(book)"
-                    xl
-                >
+          </w-tooltip>
+          <w-tooltip bottom color="blue-grey-light4" bg-color="blue-grey-dark5" v-if="!user.isAdmin">
+            <template #activator="{ on }">
+              <w-button
+                  absolute top left style="left: 40px"
+                  v-on="on"
+                  tile
+                  text
+                  icon="mdi mdi-bookmark"
+                  :color="book.isStudentBook?'teal':'blue-grey-light4'"
+                  @click="book.isStudentBook?destroySaveBooks(book):storeSaveBooks(book)"
+                  xl
+              >
 
-                </w-button>
-              </template>
-              <div class="body">
-                {{ book.document.isSaveDocument?'Видалити з кабінету':'Зберегти в кабінеті' }}
-              </div>
-
-            </w-tooltip>
-          </w-flex>
+              </w-button>
+            </template>
+            <div class="title3">
+              {{ book.isStudentBook?'Книга збережена':'Зберегти книгу' }}
+            </div>
+          </w-tooltip>
         </w-flex>
-      </w-drawer>
-    </w-card>
+      </w-flex>
+      <w-image :src="require('./../../../assets/photo5.png')" tag="img"
+               style="max-width: 16vw; position: absolute; bottom:0; left:calc(50% - 8vw)"></w-image>
+    </w-drawer>
+
+
+<!--    <w-card class="book-card" style="width: 100%" bg-color="blue-grey-dark3" content-class="pb0 blue-grey-light3" title-class="blue-grey-light3 bd0">-->
+<!--      <template #title>-->
+<!--        <div class="body blue-grey-light3">{{ book.author }}</div>-->
+<!--      </template>-->
+<!--      <w-flex column align-start justify-space-between>-->
+<!--        <div class="d-flex align-center justify-center" style="width: 100%">-->
+<!--          <w-image :src="require('../../../assets/book.png')" tag="img" style="max-width: 100px"></w-image>-->
+<!--        </div>-->
+<!--        <div class="body blue-grey-light3">{{ book.title }}</div>-->
+<!--      </w-flex>-->
+<!--      <template #actions>-->
+<!--        <w-button-->
+<!--            @click="drawer?drawer=false:openDrawer($event, book)"-->
+<!--            class="grow caption"-->
+<!--            sm-->
+<!--           color="blue-grey-dark4"  bg-color="blue-grey-light3"-->
+<!--        >-->
+<!--          Дізнатись більше-->
+<!--        </w-button>-->
+<!--      </template>-->
+    <!--    </w-card>-->
+
+
   </w-flex>
 
 </template>
@@ -128,13 +195,13 @@ export default {
     storeSaveBooks(book){
       let data={bookId:book.id}
       this.saveBook(data).then(()=>{
-        book.document.isSaveDocument=true
+        book.isStudentBook=true
         this.notify('Збережено в особистому кабінеті.')
       })
     },
     destroySaveBooks(book){
       this.deleteSavedBook(book.id).then(()=>{
-        book.document.isSaveDocument=false
+        book.isStudentBook=false
         this.notify('Книгу видалено з особистого кабінену','red')
       })
     },
@@ -150,6 +217,25 @@ export default {
 }
 </script>
 
-<style >
+<style>
 .w-notification-manager {width: 500px;}
+.book-description {
+  width: 60vw;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.book-description1 {
+line-height: 1.5;
+  white-space: normal;
+
+}
+.news-card {
+  -webkit-transition: .2s ease-in-out;
+  transition: .2s ease-in-out;
+}
+
+.news-card:hover {
+  background-color: #526670;
+}
 </style>

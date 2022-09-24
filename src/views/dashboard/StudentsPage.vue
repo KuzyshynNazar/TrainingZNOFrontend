@@ -382,7 +382,7 @@
     <w-dialog width="95vw"
               v-model="showShowDialog"
               title-class="grey-dark5--bg white"
-             >
+    >
       <template #title>
         <div>{{ `Показати дані студента ${tableItem.name}` }}</div>
       </template>
@@ -428,13 +428,13 @@
                   <div class="mr2" style="width: 250px">Школа:</div>
                   <w-tag bg-color="grey-dark5" class="title5" color="white" md>
                     <w-input
-                              style="width: 100px"
-                             color="white"
-                             label-color="white"
-                             v-model="tableItem.password"
-                             :type="isPassword ? 'password' : 'text'"
-                             :inner-icon-right="isPassword ? 'mdi mdi-eye-off' : 'mdi mdi-eye'"
-                             @click:inner-icon-right="isPassword = !isPassword">
+                        style="width: 100px"
+                        color="white"
+                        label-color="white"
+                        v-model="tableItem.password"
+                        :type="isPassword ? 'password' : 'text'"
+                        :inner-icon-right="isPassword ? 'mdi mdi-eye-off' : 'mdi mdi-eye'"
+                        @click:inner-icon-right="isPassword = !isPassword">
                     </w-input>
                   </w-tag>
 
@@ -603,19 +603,79 @@
           pdf-orientation="landscape"
           pdf-content-width="800px"
           :html-to-pdf-options="htmlToPdfOptions"
-          @hasDownloaded="beforeDownload($event)"
           ref="html2Pdf"
       >
         <template v-slot:pdf-content>
-          <div style="display: flex; flex-direction: column-reverse; max-width: 750px">
+          <section class="pdf-item">
+            <div style="margin-bottom:10px;display: flex; flex-direction: column; max-width: 750px">
+              <div class="d-flex justify-space-between align-center mb1"
+                   style="display: flex;justify-content: space-between;align-items: center;margin-bottom: 4px ;width: 100%">
+                <div style="margin-right: 8px;">Стедент:</div>
+                <div style="color: #000;">{{ testResultInfo.studentName }}</div>
+              </div>
+              <w-divider class="mb3" style="margin-bottom: 12px"></w-divider>
+              <div class="d-flex justify-space-between align-center mb1"
+                   style="display: flex;justify-content: space-between;align-items: center;margin-bottom: 4px ;width: 100%">
+                <div class="mr2" style="margin-right: 8px;width: 250px">Кількість питань:</div>
+                <div style="color: #000;">{{ testResultInfo.amountQuestion }}</div>
+              </div>
+              <w-divider class="mb3" style="margin-bottom: 12px"></w-divider>
+
+              <div class="d-flex justify-space-between align-center mb1"
+                   style="display: flex;justify-content: space-between;align-items: center;margin-bottom: 4px ;width: 100%">
+                <div class="mr2" style="margin-right: 8px;width: 250px">Кількість балів за тест:</div>
+                <div style="color: #000;">{{ testResultInfo.pointInfo }}</div>
+              </div>
+              <w-divider class="mb3" style="margin-bottom: 12px"></w-divider>
+
+              <div class="d-flex justify-space-between align-center mb1"
+                   style="display: flex;justify-content: space-between;align-items: center;margin-bottom: 4px ;width: 100%">
+                <div class="mr2" style="margin-right: 8px;width: 250px">Кількість балів, які набрав студент:</div>
+                <div style="color: #000;">{{ testResultInfo.scoredPointsInfo }}</div>
+              </div>
+              <w-divider class="mb3" style="margin-bottom: 12px"></w-divider>
+
+              <div class="d-flex justify-space-between align-center mb1"
+                   style="display: flex;justify-content: space-between;align-items: center;margin-bottom: 4px ;width: 100%">
+                <div class="mr2" style="margin-right: 8px;width: 250px">Кількість правильних відповідей:</div>
+                <div style="color: #000;">{{ testResultInfo.amountQuestionTrue }}</div>
+              </div>
+              <w-divider class="mb3" style="margin-bottom: 12px"></w-divider>
+
+              <div class="d-flex justify-space-between align-center mb1"
+                   style="display: flex;justify-content: space-between;align-items: center;margin-bottom: 4px ;width: 100%">
+                <div class="mr2" style="margin-right: 8px;width: 250px">Кількість не правильних відповідей:</div>
+                <div style="color: #000;">{{ testResultInfo.amountQuestionFalse }}</div>
+              </div>
+              <w-divider class="mb3" style="margin-bottom: 12px"></w-divider>
+
+              <div class="d-flex justify-space-between align-center mb1"
+                   style="display: flex;justify-content: space-between;align-items: center;margin-bottom: 4px ;width: 100%">
+                <div class="mr2" style="margin-right: 8px;width: 250px">Стедент здав тест на:</div>
+                <div style="color: #000;">
+                  {{ `${testResultInfo.percentagesPoint} %` }}
+                </div>
+
+              </div>
+            </div>
+          </section>
+          <div class="html2pdf__page-break"/>
+          <section class="pdf-item">
             <div style="display: flex; flex-direction: column; max-width: 750px">
               <div v-for="(result, index) in studentsTestResult" :key="index"
                    style="padding: 8px; margin-bottom: 8px; border-radius: 8px; border-style: solid;border-width: 2px"
                    :style="{borderColor:result.is_test_result?'#1db3a8':'#ff6825'}"
               >
-                <div style="display: flex; align-items: center; margin-bottom:4px ">
-                  <div>{{ index + 1 }}.</div>
-                  <div class="div-question" v-html="result.test_question"></div>
+                <div style="display: flex;  margin-bottom:4px; flex-direction: column ">
+                  <div style="display: flex; align-items: center">
+                    <div>{{ index + 1 }}.</div>
+                    <div class="div-question" v-html="result.test_question"></div>
+                  </div>
+                  <!--                  <div class="d-flex  mb3" style="display: flex;  margin-bottom:12px;">-->
+                  <!--                    <div v-for="(photo, index) in result.photos" :key="index" class="mr3" style=" margin-right:12px;">-->
+                  <!--                      <img :src="urlStorage + photo.path" style="max-width: 100px" :alt="photo.name">-->
+                  <!--                    </div>-->
+                  <!--                  </div>-->
                 </div>
                 <div
                     style="display: flex; flex-direction: column; justify-content: center; align-items: start; padding-left: 24px;margin-bottom: 4px">
@@ -768,60 +828,7 @@
                 </div>
               </div>
             </div>
-
-            <div style="margin-bottom:10px;display: flex; flex-direction: column; max-width: 750px">
-              <div class="d-flex justify-space-between align-center mb1"
-                   style="display: flex;justify-content: space-between;align-items: center;margin-bottom: 4px ;width: 100%">
-                <div class="mr2" style="margin-right: 8px;">Стедент:</div>
-                <div style="color: #000;">{{ studentTests.name }}</div>
-              </div>
-              <w-divider class="mb3" style="margin-bottom: 12px"></w-divider>
-              <div class="d-flex justify-space-between align-center mb1"
-                   style="display: flex;justify-content: space-between;align-items: center;margin-bottom: 4px ;width: 100%">
-                <div class="mr2" style="margin-right: 8px;width: 250px">Кількість питань:</div>
-                <div style="color: #000;">{{ testResultInfo.amountQuestion }}</div>
-              </div>
-              <w-divider class="mb3" style="margin-bottom: 12px"></w-divider>
-
-              <div class="d-flex justify-space-between align-center mb1"
-                   style="display: flex;justify-content: space-between;align-items: center;margin-bottom: 4px ;width: 100%">
-                <div class="mr2" style="margin-right: 8px;width: 250px">Кількість балів за тест:</div>
-                <div style="color: #000;">{{ testResultInfo.pointInfo }}</div>
-              </div>
-              <w-divider class="mb3" style="margin-bottom: 12px"></w-divider>
-
-              <div class="d-flex justify-space-between align-center mb1"
-                   style="display: flex;justify-content: space-between;align-items: center;margin-bottom: 4px ;width: 100%">
-                <div class="mr2" style="margin-right: 8px;width: 250px">Кількість балів, які набрав студент:</div>
-                <div style="color: #000;">{{ testResultInfo.scoredPointsInfo }}</div>
-              </div>
-              <w-divider class="mb3" style="margin-bottom: 12px"></w-divider>
-
-              <div class="d-flex justify-space-between align-center mb1"
-                   style="display: flex;justify-content: space-between;align-items: center;margin-bottom: 4px ;width: 100%">
-                <div class="mr2" style="margin-right: 8px;width: 250px">Кількість правильних відповідей:</div>
-                <div style="color: #000;">{{ testResultInfo.amountQuestionTrue }}</div>
-              </div>
-              <w-divider class="mb3" style="margin-bottom: 12px"></w-divider>
-
-              <div class="d-flex justify-space-between align-center mb1"
-                   style="display: flex;justify-content: space-between;align-items: center;margin-bottom: 4px ;width: 100%">
-                <div class="mr2" style="margin-right: 8px;width: 250px">Кількість не правильних відповідей:</div>
-                <div style="color: #000;">{{ testResultInfo.amountQuestionFalse }}</div>
-              </div>
-              <w-divider class="mb3" style="margin-bottom: 12px"></w-divider>
-
-              <div class="d-flex justify-space-between align-center mb1"
-                   style="display: flex;justify-content: space-between;align-items: center;margin-bottom: 4px ;width: 100%">
-                <div class="mr2" style="margin-right: 8px;width: 250px">Стедент здав тест на:</div>
-                <div style="color: #000;">
-                  {{ `${testResultInfo.percentagesPoint} %` }}
-                </div>
-
-              </div>
-            </div>
-          </div>
-
+          </section>
         </template>
       </vue3-html2pdf>
       <w-flex fill-height>
@@ -830,9 +837,18 @@
             <div v-for="(result, index) in studentsTestResult" :key="index" class="align-center bdrs2 bd2 sh1 pa2 mb2"
                  :style="{borderColor:result.is_test_result?'#1db3a8':'#ff6825'}"
             >
-              <div class="w-flex align-center mb1">
-                <div class="mr2">{{ index + 1 }}.</div>
-                <div class="div-question" v-html="result.test_question"></div>
+              <div class="w-flex  mb1" style="flex-direction: column">
+                <div class="mb3 d-flex align-center justify-start">
+                  <div class="mr2">{{ index + 1 }}.</div>
+                  <div class="div-question" v-html="result.test_question"></div>
+                </div>
+
+
+                <div class="d-flex  mb3">
+                  <div v-for="(photo, index) in result.photos" :key="index" class="mr3">
+                    <w-image :src="urlStorage + photo.path" tag="img" style="max-width: 100px"></w-image>
+                  </div>
+                </div>
               </div>
               <div class="w-flex column justify-center align-start pl6 mb1">
                 <div v-if="result.question_type===1" class="d-flex align-start justify-start" style="width: 100%">
@@ -1032,15 +1048,15 @@
       </template>
       <w-button absolute top right bg-color="grey-dark5"
                 color="white" icon="wi-cross" tile @click="showStudentPerformanceDialog=false"></w-button>
-      <w-flex fill-height>
-        <w-card style="width: 100%; height: 75vh; overflow-y: auto">
+      <w-flex fill-height column>
+        <w-card style="width: 100%; height: 30vh;  overflow-y: auto">
           <w-table
               :headers="tableStudentTestsInfoHeader"
               :items="testsCheckedStudent"
               fixed-headers
               style="width: 100%;"
           >
-            <template #item="{ item, classes,index  }">
+            <template #item="{ item, classes, index  }">
               <tr :class="classes ">
                 <td class="pl2">{{ index }}</td>
                 <td>{{ item.testName }}</td>
@@ -1077,6 +1093,12 @@
             </template>
           </w-table>
         </w-card>
+        <w-card style="max-width: 2500px;" class="mt4">
+          <LineChart :chart-data="chartData" ref="line" :chart-options="chartOptionsLine" :width="2500"
+                     :height="450"/>
+        </w-card>
+
+
       </w-flex>
 
     </w-dialog>
@@ -1099,14 +1121,20 @@
 <script>
 import {mapActions, mapGetters} from "vuex";
 import Vue3Html2pdf from 'vue3-html2pdf'
+import LineChart from '../../components/LineChart'
 
+const URL_STORAGE = process.env.VUE_APP_URL_STORAGE
+const BASE_URL = process.env.VUE_APP_API_URL
 export default {
   name: 'HelloWorld',
   components: {
-    Vue3Html2pdf
+    Vue3Html2pdf,
+    LineChart
   },
   data() {
     return {
+      urlStorage: URL_STORAGE,
+      baseUrlApi: BASE_URL,
       isPassword: true,
       openDrawer1: true,
       openDrawer: true,
@@ -1237,6 +1265,14 @@ export default {
       return {
         margin: 5,
         filename: `${this.test.studentName}-${this.test.testName}.pdf`,
+
+        html2canvas: {
+          scale: 1,
+          useCORS: true
+        },
+        image: {
+          type: 'png',
+        },
       }
 
     },
@@ -1256,7 +1292,86 @@ export default {
         item => item.class === 11,
         this.keywordFilter(this.keyword)
       ]
-    }
+    },
+    chartData() {
+
+      let data = [];
+      let name = [];
+      let length = this.testsCheckedStudent.length
+      for (let i = 0; i < length; i++) {
+        name.push(this.testsCheckedStudent[i].testName)
+        data.push(this.testsCheckedStudent[i].estimate)
+      }
+
+      return {
+        labels: name,
+        datasets: [
+          {
+            label: 'Середня сума робіт на 1 НЗ',
+            backgroundColor: '#7feae2',
+            borderColor: '#1db3a8',
+            borderWidth: 2,
+            pointRadius: 5,
+            data: data
+          },
+        ],
+      }
+    },
+
+    chartOptionsLine() {
+      return {
+        // layout: {
+        //   padding: 0
+        // },
+        // events: ['click'],
+
+        responsive: true,
+        plugins: {
+          legend: {
+            display: false,
+            align: 'start',
+            position: 'top',
+            labels: {
+              color: 'rgb(102, 102, 102,1)',
+              padding: 5,
+              boxWidth: 15,
+              font: {
+                size: 12,
+                lineHeight: 2,
+              },
+              usePointStyle: true,
+
+
+            },
+          },
+
+        },
+
+        scales: {
+          x: {
+            ticks: {
+              display: true,
+              color: 'rgb(102, 102, 102,1)',
+            },
+            grid: {
+              borderColor: 'rgb(229, 229, 229,1)',
+              color: 'rgb(229, 229, 229,1)',
+            }
+          },
+          y: {
+            ticks: {
+              display: true,
+              color: 'rgb(102, 102, 102,1)',
+            },
+            grid: {
+              borderColor: 'rgb(229, 229, 229,1)',
+              color: 'rgb(229, 229, 229,1)',
+            }
+          },
+        },
+
+      }
+    },
   },
   methods: {
     ...mapActions({
@@ -1350,6 +1465,7 @@ export default {
     },
     generateReport() {
       this.$refs.html2Pdf.generatePdf()
+
     },
     checkedTest() {
       let data = {id: this.test.id, estimate: this.estimate}

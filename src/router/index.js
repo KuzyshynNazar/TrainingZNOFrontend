@@ -69,7 +69,7 @@ const routes = [
         component: () => import( '../views/account/AccountPage'),
         children: [
           {
-            path: '/account/tests',
+            path: '/account/my-tests',
             component: () => import( '../views/account/TestPage'),
           },
           {

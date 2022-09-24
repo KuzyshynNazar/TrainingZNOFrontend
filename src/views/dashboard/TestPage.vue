@@ -776,7 +776,6 @@
                 <w-icon class="pr2">mdi mdi-plus-circle-outline</w-icon>
                 Створити відповідь
               </w-button>
-
               <w-menu align-right shadow>
                 <template #activator="{ on }">
                   <w-button v-on="on" :class="tableItemTestQuestion.questionType===1?'ml3':''" bg-color="grey-dark5"
@@ -831,54 +830,56 @@
                 </div>
               </w-menu>
             </div>
-            <div v-if="tableItemTestQuestion.questionType===1">
-              <w-table
-                  :headers="tableHeaderTestQuestionAnswer"
-                  :items="testQuestionAnswers"
-                  fixed-headers
-                  style="width: 100%"
-              >
-                <template #item="{ item, classes,index  }">
-                  <tr :class="classes">
-                    <td>
-                      <div class="ml2">{{ index }}</div>
-                    </td>
-                    <td v-html="item.answer"></td>
-                    <td style="text-align: right">
-                      <w-icon class="mr1 pa3 icon" md color="grey-dark5" style="cursor: pointer"
-                              @click="openEditTestQuestionAnswerDialog(item)">
-                        mdi mdi-pencil
-                      </w-icon>
-                      <w-icon class="mr1 pa3 icon" md color="grey-dark5" style="cursor: pointer"
-                              @click="openDeleteTestQuestionAnswerDialog(item)">
-                        mdi mdi-delete
-                      </w-icon>
-                    </td>
-                  </tr>
-                </template>
-              </w-table>
-              <div class="mt3 bd1 pa2" v-if="tableItemTestQuestion.true_answer">
-                <div v-for="(testQuestionAnswer, index) in testQuestionAnswers" :key="index"
-                     v-show="testQuestionAnswer.id==tableItemTestQuestion.true_answer.true_answer">
-                  <div class="d-flex align-center">
-                    <div class="mr2 title3">Правельна відповідь:</div>
-                    <div v-html="testQuestionAnswer.answer" class="title3 text-italic teal"></div>
+            <div v-if="tableItemTestQuestion.true_answer!==null">
+              <div v-if="tableItemTestQuestion.questionType===1">
+                <w-table
+                    :headers="tableHeaderTestQuestionAnswer"
+                    :items="testQuestionAnswers"
+                    fixed-headers
+                    style="width: 100%"
+                >
+                  <template #item="{ item, classes,index  }">
+                    <tr :class="classes">
+                      <td>
+                        <div class="ml2">{{ index }}</div>
+                      </td>
+                      <td v-html="item.answer"></td>
+                      <td style="text-align: right">
+                        <w-icon class="mr1 pa3 icon" md color="grey-dark5" style="cursor: pointer"
+                                @click="openEditTestQuestionAnswerDialog(item)">
+                          mdi mdi-pencil
+                        </w-icon>
+                        <w-icon class="mr1 pa3 icon" md color="grey-dark5" style="cursor: pointer"
+                                @click="openDeleteTestQuestionAnswerDialog(item)">
+                          mdi mdi-delete
+                        </w-icon>
+                      </td>
+                    </tr>
+                  </template>
+                </w-table>
+                <div class="mt3 bd1 pa2" v-show="tableItemTestQuestion.true_answer">
+                  <div v-for="(testQuestionAnswer, index) in testQuestionAnswers" :key="index"
+                       v-show="testQuestionAnswer.id===tableItemTestQuestion.true_answer.true_answer">
+                    <div class="d-flex align-center">
+                      <div class="mr2 title3">Правельна відповідь:</div>
+                      <div v-html="testQuestionAnswer.answer" class="title3 text-italic teal"></div>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-            <div v-if="tableItemTestQuestion.questionType===2" class="mt3 bd1 pa2">
-              <div class="d-flex align-center">
-                <div class="mr2 title3">Правельна відповідь:</div>
-                <div class="title3 text-italic teal">{{ tableItemTestQuestion.true_answer.true_answer }}</div>
+              <div v-else-if="tableItemTestQuestion.questionType===2" class="mt3 bd1 pa2">
+                <div class="d-flex align-center">
+                  <div class="mr2 title3">Правельна відповідь:</div>
+                  <div class="title3 text-italic teal">{{ tableItemTestQuestion.true_answer.true_answer }}</div>
+                </div>
               </div>
-            </div>
-            <div v-if="tableItemTestQuestion.questionType===3" class="mt3 bd1 pa2">
-              <div class="d-flex align-center">
-                <div class="mr2 title3">Правельна відповідь:</div>
-                <div class="title3 text-italic teal">{{ tableItemTestQuestion.true_answer.true_answer[0] }},
-                  {{ tableItemTestQuestion.true_answer.true_answer[1] }},
-                  {{ tableItemTestQuestion.true_answer.true_answer[2] }}
+              <div v-else-if="tableItemTestQuestion.questionType===3" class="mt3 bd1 pa2">
+                <div class="d-flex align-center">
+                  <div class="mr2 title3">Правельна відповідь:</div>
+                  <div class="title3 text-italic teal">{{ tableItemTestQuestion.true_answer.true_answer[0] }},
+                    {{ tableItemTestQuestion.true_answer.true_answer[1] }},
+                    {{ tableItemTestQuestion.true_answer.true_answer[2] }}
+                  </div>
                 </div>
               </div>
             </div>
@@ -1518,6 +1519,8 @@ export default {
     },
     openCreateTestQuestionAnswersDialog(item) {
       this.tableItemTestQuestion = item
+      console.log(this.tableItemTestQuestion)
+
       this.inputsTestQuestionTrueAnswer.true_answer = null
       this.showProgress = true
       this.getAllTestQuestionAnswers(item.id).then(() => {
@@ -1537,17 +1540,21 @@ export default {
       this.inputsTestQuestions.status ? this.inputsTestQuestions.status = 1 : this.inputsTestQuestions.status = 0
       this.inputsTestQuestions.test_id = this.tableItemTest.id
       this.storeTestQuestion(this.inputsTestQuestions).then(() => {
-        this.inputsTestQuestionPhotos.testQuestionId=this.testQuestion.id
-        this.storeTestQuestionPhotos(this.inputsTestQuestionPhotos).then(()=>{
-          let index = this.testQuestions.findIndex((c) => c.id === this.testQuestion.id);
-          if (index > -1) {
-            this.testQuestions[index].photos= this.testQuestionPhotos
-          }
-          this.inputsTestQuestionPhotos.testQuestionId=null
-          this.inputsTestQuestionPhotos.photos=null
-          this.notify('Питання створено.')
-          this.showCreateTestQuestionDialog = false
-        })
+        console.log(this.inputsTestQuestionPhotos.photos===null)
+        if(this.inputsTestQuestionPhotos.photos!==null){
+          this.inputsTestQuestionPhotos.testQuestionId=this.testQuestion.id
+          this.storeTestQuestionPhotos(this.inputsTestQuestionPhotos).then(()=>{
+            let index = this.testQuestions.findIndex((c) => c.id === this.testQuestion.id);
+            if (index > -1) {
+              this.testQuestions[index].photos= this.testQuestionPhotos
+            }
+            this.inputsTestQuestionPhotos.testQuestionId=null
+            this.inputsTestQuestionPhotos.photos=null
+
+          })
+        }
+        this.notify('Питання створено.')
+        this.showCreateTestQuestionDialog = false
       })
     },
     editTestQuestion() {
@@ -1696,6 +1703,8 @@ export default {
       })
     },
     parentCategory(node) {
+      console.log(node)
+      this.inputsTests.name= `${node.parentName }-${ node.text}`
       this.isParentCategory = node.id
     },
     input1(question, answer, event, index) {

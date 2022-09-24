@@ -3,31 +3,24 @@
     <w-flex column>
       <header>
         <w-toolbar  class="pa0" bg-color="blue-grey-dark5" color="blue-grey-light3" height="40px">
-          <!--          <w-icon-->
-          <!--              class="ml3 mr3"-->
-          <!--              color="white"-->
-          <!--              xl-->
-          <!--              @click="home"-->
-          <!--              style="cursor: pointer"-->
-          <!--          >-->
-          <!--            car-bmw-->
-          <!--          </w-icon>-->
-
           <div class="ml3 mr3" @click="home" style="cursor: pointer">
-            <w-icon sm>mdi mdi-format-superscript</w-icon>
-            <w-icon sm>mdi mdi-plus</w-icon>
-            <w-icon sm>mdi mdi-square-root</w-icon>
-            <w-icon sm>mdi mdi-equal</w-icon>
-            <w-icon sm>mdi mdi-chart-bell-curve</w-icon>
+            <w-icon lg>mdi mdi-format-superscript</w-icon>
+            <w-icon lg>mdi mdi-plus</w-icon>
+            <w-icon lg>mdi mdi-square-root</w-icon>
+            <w-icon lg>mdi mdi-equal</w-icon>
+            <w-icon lg>mdi mdi-chart-bell-curve</w-icon>
           </div>
           <div class="spacer"></div>
-          <w-tooltip left>
+          <w-tooltip left color="blue-grey-light4" bg-color="blue-grey-dark5">
             <template #activator="{ on }">
-              <w-button v-on="on" icon="mdi mdi-backburger" color="blue-grey-light3" @click="openDrawer = true" tile text md
-                        class="mr2">
+              <w-button v-on="on" icon="mdi mdi-backburger" color="blue-grey-light3" @click="openDrawer = true" tile text lg
+                        class="mr4">
               </w-button>
             </template>
-            Розгорнути бічну панель
+            <div class="title3">
+              Розгорнути бічну панель
+            </div>
+
           </w-tooltip>
         </w-toolbar>
       </header>
@@ -35,6 +28,7 @@
         <w-drawer
             v-model="openDrawer"
             right
+            width="400px"
             bg-color="blue-grey-dark5"
             color="blue-grey-light3"
         >
@@ -43,25 +37,25 @@
               <w-button
                   v-on="on"
                   @click="openDrawer = false"
-                  sm
+                  lg
                   absolute
                   left
                   text
                   tile
-                  style="left: -20px"
+                  style="left: -28px"
                   bg-color="blue-grey-dark5"
-                  color="blue-grey-light3"
+                  color="blue-grey-light4"
                   icon="mdi mdi-forwardburger">
               </w-button>
             </template>
             Згорнути бічну панель
           </w-tooltip>
           <w-flex column>
-            <w-list style="display: inline-grid" :items="items" nav hover item-class="ma0">
+            <w-list style="display: inline-grid" :items="items" nav hover item-class="ma0 pa4">
               <template #item="{ item }">
-                <div class="blue-grey-light3">{{ item.label }}</div>
+                <div class="title3 blue-grey-light4">{{ item.label }}</div>
                 <div class="spacer"></div>
-                <w-icon md color="blue-grey-light3">{{ item.icon }}</w-icon>
+                <w-icon lg color="blue-grey-light4">{{ item.icon }}</w-icon>
               </template>
             </w-list>
           </w-flex>
@@ -72,53 +66,66 @@
       </main>
       <footer>
         <w-toolbar shadow class="pa0"  bg-color="blue-grey-dark5" color="blue-grey-light3" height="40px">
-          <w-tooltip right color="blue-grey-light3" bg-color="blue-grey-dark5">
-            <template #activator="{ on }">
-              <w-button v-on="on" :icon="!isFullscreen?iconFullscreen1:iconFullscreen2" tile color="white"
-                        @click="fullScreen" text md
-                        class="ml3 mr3">
-              </w-button>
-            </template>
-            {{ !isFullscreen ? 'Повноноекраний режим' : 'Звичайний режим' }}
-          </w-tooltip>
+          <div class="spacer"></div>
           <w-tooltip top color="blue-grey-light3" bg-color="blue-grey-dark5">
             <template #activator="{ on }">
-              <w-button v-on="on" icon="mdi mdi-location-exit" color="blue-grey-light3" v-if="user.isAdmin" @click="logOutAdmin" tile text md
-                        class="mr2"></w-button>
-              <w-button v-else v-on="on" icon="mdi mdi-logout-variant" color="blue-grey-light3" @click="logOutStudent" tile text md
-                        class="mr2"></w-button>
+              <w-button v-on="on" :icon="!isFullscreen?iconFullscreen1:iconFullscreen2" tile color="white"
+                        @click="fullScreen" text lg
+                        class="mr3">
+              </w-button>
             </template>
-            Вихід
+            <div class="title3">
+              {{ !isFullscreen ? 'Повноноекраний режим' : 'Звичайний режим' }}
+            </div>
+          </w-tooltip>
+          <w-tooltip  v-if="!user.isAdmin" top color="blue-grey-light4" bg-color="blue-grey-dark5">
+            <template #activator="{ on }">
+              <w-button v-on="on" icon="mdi mdi-account" color="blue-grey-light4" @click="goToAccount" tile text lg
+                        class="mr3"></w-button>
+            </template>
+            <div class="title3">
+              Особистий кабінет
+            </div>
+          </w-tooltip>
+          <w-tooltip v-if="user.isAdmin" top color="blue-grey-light4" bg-color="blue-grey-dark5">
+            <template #activator="{ on }">
+              <w-button v-on="on" icon="mdi mdi-monitor-dashboard" color="blue-grey-light4" @click="goToAdminPanel" tile text lg
+                        class="mr3"></w-button>
+            </template>
+            <div class="title3">
+              Адмін панель
+            </div>
+          </w-tooltip>
+<!--          <w-tooltip top color="blue-grey-light4" bg-color="blue-grey-dark5">-->
+<!--            <template #activator="{ on }">-->
+<!--              <w-button v-on="on" icon="mdi mdi-cog-outline" color="blue-grey-light4" @click="goToSettings" tile text lg-->
+<!--                        class="mr3"></w-button>-->
+<!--            </template>-->
+<!--            <div class="title3">-->
+<!--              Налаштування сайту-->
+<!--            </div>-->
+<!--          </w-tooltip>-->
+<!--          <w-tooltip  top color="blue-grey-light4" bg-color="blue-grey-dark5">-->
+<!--            <template #activator="{ on }">-->
+<!--              <w-button v-on="on" icon="mdi mdi-account-cog" color="blue-grey-light3" @click="goToSettingsAccount" tile text lg-->
+<!--                        class="mr3"></w-button>-->
+<!--            </template>-->
+<!--            <div class="title3">-->
+<!--              Налаштування особистого кабінету-->
+<!--            </div>-->
+<!--          </w-tooltip>-->
+          <w-tooltip top color="blue-grey-light4" bg-color="blue-grey-dark5">
+            <template #activator="{ on }">
+              <w-button v-on="on" icon="mdi mdi-location-exit" color="blue-grey-light4" v-if="user.isAdmin" @click="logOutAdmin" tile text lg
+                        class="mr3"></w-button>
+              <w-button v-else v-on="on" icon="mdi mdi-logout-variant" color="blue-grey-light4" @click="logOutStudent" tile text lg
+                        class="mr3"></w-button>
+            </template>
+            <div class="title3">
+              Вихід
+            </div>
           </w-tooltip>
           <div class="spacer"></div>
-          <w-tooltip  v-if="!user.isAdmin" top color="blue-grey-light3" bg-color="blue-grey-dark5">
-            <template #activator="{ on }">
-              <w-button v-on="on" icon="mdi mdi-account" color="blue-grey-light3" @click="goToAccount" tile text md
-                        class="ml3 mr3"></w-button>
-            </template>
-            Особистий кабінет
-          </w-tooltip>
-          <w-tooltip v-if="user.isAdmin" top color="blue-grey-light3" bg-color="blue-grey-dark5">
-            <template #activator="{ on }">
-              <w-button v-on="on" icon="mdi mdi-monitor-dashboard" color="blue-grey-light3" @click="goToAdminPanel" tile text md
-                        class="ml3 mr3"></w-button>
-            </template>
-            Адмін панель
-          </w-tooltip>
-          <w-tooltip top color="white" bg-color="blue-grey-dark5">
-            <template #activator="{ on }">
-              <w-button v-on="on" icon="mdi mdi-cog-outline" color="blue-grey-light3" @click="goToSettings" tile text md
-                        class="ml3 mr3"></w-button>
-            </template>
-            Налаштування сайту
-          </w-tooltip>
-          <w-tooltip  left color="blue-grey-light3" bg-color="blue-grey-dark5">
-            <template #activator="{ on }">
-              <w-button v-on="on" icon="mdi mdi-account-cog" color="blue-grey-light3" @click="goToSettingsAccount" tile text md
-                        class="ml3 mr3"></w-button>
-            </template>
-            Налаштування особистого кабінету
-          </w-tooltip>
         </w-toolbar>
       </footer>
     </w-flex>
@@ -193,7 +200,7 @@ export default {
       this.$router.push({path: '/home'});
     },
     goToAccount() {
-      this.$router.push({path: '/account'});
+      this.$router.push({path: '/account/my-tests'});
     },
     goToSettingsAccount() {
       this.$router.push({path: '/account-settings'});
@@ -215,18 +222,18 @@ export default {
 }
 ::-webkit-scrollbar {
   /*display: none;*/
-  width: 6px;
+  width: 10px;
   height: 5px;
 }
 
 
 ::-webkit-scrollbar:horizontal {
-  width: 5px;
+  width: 10px;
   height: 10px;
 }
 
 ::-webkit-scrollbar:vertical {
-  width: 6px;
+  width: 10px;
   height: 5px;
 }
 

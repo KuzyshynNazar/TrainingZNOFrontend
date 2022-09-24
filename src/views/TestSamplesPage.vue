@@ -2,12 +2,12 @@
   <w-flex align-center justify-center style="width: 100vw">
   <w-grid
       style="width: 70vw"
-      :columns="{ xs: 1, sm: 2, md: 4, lg: 5, xl: 5 }"
+      :columns="{ xs: 1, sm: 1, md: 1, lg: 1, xl: 1 }"
       gap="3"
       class="pa3"
       v-if="filteredTestSampleList!==undefined && filteredTestSampleList.length!==0"
   >
-    <div v-for="(testSample, index) in filteredTestSampleList" :key="index" class="sh1">
+    <div v-for="(testSample, index) in filteredTestSampleList" :key="index" class="sh2 bdrs3">
       <TestSampleCardComponent
           :test-sample="testSample"
           :drawer-prop="showDrawer"
@@ -22,7 +22,6 @@
                 bg-color="blue-grey-light3" text tile icon="mdi mdi-reload" xl>Презавантажити</w-button>
     </w-flex>
   </w-flex>
-<!--  <w-image :src="require('./../assets/math-logo.png')" tag="img" style="max-width: 10vw; position: fixed; top:40px; right: 10px; transform: rotate(-180deg) scale(-1, 1);" ></w-image>-->
   <w-image :src="require('./../assets/math-logo.png')" tag="img" style="max-width: 10vw; position: fixed; top:40px; left: 10px;  transform: rotate(-180deg) scale(-1, 1);" ></w-image>
   <w-button absolute top left bg-color="blue-grey-dark3" color="blue-grey-light3" class="mt3" style="top:40px; left: 0"
              icon="mdi mdi-magnify" xl tile @click="openDrawer"></w-button>
@@ -44,8 +43,6 @@
       >
       </w-input>
     </w-flex>
-
-
   </w-drawer>
   <w-overlay
       v-model="showProgress"
@@ -60,8 +57,6 @@
         bg-color="light-blue-light2">
     </w-progress>
   </w-overlay>
-
-
 </template>
 
 <script>
@@ -123,59 +118,5 @@ export default {
 </script>
 
 <style>
-p {
-  text-align: justify;
-  line-height: 1.6;
-  margin-bottom: 10px;
-  text-indent: 1.5em;
-  margin-top: 0;
 
-}
-
-.w-card__actions {
-  padding: 8px;
-}
-
-.book-description {
-  width: 100px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-p + p {
-
-}
-
-.active-class {
-  background-color: #5f7681;
-}
-
-.book-card {
-  -webkit-transition: .2s ease-in-out;
-  transition: .2s ease-in-out;
-}
-
-.book-card:hover {
-  background-color: #5f7681;
-  color: black;
-}
-
-h3 {
-  margin: 40px 0 0;
-}
-
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-
-a {
-  color: #42b983;
-}
 </style>

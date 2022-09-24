@@ -1,83 +1,202 @@
 <template>
   <w-flex fill-height >
-    <w-card class="book-card" style="width: 100%" bg-color="blue-grey-dark3" content-class="pb0 blue-grey-light3" title-class="blue-grey-light3 bd0">
-      <template #title>
-        <div class="body blue-grey-light3">{{ formula.author }}</div>
+    <w-flex align-center justify-space-between class="news-card blue-grey-dark3--bg bdrs3">
+      <div class="d-flex align-center justify-center pa2" style="width: 100px">
+        <w-image :src="require('../../../assets/formulas.png')" tag="img" style="max-width: 100px"></w-image>
+      </div>
+      <w-divider class="my4"  vertical></w-divider>
+      <div class="d-flex justify-start pa2" style="flex-direction: column; width: calc(100% - 200px)">
+        <div class="blue-grey-light4 title2">{{ formula.author }} - {{ formula.title }}</div>
+        <div class="blue-grey-light4 title3 text-italic text-muted book-description"> {{ formula.description }}</div>
+      </div>
+      <w-divider class="my4"  vertical></w-divider>
+      <div class="d-flex justify-center align-center pa2" style="width: 100px; flex-direction: column">
+        <w-tooltip left color="blue-grey-light4" bg-color="blue-grey-dark5">
+          <template #activator="{ on }">
+            <w-button
+                v-on="on"
+                tile
+                text
+                icon="mdi mdi-book-open-page-variant"
+                color="blue-grey-light4"
+                :route="urlStorage + formula.document.path"
+                target="_blank"
+                lg
+            >
+            </w-button>
+          </template>
+          <div class="title3"> Читати книгу</div>
+        </w-tooltip>
+        <w-tooltip left color="blue-grey-light4" bg-color="blue-grey-dark5">
+          <template #activator="{ on }">
+            <w-button
+                v-on="on"
+                @click="drawer?drawer=false:openDrawer($event, formula)"
+                class="grow caption"
+                icon="mdi mdi-eye-outline"
+                lg
+                tile
+                text
+                color="blue-grey-light4"
+            >
 
-      </template>
+            </w-button>
+          </template>
+          <div class="title3">Дізнатись більше</div>
+        </w-tooltip>
+        <w-tooltip left color="blue-grey-light4" bg-color="blue-grey-dark5" v-if="!user.isAdmin">
+          <template #activator="{ on }">
+            <w-button
+                v-on="on"
+                tile
+                text
+                icon="mdi mdi-bookmark"
+                :color="formula.isStudentBook?'teal':'blue-grey-light4'"
+                @click="formula.isStudentBook?destroySaveFormulas(formula):storeSaveFormulas(formula)"
+                lg
+            >
+            </w-button>
+          </template>
+          <div class="title3">
+            {{ formula.isStudentBook?'Книга збережена':'Зберегти книгу' }}
+          </div>
 
-      <w-flex column align-start justify-space-between>
-        <div class="d-flex align-center justify-center" style="width: 100%">
-          <w-image :src="require('../../../assets/formulas.png')" tag="img" style="max-width: 100px"></w-image>
-        </div>
-        <div class="body blue-grey-light3">{{ formula.title }}</div>
-      </w-flex>
+        </w-tooltip>
+      </div>
+    </w-flex>
+    <w-drawer
+        right
+        v-model="drawer"
+        absolute
+        bg-color="blue-grey-dark3" color="blue-grey-light4"
+        height="50%"
+        z-index="100"
+    >
+      <w-button absolute top right color="blue-grey-dark3" text
+                bg-color="blue-grey-light4" icon="wi-cross" lg tile @click="drawer=false"></w-button>
+      <w-flex column style="padding: 24px">
+        <div class="title2 text-center mb4">{{ formula.author }} - {{ formula.title }}</div>
+        <div class="title3 text-italic book-description1"> {{ formula.description }}</div>
+        <w-flex no-grow justify-center align-center>
+          <w-tooltip bottom color="blue-grey-light4" bg-color="blue-grey-dark5">
+            <template #activator="{ on }">
+              <w-button
+                  absolute top left
+                  v-on="on"
+                  tile
+                  text
+                  icon="mdi mdi-book-open-page-variant"
+                  color="blue-grey-light4"
+                  :route="urlStorage + formula.document.path"
+                  target="_blank"
+                  xl
+              >
+              </w-button>
+            </template>
+            <div class="title3"> Читати книгу</div>
 
+          </w-tooltip>
+          <w-tooltip bottom color="blue-grey-light4" bg-color="blue-grey-dark5" v-if="!user.isAdmin">
+            <template #activator="{ on }">
+              <w-button
+                  absolute top left style="left: 40px"
+                  v-on="on"
+                  tile
+                  text
+                  icon="mdi mdi-bookmark"
+                  :color="formula.isStudentBook?'teal':'blue-grey-light4'"
+                  @click="formula.isStudentBook?destroySaveFormulas(formula):storeSaveFormulas(formula)"
+                  xl
+              >
 
-      <template #actions>
-        <w-button
-            @click="drawer?drawer=false:openDrawer($event, formula)"
-            class="grow caption"
-            sm
-           color="blue-grey-dark4"  bg-color="blue-grey-light3"
-        >
-          Дізнатись більше
-        </w-button>
-      </template>
-      <w-drawer
-          top
-          v-model="drawer"
-          absolute
-          color="blue-grey-dark3" bg-color="blue-grey-light3"
-          height="50%"
-      >
-        <w-button absolute bottom right color="blue-grey-dark3" text style="right: 0;bottom: 0"
-                  bg-color="blue-grey-light3" icon="wi-cross" xs tile @click="drawer=false"></w-button>
-        <w-flex column >
-          <w-flex class="body black pa1">
-            {{ formula.description }}
-          </w-flex>
-          <w-flex no-grow justify-center align-center>
-            <w-tooltip top color="blue-grey-light3" bg-color="blue-grey-dark5">
-              <template #activator="{ on }">
-                <w-button
-                    v-on="on"
-                    tile
-                    text
-                    icon="mdi mdi-book-open-page-variant"
-                    color="blue-grey-dark4"
-                    :route="urlStorage + formula.document.path"
-                    target="_blank"
-                    xl
-                >
-                </w-button>
-              </template>
-              <div class="body"> Читати книгу</div>
-
-            </w-tooltip>
-            <w-tooltip top color="blue-grey-light3" bg-color="blue-grey-dark5" v-if="!user.isAdmin">
-              <template #activator="{ on }">
-                <w-button
-                    v-on="on"
-                    tile
-                    text
-                    icon="mdi mdi-book-account-outline"
-                    :color="formula.document.isSaveDocument?'cyan-dark4':'blue-grey-dark4'"
-                    @click="formula.document.isSaveDocument?destroySaveFormulas(formula):storeSaveFormulas(formula)"
-                    xl
-                >
-
-                </w-button>
-              </template>
-              <div class="body">
-                {{ formula.document.isSaveDocument?'Видалити з кабінету':'Зберегти в кабінеті' }}
-              </div>
-
-            </w-tooltip>
-          </w-flex>
+              </w-button>
+            </template>
+            <div class="title3">
+              {{ formula.isStudentBook?'Книга збережена':'Зберегти книгу' }}
+            </div>
+          </w-tooltip>
         </w-flex>
-      </w-drawer>
-    </w-card>
+      </w-flex>
+      <w-image :src="require('./../../../assets/photo5.png')" tag="img"
+               style="max-width: 16vw; position: absolute; bottom:0; left:calc(50% - 8vw)"></w-image>
+    </w-drawer>
+<!--    <w-card class="book-card" style="width: 100%" bg-color="blue-grey-dark3" content-class="pb0 blue-grey-light3" title-class="blue-grey-light3 bd0">-->
+<!--      <template #title>-->
+<!--        <div class="body blue-grey-light3">{{ formula.author }}</div>-->
+<!--      </template>-->
+
+<!--      <w-flex column align-start justify-space-between>-->
+<!--        <div class="d-flex align-center justify-center" style="width: 100%">-->
+<!--          <w-image :src="require('../../../assets/formulas.png')" tag="img" style="max-width: 100px"></w-image>-->
+<!--        </div>-->
+<!--        <div class="body blue-grey-light3">{{ formula.title }}</div>-->
+<!--      </w-flex>-->
+
+
+<!--      <template #actions>-->
+<!--        <w-button-->
+<!--            @click="drawer?drawer=false:openDrawer($event, formula)"-->
+<!--            class="grow caption"-->
+<!--            sm-->
+<!--           color="blue-grey-dark4"  bg-color="blue-grey-light3"-->
+<!--        >-->
+<!--          Дізнатись більше-->
+<!--        </w-button>-->
+<!--      </template>-->
+<!--      <w-drawer-->
+<!--          top-->
+<!--          v-model="drawer"-->
+<!--          absolute-->
+<!--          color="blue-grey-dark3" bg-color="blue-grey-light3"-->
+<!--          height="50%"-->
+<!--      >-->
+<!--        <w-button absolute bottom right color="blue-grey-dark3" text style="right: 0;bottom: 0"-->
+<!--                  bg-color="blue-grey-light3" icon="wi-cross" xs tile @click="drawer=false"></w-button>-->
+<!--        <w-flex column >-->
+<!--          <w-flex class="body black pa1">-->
+<!--            {{ formula.description }}-->
+<!--          </w-flex>-->
+<!--          <w-flex no-grow justify-center align-center>-->
+<!--            <w-tooltip top color="blue-grey-light3" bg-color="blue-grey-dark5">-->
+<!--              <template #activator="{ on }">-->
+<!--                <w-button-->
+<!--                    v-on="on"-->
+<!--                    tile-->
+<!--                    text-->
+<!--                    icon="mdi mdi-book-open-page-variant"-->
+<!--                    color="blue-grey-dark4"-->
+<!--                    :route="urlStorage + formula.document.path"-->
+<!--                    target="_blank"-->
+<!--                    xl-->
+<!--                >-->
+<!--                </w-button>-->
+<!--              </template>-->
+<!--              <div class="body"> Читати книгу</div>-->
+
+<!--            </w-tooltip>-->
+<!--            <w-tooltip top color="blue-grey-light3" bg-color="blue-grey-dark5" v-if="!user.isAdmin">-->
+<!--              <template #activator="{ on }">-->
+<!--                <w-button-->
+<!--                    v-on="on"-->
+<!--                    tile-->
+<!--                    text-->
+<!--                    icon="mdi mdi-book-account-outline"-->
+<!--                    :color="formula.document.isSaveDocument?'cyan-dark4':'blue-grey-dark4'"-->
+<!--                    @click="formula.document.isSaveDocument?destroySaveFormulas(formula):storeSaveFormulas(formula)"-->
+<!--                    xl-->
+<!--                >-->
+
+<!--                </w-button>-->
+<!--              </template>-->
+<!--              <div class="body">-->
+<!--                {{ formula.document.isSaveDocument?'Видалити з кабінету':'Зберегти в кабінеті' }}-->
+<!--              </div>-->
+
+<!--            </w-tooltip>-->
+<!--          </w-flex>-->
+<!--        </w-flex>-->
+<!--      </w-drawer>-->
+<!--    </w-card>-->
   </w-flex>
 
 </template>
@@ -128,13 +247,13 @@ export default {
     storeSaveFormulas(formula){
       let data={formulaId:formula.id}
       this.saveFormula(data).then(()=>{
-        formula.document.isSaveDocument=true
+        formula.isStudentBook=true
         this.notify('Збережено в особистому кабінеті.')
       })
     },
     destroySaveFormulas(formula){
       this.deleteSavedFormula(formula.id).then(()=>{
-        formula.document.isSaveDocument=false
+        formula.isStudentBook=false
         this.notify('Книгу видалено з особистого кабінену','red')
       })
     },
@@ -150,6 +269,25 @@ export default {
 }
 </script>
 
-<style >
+<style scoped>
 .w-notification-manager {width: 500px;}
+.book-description {
+  width: 60vw;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.book-description1 {
+  line-height: 1.5;
+  white-space: normal;
+
+}
+.news-card {
+  -webkit-transition: .2s ease-in-out;
+  transition: .2s ease-in-out;
+}
+
+.news-card:hover {
+  background-color: #526670;
+}
 </style>

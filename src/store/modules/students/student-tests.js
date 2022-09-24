@@ -3,6 +3,8 @@ import studentTestsService from '../../../services/students/student-tests-servic
 
 const state = () => ({
     studentTests: [],
+    testsCheckedStudent: [],
+
 })
 
 const getters = {
@@ -11,6 +13,8 @@ const getters = {
      * @param state
      */
     studentTests: state => state.studentTests,
+    testsCheckedStudent: state => state.testsCheckedStudent,
+
 
 };
 
@@ -28,6 +32,16 @@ const actions = {
     async edit(context, data) {
         await studentTestsService.edit(context, data)
     },
+
+    /**
+     *
+     * @param context
+     * @param data
+     * @returns {Promise<void>}
+     */
+    async getTestStudentCheckedByStudentId(context, data) {
+        await studentTestsService.getTestStudentCheckedByStudentId(context, data)
+    },
 }
 
 const mutations = {
@@ -38,6 +52,15 @@ const mutations = {
      */
     [types.SET_STUDENT_TESTS]: (state, studentTests) => {
         state.studentTests = studentTests
+    },
+
+    /**
+     *
+     * @param state
+     * @param testsCheckedStudent
+     */
+    [types.SET_TESTS_CHECKED_STUDENT]: (state, testsCheckedStudent) => {
+        state.testsCheckedStudent = testsCheckedStudent
     },
 };
 

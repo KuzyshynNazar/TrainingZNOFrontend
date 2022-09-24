@@ -1,75 +1,181 @@
 <template>
-  <w-flex wrap align-start class="pt2 pr2 pl2" style="margin-left: 250px">
-    <div class="xs6 pr2" v-for="(test, index) in  studentTests" :key="index">
-      <w-card class="news-card mb1 "  style="width: 100%"  shadow
-              @click.prevent="test.status?openTestResultDialog($event, test):openTestInfoDialog($event, test)"
-              bg-color="grey-dark4" color="white"
-              :style="{border:'2px', borderColor: test.status?'#1db3a8':'#ff6825', borderStyle:'solid'}"
+  <w-flex justify-space-between style="width: 100%; padding-left: 290px" column fill-height class="pr3 pt3 pb3 pl10">
+    <w-card style="max-width: calc(100vw - 275px); max-height: calc(100vh - 106px);  overflow-y: auto"
+            bg-color="blue-grey-dark2" content-class="pa0" no-border>
+      <w-table
+          :headers="tableStudentTestHeader"
+          :items="studentTests"
+          fixed-headers
+          :filter="filters[activeFilter]"
+          style="width: 100%;"
       >
-        <!--      :bg-color="test.status?'success-light1':'warning-light1'"-->
-        <template #title>
-          <div class="d-flex align-center justify-space-between" style="width: 100%">
-            <div class="title5">{{ test.name }}</div>
-            <div class="ml5 title5">
-              <w-tooltip left v-if="test.status" >
+        <template #item="{ item, classes,index  }">
+          <tr :class="classes">
+            <td class="pl2 pa4 blue-grey-light3">{{ index }}</td>
+            <td class="pa4 blue-grey-light3">{{ item.name }}</td>
+            <td class="pa4 blue-grey-light3">{{ item.description }}</td>
+            <td class="pa4 blue-grey-light3">
+              <w-tooltip v-if="item.status" left bg-color="blue-grey-dark3" color="blue-grey-light3">
                 <template #activator="{ on }">
-                  <w-icon  v-on="on" xl color="teal">mdi mdi-plus-circle-outline</w-icon>
+                  <w-icon color="teal" v-on="on">mdi mdi-checkbox-blank-circle</w-icon>
                 </template>
-                Ви пройшли тест
+                <div class="title3 text-italic">Тест пройдений</div>
               </w-tooltip>
-              <w-tooltip left v-else >
+              <w-tooltip v-else left bg-color="blue-grey-dark3" color="blue-grey-light3">
                 <template #activator="{ on }">
-                  <w-icon  v-on="on" xl color="deep-orange">mdi mdi-minus-circle-outline</w-icon>
+              <w-icon color="deep-orange" v-on="on">mdi mdi-checkbox-blank-circle</w-icon>
                 </template>
-                Пройдіть тест
+                <div class="title3 text-italic">Тест не пройдений</div>
               </w-tooltip>
-            </div>
+            </td>
+            <td class="pa4 blue-grey-light3">{{ item.created }}</td>
+            <td class="pa4 blue-grey-light5">
+              <w-flex  align-center>
+                <w-tooltip v-if="item.status" left bg-color="blue-grey-dark3" color="blue-grey-light3">
+                  <template #activator="{ on }">
+                    <w-button
+                        v-on="on"
+                        tile
+                        color="blue-grey-light5"
+                        @click="openTestResultDialog(item)"
+                        lg
+                    >
+                      <w-icon class="mr2">mdi mdi-text-box-check-outline</w-icon>
+                      Результат тесту
+                    </w-button>
+                  </template>
+                  <div class="title3 text-italic">Результат тесту</div>
+                </w-tooltip>
+                <w-tooltip v-else left bg-color="blue-grey-dark3" color="blue-grey-light3">
+                  <template #activator="{ on }">
+                    <w-button
+                        v-on="on"
+                        tile
+
+                        color="blue-grey-light5"
+                        @click="openTestInfoDialog(item)"
+                        lg
+                    >
+                      <w-icon class="mr2">mdi mdi-clipboard-text-clock-outline</w-icon>
+                      Пройти тест
+                    </w-button>
+                  </template>
+                  <div class="title3 text-italic">
+                    Пройти тест
+                  </div>
+
+                </w-tooltip>
+              </w-flex>
+            </td>
+          </tr>
+        </template>
+        <template #no-data>
+          <div class="title2" v-if="studentTests.length===0">
+            Нічого не знайдено!
+          </div>
+          <div>
+            <w-button   @click="search=''" class="pa4 mt2"  lg bg-color="blue-grey-dark3" color="blue-grey-light3"
+                        icon="mdi mdi-reload"
+            ></w-button>
+
           </div>
         </template>
-
-        <w-flex align-center justify-space-between style="width: 100%">
-          <div class="news-description body"> {{ test.description }}</div>
-          <div class="caption text-right white">{{ test.created }}</div>
-        </w-flex>
-        <!--      <template #actions v-if="!test.status">-->
-        <!--        <div class="spacer"></div>-->
-        <!--        <w-button bg-color="success" @click="openTestInfoDialog($event, test)">Пройти тест</w-button>-->
-        <!--      </template>-->
-      </w-card>
-    </div>
+      </w-table>
+    </w-card>
   </w-flex>
-
+  <w-drawer
+      top
+      v-model="drawerSearch"
+      absolute
+      style="top: 40px;width: calc(100vw - 250px); margin-left: 250px; z-index: 10"
+      height="50px"
+      color="blue-grey-dark3" bg-color="blue-grey-light3"
+  >
+    <w-flex  wrap class="mx10">
+      <div class="xs8 d-flex align-center justify-center">
+        <w-input
+            style="width: 100%"
+            color="blue-grey-dark3"
+            v-model="search"
+            placeholder="Пошук"
+            inner-icon-left="wi-search"
+            @click="setActiveFilter"
+        >
+        </w-input>
+      </div>
+      <div class="xs4 w-flex justify-end">
+        <w-button
+            :bg-color="activeFilter !== 0?'blue-grey-light3':'blue-grey-dark3'"
+            :color="activeFilter !== 0?'blue-grey-dark3':'blue-grey-light3'"
+            class="mr2"
+            @click="activeFilter = 0"
+            tile
+            :outline="activeFilter !== 0">
+          Без фільтра
+        </w-button>
+        <w-button
+            :bg-color="activeFilter !== 1?'blue-grey-light3':'blue-grey-dark3'"
+            :color="activeFilter !== 1?'blue-grey-dark3':'blue-grey-light3'"
+            class="mr2"
+            @click="activeFilter = 1"
+            tile
+            :outline="activeFilter !== 1">
+          Пройдені тести
+        </w-button>
+        <w-button
+            :bg-color="activeFilter !== 2?'blue-grey-light3':'blue-grey-dark3'"
+            :color="activeFilter !== 2?'blue-grey-dark3':'blue-grey-light3'"
+            @click="activeFilter = 2"
+            tile
+            :outline="activeFilter !== 2">
+          Не пройдені тести
+        </w-button>
+      </div>
+    </w-flex>
+  </w-drawer>
+  <w-button absolute top left bg-color="blue-grey-dark3" color="blue-grey-light3" class="mt3" style="top:40px; left: 250px"
+            icon="mdi mdi-filter-multiple" xl tile @click="openDrawer">
+  </w-button>
   <w-dialog
       class="dialog-test"
       fullscreen
       persistent
       v-model="showTestDialog"
       content-class="mt3"
-      title-class="grey-dark5--bg white">
+      bg-color="blue-grey-light3"
+      title-class="blue-grey-dark4--bg blue-grey-light5">
 
     <template #title>
-      <w-flex column align-start >
+      <w-flex column align-start>
         <div>{{ testRead ? testRead.name : '' }}</div>
         <div>
           <div class="d-flex align-center">
-            <div class="mr2 body">
+            <div class="mr2 body blue-grey-light5">
               Час до завершення тесту -
             </div>
-            <w-tag class="mr1" bg-color="white" color="grey-dark5 body" md>{{ min }}</w-tag>
+            <w-tag class="mr1" bg-color="blue-grey-light5" color="blue-grey-dark4 body" md>{{ min }}</w-tag>
             <span>:</span>
-            <w-tag class="ml1" bg-color="white" color="grey-dark5 body" md>{{ sec }}</w-tag>
+            <w-tag class="ml1" bg-color="blue-grey-light5" color="blue-grey-dark4 body" md>{{ sec }}</w-tag>
           </div>
 
         </div>
-        <w-button absolute top right bg-color="grey-dark5"
-                  color="white" icon="wi-cross" tile @click="closeTestDialog"></w-button>
+        <w-button absolute top right bg-color="blue-grey-light3"
+                  color="blue-grey-dark4" icon="wi-cross" tile @click="closeTestDialog"></w-button>
       </w-flex>
     </template>
-    <w-flex column style="width: 90%; margin: 0 auto" >
+    <w-flex column style="width: 90%; margin: 0 auto">
       <div v-for="(value, index) in testRead.questions" :key="index" class="align-center mb2">
-        <div class="w-flex align-center justify-start mb1">
-          <div class="mr2">{{ index + 1 }}.</div>
-          <div class="div-question" v-html="value.question"></div>
+        <div class="w-flex  mb1" style="flex-direction: column">
+          <div class="mb3 d-flex align-center justify-start">
+            <div class="mr2">{{ index + 1 }}.</div>
+            <div class="div-question" v-html="value.question"></div>
+          </div>
+          <div class="d-flex  mb3">
+            <div v-for="(photo, index) in value.photos" :key="index" class="mr3">
+              <w-image :src="urlStorage + photo.path" tag="img" style="max-width: 150px"></w-image>
+            </div>
+          </div>
+
         </div>
         <div class="w-flex column justify-center align-start pl6 mb1">
           <div v-if="value.questionType===1" class="d-flex align-center justify-center">
@@ -144,7 +250,6 @@
               </div>
             </div>
           </div>
-
         </div>
         <w-divider class="mt3 mb3"></w-divider>
       </div>
@@ -152,9 +257,10 @@
     <template #actions>
       <div class="spacer"></div>
       <w-button @click="createTestResult"
-                bg-color="grey-dark5"
-                color="white" xl
-      >Надіслати відповідь</w-button>
+                bg-color="blue-grey-dark4"
+                color="blue-grey-light5" xl
+      >Надіслати відповідь
+      </w-button>
       <div class="spacer"></div>
     </template>
   </w-dialog>
@@ -162,18 +268,27 @@
       fullscreen
       v-model="showTestResultDialog"
       :title="testRead?testRead.name:''"
-      title-class="grey-dark5--bg white">
-    <w-button absolute top right bg-color="grey-dark5"
-              color="white" icon="wi-cross" tile @click="showTestResultDialog=false"></w-button>
+      bg-color="blue-grey-light3"
+      title-class="blue-grey-dark4--bg blue-grey-light5">
+    <w-button absolute top right bg-color="blue-grey-light3"
+              color="blue-grey-dark4" icon="wi-cross" tile @click="showTestResultDialog=false"></w-button>
     <w-flex fill-height>
-      <w-card class="dialog-test__result" no-border style="width: 70%; height: calc(100vh - 50px); overflow-y: auto">
+      <w-card class="dialog-test__result" no-border style="width: 70%; height: calc(100vh - 70px); overflow-y: auto">
         <w-flex column>
           <div v-for="(result, index) in testResult" :key="index" class="align-center bdrs2 bd2 sh1 pa2 mb2"
-                :style="{borderColor:result.is_test_result?'#1db3a8':'#ff6825'}"
+               :style="{borderColor:result.is_test_result?'#1db3a8':'#ff6825'}"
           >
-            <div class="w-flex align-center mb1">
-              <div class="mr2">{{ index + 1 }}.</div>
-              <div class="div-question" v-html="result.test_question"></div>
+            <div class="w-flex  mb1" style="flex-direction: column">
+              <div class="mb3 d-flex align-center justify-start">
+                <div class="mr2">{{ index + 1 }}.</div>
+                <div class="div-question" v-html="result.test_question"></div>
+              </div>
+
+              <div class="d-flex  mb3">
+                <div v-for="(photo, index) in result.photos" :key="index" class="mr3">
+                  <w-image :src="urlStorage + photo.path" tag="img" style="max-width: 100px"></w-image>
+                </div>
+              </div>
             </div>
             <div class="w-flex column justify-center align-start pl6 mb1">
               <div v-if="result.question_type===1" class="d-flex align-start justify-start" style="width: 100%">
@@ -183,7 +298,8 @@
                 <div v-else style="width: 100%; display: flex;">
                   <div class="d-flex justify-center xs4" style="flex-direction: column">
                     <div v-for="(item, i) in result.answers" :key="i" class="d-flex align-center mb1">
-                      <div class="pa2 bdrsm bd2 mr2" :class="item.id==result.test_question_answer&&item.id==result.test_question_true_answer?'teal--bg':item.id==result.test_question_answer&&item.id!==result.test_question_true_answer?'deep-orange--bg':''"></div>
+                      <div class="pa2 bdrsm bd2 mr2"
+                           :class="item.id==result.test_question_answer&&item.id==result.test_question_true_answer?'teal--bg':item.id==result.test_question_answer&&item.id!==result.test_question_true_answer?'deep-orange--bg':''"></div>
                       <div v-html="item.label" class="div-question title5"></div>
                     </div>
                   </div>
@@ -211,7 +327,7 @@
                   питання
                 </div>
                 <div v-else style="width: 100%" class="d-flex">
-                  <div class="d-flex column xs4" >
+                  <div class="d-flex column xs4">
                     <div class="mr3 title5 text-italic">Ваша відповідь:</div>
                     <div class="title5 text-bold text-italic">
                       {{ result.test_question_answer ? result.test_question_answer : '' }}
@@ -341,8 +457,12 @@
 
         <div class="d-flex justify-space-between align-center mb1" style="width: 100%">
           <div class="mr2" style="width: 250px">Ви здали тест на:</div>
-          <w-tag bg-color="teal" color="white body" md v-if="testResultInfo.percentagesPoint>70">{{ `${testResultInfo.percentagesPoint} %` }}</w-tag>
-          <w-tag bg-color="deep-orange" color="white body" md v-if="testResultInfo.percentagesPoint<70">{{ `${testResultInfo.percentagesPoint} %` }}</w-tag>
+          <w-tag bg-color="teal" color="white body" md v-if="testResultInfo.percentagesPoint>70">
+            {{ `${testResultInfo.percentagesPoint} %` }}
+          </w-tag>
+          <w-tag bg-color="deep-orange" color="white body" md v-if="testResultInfo.percentagesPoint<70">
+            {{ `${testResultInfo.percentagesPoint} %` }}
+          </w-tag>
         </div>
         <w-divider class="mb3"></w-divider>
 
@@ -353,78 +473,94 @@
   <w-dialog
       width="600px"
       v-model="showTestInfoDialog"
-      title-class="grey-dark5--bg white"
+      bg-color="blue-grey-light3"
+      title-class="blue-grey-dark4--bg blue-grey-light5"
       title="Інформація про тест"
   >
-    <w-button absolute top right bg-color="grey-dark5"
-              color="white" icon="wi-cross" tile @click="showTestInfoDialog=false"></w-button>
+    <w-button absolute top right bg-color="blue-grey-light3"
+              color="blue-grey-dark4" icon="wi-cross" tile @click="showTestInfoDialog=false"></w-button>
     <w-flex column fill-height v-if="currentTime===time">
       <div class="d-flex align-center mb2" style="width: 100%">
         <div class="mr2" style="width: 160px">Назва тесту:</div>
 
         <div>{{ testRead.name }}</div>
       </div>
-      <w-divider class="mb3"></w-divider>
+      <w-divider class="mb3" color="blue-grey-dark4"></w-divider>
       <div class="d-flex align-center mb2" style="width: 100%">
         <div class="mr2" style="width: 160px">Кількість питань:</div>
-        <w-tag bg-color="grey-dark5" color="white" shadow>{{ testInfo.amountQuestion }}</w-tag>
+        <w-tag bg-color="blue-grey-dark4" color="blue-grey-light5" shadow>{{ testInfo.amountQuestion }}</w-tag>
       </div>
       <div class="d-flex align-center mb2" style="width: 100%">
         <div class="mr2" style="width: 160px">Кількість балів за тест:</div>
-        <w-tag bg-color="grey-dark5" color="white" shadow>{{ testInfo.pointInfo }}</w-tag>
+        <w-tag bg-color="blue-grey-dark4" color="blue-grey-light5" shadow>{{ testInfo.pointInfo }}</w-tag>
       </div>
       <div class="d-flex align-center mb2" style="width: 100%">
         <div class="mr2" style="width: 160px">Час проведення тесту:</div>
-        <w-tag bg-color="grey-dark5" color="white" shadow>{{ `${currentTime / 60} хв.` }}</w-tag>
+        <w-tag bg-color="blue-grey-dark4" color="blue-grey-light5" shadow>{{ `${currentTime / 60} хв.` }}</w-tag>
       </div>
-      <w-divider></w-divider>
+      <w-divider color="blue-grey-dark4"></w-divider>
     </w-flex>
-    <w-flex v-else column fill-height >
+    <w-flex v-else column fill-height>
       <div class="d-flex align-center mb2" style="width: 100%">
         <div class="mr2">Ви вже розпочали тест!</div>
       </div>
       <w-divider class="mb3"></w-divider>
       <div class="d-flex align-center mb2" style="width: 100%">
-        <div class="mr2" >До закінчення часу здачі тесту залишилось - </div>
-        <w-tag bg-color="white" color="grey-dark5 body" md>{{ min }}</w-tag>
+        <div class="mr2">До закінчення часу здачі тесту залишилось -</div>
+        <w-tag bg-color="blue-grey-dark4" color="blue-grey-light5 body" md>{{ min }}</w-tag>
         <span>:</span>
-        <w-tag class="ml1" bg-color="white" color="grey-dark5 body" md>{{ sec }}</w-tag>
+        <w-tag class="ml1" bg-color="blue-grey-dark4" color="blue-grey-light5 body" md>{{ sec }}</w-tag>
       </div>
-      <w-divider></w-divider>
+      <w-divider color="blue-grey-dark4"></w-divider>
     </w-flex>
     <template #actions>
       <div class="spacer"/>
       <w-button v-show="currentTime===time"
-          class="mr2"
-          @click="showTestInfoDialog = false"
-          bg-color="grey-dark5" color="white">
+                class="mr2"
+                @click="showTestInfoDialog = false"
+                bg-color="blue-grey-dark4" color="blue-grey-light5">
         Повернутись назад
       </w-button>
       <w-button v-if="currentTime===time"
-          @click="openTestDialog"
-          bg-color="grey-dark5" color="white">
+                @click="openTestDialog"
+                bg-color="blue-grey-dark4" color="blue-grey-light5">
         Пройти тест
       </w-button>
       <w-button v-else
-          @click="openTestDialog"
-          bg-color="grey-dark5" color="white">
+                @click="openTestDialog"
+                bg-color="blue-grey-dark4" color="blue-grey-light5">
         Продовжити тест
       </w-button>
       <div class="spacer"/>
     </template>
   </w-dialog>
+  <w-overlay
+      v-model="showProgress"
+      persistent
+      opacity="0.8"
+  >
+    <w-progress
+        size="150px"
+        class="ma1"
+        circle
+        color="yellow-light2"
+        bg-color="light-blue-light2">
+    </w-progress>
+  </w-overlay>
 </template>
 
 <script>
 import {mapActions, mapGetters} from "vuex";
 
-
-
+const URL_STORAGE = process.env.VUE_APP_URL_STORAGE
+const BASE_URL = process.env.VUE_APP_API_URL
 export default {
   name: 'HelloWorld',
   components: {},
   data() {
     return {
+      urlStorage: URL_STORAGE,
+      baseUrlApi: BASE_URL,
       showTestDialog: false,
       showTestResultDialog: false,
       showTestInfoDialog: false,
@@ -464,12 +600,30 @@ export default {
       sec: null,
       min: null,
       timer: null,
+      showProgress: false,
+      tableStudentTestHeader: [
+        {label: '№', key: 'id', width: '5%'},
+        {label: 'Назва', key: 'title', width: '30%'},
+        {label: 'Опис', key: 'description', width: '35%'},
+        {label: 'Статус', key: 'status', width: '10%'},
+        {label: 'Створено', key: 'created', width: '10%'},
+        {label: 'Дія', width: '10%'},
+      ],
+      search: '',
+      drawerSearch: false,
+      activeFilter: 0,
+      keywordFilter: keyword => item => {
+        const allTheColumns = `${item.id} ${item.name} ${item.nick_name}`
+        return new RegExp(keyword, 'i').test(allTheColumns)
+      },
     }
   },
   created() {
     this.currentTime = this.time
-    // console.log(this.currentTime)
-    this.getStudentTests()
+    this.showProgress = true
+    this.getStudentTests().then(() => {
+      this.showProgress = false
+    })
   },
   computed: {
     ...mapGetters({
@@ -518,7 +672,15 @@ export default {
     },
     time() {
       return 20 * 60
-    }
+    },
+    filters() {
+      return [
+        null,
+        item => item.status === 1,
+        item => item.status === 0,
+        this.keywordFilter(this.search)
+      ]
+    },
   },
   watch: {
     currentTime(time) {
@@ -540,32 +702,27 @@ export default {
       this.showTestInfoDialog = false
       this.startTimer()
     },
-    openTestInfoDialog(event, test) {
-      this.showTestInfoDialog = true
+    openTestInfoDialog(test) {
       this.testRead = test
-
-      this.isActive(event)
+      this.showTestInfoDialog = true
     },
-    openTestResultDialog(event, test) {
-      this.showTestResultDialog = true
+    openTestResultDialog(test) {
       this.testRead = test
       this.getTestResult(test.id)
-      this.isActive(event)
+      this.showTestResultDialog = true
     },
-    closeTestDialog(){
-      this.showTestDialog=false
+    closeTestDialog() {
+      this.showTestDialog = false
     },
     isActive(event) {
       let active = document.querySelectorAll('.active-class');
       active.forEach((link) => link.classList.remove('active-class'));
       let elem = event.target.parentElement.parentElement
       if (elem) {
-        console.log(elem)
         elem.classList.add('active-class')
       }
     },
     input1(question, answer, event, index) {
-      console.log(question, answer, event, index)
       if (this.selection.answers[`question${index}`] === undefined || this.selection.answers[`question${index}`] === null) {
         this.selection.answers[`question${index}`] = []
         this.selection.answers[`question${index}`].push({questionId: question, answer: `${answer}-${event}`})
@@ -584,7 +741,6 @@ export default {
 
     },
     input2(event, questionId, index) {
-      console.log(event)
       this.selection.answers[`question${index}`] = {questionId: questionId, answerId: JSON.stringify(event)}
     },
     input3(event, questionId, index) {
@@ -634,43 +790,48 @@ export default {
     stopTimer() {
       clearTimeout(this.timer)
     },
+    openDrawer(){
+      this.drawerSearch=true
+      this.search=''
+    },
+    setActiveFilter() {
+      this.activeFilter = 3
+    },
   }
 }
 </script>
 
 <style>
-.w-card__title {
-  padding: 6px 12px !important;
+thead {
+  background-color: #38464c !important;
+  border: none !important;
+  margin: 20px !important;
+  color: #b3c0c7;
 }
-
-.w-card__content {
-  padding: 6px 12px !important;
+.w-table__header {
+  padding: 16px;
 }
-
-.w-card__content {
-  padding: 6px 12px !important;
-}
-
-/*.w-card__actions {*/
-/*  padding: 0 12px 6px 12px !important;*/
-/*}*/
 .w-tag {
   line-height: 14px !important;
-
 }
-.dialog-test .w-card__title{
-  position: sticky; top: 0; z-index: 10;
+.dialog-test .w-card__title {
+  position: sticky;
+  top: 0;
+  z-index: 10;
   width: 100%;
 }
-.dialog-test__result .w-card__content{
+
+.dialog-test__result .w-card__content {
   padding: 0 !important;
   padding-right: 5px !important;
 }
-.dialog-test__result-info .w-card__content{
+
+.dialog-test__result-info .w-card__content {
   border: 2px solid #505050;
   border-radius: 8px;
   box-shadow: 0 0 1px #0000001a, 2px 2px 8px #00000026;
 }
+
 p {
   text-align: justify;
   line-height: 1.6;
@@ -696,10 +857,6 @@ p {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-}
-
-p + p {
-
 }
 
 .active-class {

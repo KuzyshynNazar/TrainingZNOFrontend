@@ -2,12 +2,12 @@
   <w-flex align-center justify-center style="width: 100vw">
   <w-grid
       style="width: 70vw"
-      :columns="{ xs: 1, sm: 2, md: 4, lg: 5, xl: 5 }"
-      gap="3"
+      :columns="{ xs: 1, sm: 1, md: 1, lg: 1, xl: 1 }"
+      gap="2"
       class="pa3"
       v-if="filteredFormulaList!==undefined && filteredFormulaList.length!==0"
   >
-    <div v-for="(formula, index) in filteredFormulaList" :key="index" class="sh1">
+    <div v-for="(formula, index) in filteredFormulaList" :key="index" class="sh2 bdrs3">
       <FormulaCardComponent
           :formula="formula"
           :drawer-prop="showDrawer"
@@ -44,8 +44,6 @@
       >
       </w-input>
     </w-flex>
-
-
   </w-drawer>
   <w-overlay
       v-model="showProgress"
@@ -60,8 +58,6 @@
         bg-color="light-blue-light2">
     </w-progress>
   </w-overlay>
-
-
 </template>
 
 <script>
@@ -79,9 +75,6 @@ export default {
       showDrawer: false,
 
     }
-  },
-  mounted() {
-
   },
   created() {
     this.showProgress = true

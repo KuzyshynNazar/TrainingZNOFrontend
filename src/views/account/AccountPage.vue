@@ -10,9 +10,9 @@
     <w-flex column>
       <w-list  style="margin-top: 40px; display: inline-grid; width: 100%" :items="items" nav hover item-class="ma0">
         <template #item="{ item }" >
-          <div class="blue-grey-light3">{{ item.label }}</div>
+          <div class="blue-grey-light4 title3">{{ item.label }}</div>
           <div class="spacer"></div>
-          <w-icon md class="blue-grey-light3">{{ item.icon }}</w-icon>
+          <w-icon lg class="blue-grey-light4">{{ item.icon }}</w-icon>
 
         </template>
       </w-list>
@@ -34,7 +34,7 @@ export default {
     return {
       openDrawer1: true,
       items: [
-        {label: 'Мої тести', id: 'item1', color: 'white',icon: 'mdi mdi-ab-testing', route: '/account/tests'},
+        {label: 'Мої тести', id: 'item1', color: 'white',icon: 'mdi mdi-ab-testing', route: '/account/my-tests'},
         {label: 'Мої книги', id: 'item2', color: 'white',icon: 'mdi mdi-book-open-page-variant', route: '/account/my-books'},
         {label: 'Мої формули і правила', id: 'item3', color: 'white',icon: 'mdi mdi-function-variant', route: '/account/my-formulas-and-rules'},
         {label: 'Мої зразки тестів', id: 'item4', color: 'white',icon: 'mdi mdi-ballot-outline', route: '/account/my-test-samples'},

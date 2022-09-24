@@ -69,82 +69,78 @@
     </w-card>
   </w-flex>
   <w-dialog title="Створити Батьківську Категорію"
-            width="600px"
+            width="800px"
             title-class="grey-dark5--bg white"
             v-model="showCreateDialog">
     <w-button absolute top right bg-color="grey-dark5"
               color="white" icon="wi-cross" tile @click="showCreateDialog=false"></w-button>
     <div class="mb4">
-      <w-input v-model="inputsCategory.text" label="Name"></w-input>
+      <w-input v-model="inputsCategory.text"  color="grey-dark5" label-color="grey-dark5" label="Name"></w-input>
       <span v-if="errors && errors.text" style="font-size: 10px; color: red">{{ errors.text[0] }}</span>
     </div>
     <div class="mb4">
-      <w-input v-model="inputsCategory.slug" label="slug"></w-input>
+      <w-input v-model="inputsCategory.slug"  color="grey-dark5" label-color="grey-dark5" label="slug"></w-input>
       <span v-if="errors && errors.slug" style="font-size: 10px; color: red">{{ errors.slug[0] }}</span>
     </div>
-
-    <!--    <div class="mb4">-->
-    <!--      <w-input v-model="inputsCategory.parent_id" disabled label="батьківська категорія"></w-input>-->
-    <!--      <span v-if="errors && errors.parent_id" style="font-size: 10px; color: red">{{ errors.parent_id[0] }}</span>-->
-    <!--    </div>-->
-
-    <!--    <div class="mb4">-->
-    <!--      <w-checkbox v-model="inputsCategory.status" label="статус">Статус</w-checkbox>-->
-    <!--    </div>-->
     <w-flex>
-      <w-button @click="storeCategory" class="mt3 grow">Створити студента</w-button>
+      <w-button @click="storeCategory" bg-color="grey-dark5"
+                color="white" class="mt3 grow">Створити студента</w-button>
     </w-flex>
   </w-dialog>
   <w-dialog title="Створити категорію"
-            width="600px"
+            width="800px"
             title-class="grey-dark5--bg white"
             v-model="showCreateChildDialog">
     <w-button absolute top right bg-color="grey-dark5"
               color="white" icon="wi-cross" tile @click="showCreateChildDialog=false"></w-button>
     <div class="mb4">
-      <w-input v-model="inputsCategory.text" label="Name"></w-input>
+      <w-input v-model="inputsCategory.text" color="grey-dark5" label-color="grey-dark5" label="Name"></w-input>
       <span v-if="errors && errors.text" style="font-size: 10px; color: red">{{ errors.text[0] }}</span>
     </div>
     <div class="mb4">
-      <w-input v-model="inputsCategory.slug" label="slug"></w-input>
+      <w-input v-model="inputsCategory.slug" color="grey-dark5" label-color="grey-dark5" label="slug"></w-input>
       <span v-if="errors && errors.slug" style="font-size: 10px; color: red">{{ errors.slug[0] }}</span>
     </div>
 
     <div class="mb4">
-      <w-input v-model="inputsCategoryParent" disabled label="батьківська категорія"></w-input>
+      <w-input v-model="inputsCategoryParent" color="grey-dark5" label-color="grey-dark5" disabled label="батьківська категорія"></w-input>
       <span v-if="errors && errors.parent_id" style="font-size: 10px; color: red">{{ errors.parent_id[0] }}</span>
     </div>
 
     <w-flex>
-      <w-button @click="storeChildCategory" class="mt3 grow">Створити студента</w-button>
+      <w-button @click="storeChildCategory" bg-color="grey-dark5"
+                color="white" class="mt3 grow">Створити студента</w-button>
     </w-flex>
   </w-dialog>
   <w-dialog title="Редагувати категорію"
-            width="1000px"
+            width="1200px"
             title-class="grey-dark5--bg white"
             v-model="showEditDialog">
     <w-button absolute top right bg-color="grey-dark5"
               color="white" icon="wi-cross" tile @click="showEditDialog=false"></w-button>
     <w-flex fill-height>
-      <w-card class="grow mr3" title="Відображення дерева категорії" style="height: 500px">
+      <w-card class="grow mr3" title="Відображення дерева категорії" style="height: 500px; width: 60%">
         <div style="width:100%; height: 430px; overflow: auto;">
           <Tree :value="treeCategories">
             <template v-slot="{node,  path, tree}">
               <w-flex justify-space-between align-center>
                 <w-flex align-center>
                   <div class="mr2">
-                    <w-button v-if="node.children.length!==0" @click="tree.toggleFold(node, path)" tile class="mr2">
+                    <w-button v-if="node.children.length!==0"  bg-color="grey-dark5"
+                              color="white" @click="tree.toggleFold(node, path)" tile class="mr2">
                       <w-icon>
                         {{ node.$folded ? 'mdi mdi-plus' : 'mdi mdi-minus' }}
                       </w-icon>
                     </w-button>
 
-                    <w-button v-else tile class="mr2">
+                    <w-button v-else tile class="mr2" bg-color="grey-dark5"
+                              color="white">
                       <w-icon>
 
                       </w-icon>
                     </w-button>
-                    <w-radio :disabled="node.parent_id===inputsCategory.id" class="mr2" name="name"
+                    <w-radio :disabled="node.parent_id===inputsCategory.id" class="mr2"  bg-color="grey-dark5"
+                             color="white" name="name"
                              @change="parentCategory(node)"></w-radio>
                   </div>
                   <div class="mr2">
@@ -152,17 +148,20 @@
                   </div>
                 </w-flex>
                 <div class="mr2">
-                  <w-button @click="openCreateChildDialog(node)" class="mr2">
+                  <w-button @click="openCreateChildDialog(node)" bg-color="grey-dark5"
+                            color="white" class="mr2">
                     <w-icon>
                       mdi mdi-plus
                     </w-icon>
                   </w-button>
-                  <w-button @click="openEditDialog(node)" class="mr2">
+                  <w-button @click="openEditDialog(node)" bg-color="grey-dark5"
+                            color="white" class="mr2">
                     <w-icon>
                       mdi mdi-pencil
                     </w-icon>
                   </w-button>
-                  <w-button @click="openDeleteDialog(node)" class="mr2">
+                  <w-button @click="openDeleteDialog(node)" bg-color="grey-dark5"
+                            color="white" class="mr2">
                     <w-icon>
                       mdi mdi-delete
                     </w-icon>
@@ -173,24 +172,18 @@
           </Tree>
         </div>
       </w-card>
-      <w-card title="Форма редагування">
-        <div class="mb4">
-          <w-input v-model="inputsCategory.text" label="Name"></w-input>
+      <w-card title="Форма редагування" style="width: 40%">
+        <div class="mb4" style="width: 100%">
+          <w-input v-model="inputsCategory.text" color="grey-dark5" label-color="grey-dark5" label="Name"></w-input>
           <span v-if="errors && errors.text" style="font-size: 10px; color: red">{{ errors.text[0] }}</span>
         </div>
-        <div class="mb4">
-          <w-input v-model="inputsCategory.slug" label="slug"></w-input>
+        <div class="mb4" style="width: 100%">
+          <w-input v-model="inputsCategory.slug" color="grey-dark5" label-color="grey-dark5" label="slug"></w-input>
           <span v-if="errors && errors.slug" style="font-size: 10px; color: red">{{ errors.slug[0] }}</span>
         </div>
-        <!--        <div class="mb4">-->
-        <!--          <w-input v-model="inputsCategory.parent_id" label="батьківська категорія"></w-input>-->
-        <!--          <span v-if="errors && errors.parent_id" style="font-size: 10px; color: red">{{ errors.parent_id[0] }}</span>-->
-        <!--        </div>-->
-        <!--        <div class="mb4">-->
-        <!--          <w-checkbox v-model="inputsCategory.status" disabled label="статус">Статус</w-checkbox>-->
-        <!--        </div>-->
         <w-flex>
-          <w-button @click="editCategory" class="mt3 grow">Створити студента</w-button>
+          <w-button @click="editCategory" class="mt3 grow" bg-color="grey-dark5"
+                    color="white">Створити студента</w-button>
         </w-flex>
       </w-card>
     </w-flex>
@@ -205,8 +198,10 @@
     Ви хочеревидалити студента <strong>{{ inputsCategory.text }}</strong>?
 
     <w-flex>
-      <w-button @click="deleteCategory" class="mt3 mr5 grow">Так</w-button>
-      <w-button @click="showDeleteDialog=false" class="mt3 grow">Ні</w-button>
+      <w-button @click="deleteCategory" bg-color="grey-dark5"
+                color="white" class="mt3 mr5 grow">Так</w-button>
+      <w-button @click="showDeleteDialog=false" bg-color="grey-dark5"
+                color="white" class="mt3 grow">Ні</w-button>
     </w-flex>
   </w-dialog>
   <w-dialog title="Показати категорії і тести"

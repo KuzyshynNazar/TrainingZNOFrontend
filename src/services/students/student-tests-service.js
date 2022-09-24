@@ -36,4 +36,21 @@ export default {
             console.log(err)
         });
     },
+
+
+    /**
+     *
+     * @param context
+     * @param data
+     */
+    async getTestStudentCheckedByStudentId(context,data) {
+        await apiStudentTests.getTestStudentCheckedByStudentId( {
+            headers: { 'Authorization': `Bearer ${context.rootGetters["auth/token"]}`},
+            params:{studentId:data.studentId}
+        }).then((response) => {
+            context.commit(types.SET_TESTS_CHECKED_STUDENT, response.data.data);
+        }).catch(err => {
+            console.log(err)
+        });
+    },
 }

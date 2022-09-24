@@ -3,16 +3,12 @@
     <w-card class="book-card" style="width: 100%" bg-color="blue-grey-dark3" content-class="pb0 blue-grey-light3" title-class="blue-grey-light3 bd0">
       <template #title>
         <div class="body blue-grey-light3">{{ book.title }}</div>
-
       </template>
-
       <w-flex column align-start justify-space-between>
         <div class="d-flex align-center justify-center" style="width: 100%">
           <w-image :src="require('../../../assets/book.png')" tag="img" style="max-width: 100px"></w-image>
         </div>
       </w-flex>
-<!--      <w-divider class="mt2 mx-3 cyan-dark4&#45;&#45;bg"></w-divider>-->
-
       <template #actions>
         <w-button
             @click="drawer?drawer=false:openDrawer($event, book)"
@@ -146,5 +142,11 @@ export default {
 </script>
 
 <style >
+.book-description {
+  width: 30vw;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 .w-notification-manager {width: 500px;}
 </style>
