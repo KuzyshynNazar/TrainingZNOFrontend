@@ -1,6 +1,6 @@
 const axios = require('axios');
 
-const origin = 'http://training-zno/api-admin';
+const origin = process.env.VUE_APP_API_URL+'/api-admin';
 const routes = {
     get: {
         testQuestionTrueAnswers: `${origin}/testQuestionTrueAnswers`,

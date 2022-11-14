@@ -1,6 +1,6 @@
 const axios = require('axios');
 
-const origin = 'http://training-zno/api-student';
+const origin = process.env.VUE_APP_API_URL+'/api-student';
 const routes = {
     get: {
         savedBooks: `${origin}/studentBooks`,

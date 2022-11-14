@@ -1,6 +1,6 @@
 const axios = require('axios');
 
-const origin = 'http://training-zno/api-app';
+const origin = process.env.VUE_APP_API_URL+'/api-app';
 const routes = {
     get: {
         taskTemplates: `${origin}/taskTemplates`,

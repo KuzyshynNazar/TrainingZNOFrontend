@@ -1,7 +1,7 @@
 const axios = require('axios');
 
-const origin = 'http://training-zno/api-admin';
-const origin1 = 'http://training-zno/api-student';
+const origin = process.env.VUE_APP_API_URL+'/api-admin';
+const origin1 = process.env.VUE_APP_API_URL+'/api-student';
 const routes = {
     post: {
         loginAdmin: `${origin}/login-admin`,
